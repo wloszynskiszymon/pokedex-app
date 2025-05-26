@@ -1,30 +1,15 @@
-<mat-card class="header__card">
-  <mat-card-header>
-    <mat-card-title>Welcome to the Pokémon App!</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Find your favorite pokémons here!</p>
-  </mat-card-content>
-</mat-card>
+<main>
 
-<p></p>
+  <mat-card class="header__card">
+    <mat-card-header>
+      <mat-card-title>Welcome to the Pokémon App!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Find your favorite pokémons here!</p>
+    </mat-card-content>
+  </mat-card>
 
-@if (pokemons()) {
+  <app-pokemon-list />
 
-@for(pokemon of pokemons(); track pokemon.name) {
-<mat-card class="pokemon__card">
-  <mat-card-header>
-    <mat-card-title>{{ pokemon.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Pokemon test :D</p>
-  </mat-card-content>
-</mat-card>
-}
-
-
-} @else if (pokemons().length === 0) {
-<p>No pokemons found.</p>
-}
-
-<router-outlet />
+  <router-outlet />
+</main>
