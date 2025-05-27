@@ -1,15 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import {
-  PokemonApiFilterResponse,
   PokemonApiResponse,
   PokemonDetails,
   PokemonItemFields,
 } from './pokemon.model';
 import { environment } from '../../environments/environment';
-
-// could be extracted as environment variable later
-const baseUrl = 'https://api.pokemontcg.io/v2';
+import { baseUrl } from '../app.config';
 
 @Injectable({
   providedIn: 'root',
@@ -25,17 +22,8 @@ export class PokemonService {
   private pokemons = signal<PokemonItemFields[]>([]);
   private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
 
-  // for filtering
-  private supertypes = signal<string[]>([]);
-  private subtypes = signal<string[]>([]);
-  private types = signal<string[]>([]);
-
   loadedPokemons = this.pokemons.asReadonly();
   loadedPokemonDetails = this.pokemonDetails.asReadonly();
-
-  loadedSupertypes = this.supertypes.asReadonly();
-  loadedSubtypes = this.subtypes.asReadonly();
-  loadedTypes = this.types.asReadonly();
 
   constructor() {
     this.loadPokemons().subscribe({
@@ -44,16 +32,6 @@ export class PokemonService {
       },
       error: (err) => {
         console.error('Error loading pokemons:', err);
-      },
-    });
-
-    this.loadFilters().subscribe({
-      next: ({ data }) => {
-        console.log('Filters loaded:', data);
-        this.types.set(data);
-      },
-      error: (err) => {
-        console.error('Error loading filters:', err);
       },
     });
   }
@@ -77,11 +55,5 @@ export class PokemonService {
           this.pokemonDetails.set(data.data);
         },
       });
-  }
-
-  private loadFilters() {
-    return this.httpClient.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
-      headers: this.headers,
-    });
   }
 }

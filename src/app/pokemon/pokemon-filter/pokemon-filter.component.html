@@ -1,16 +1,8 @@
 <mat-form-field>
-    <mat-label>Types</mat-label>
-    <mat-select [formControl]="typesControl" multiple>
-        <mat-select-trigger>
-            {{typesControl.value?.[0] || ''}}
-            @if ((typesControl.value?.length || 0) > 1) {
-            <span class="additional">
-                (+{{(typesControl.value?.length || 0) - 1}} {{typesControl.value?.length === 2 ? 'other' : 'others'}})
-            </span>
-            }
-        </mat-select-trigger>
-        @for (type of typesList(); track type) {
-        <mat-option [value]="type">{{type}}</mat-option>
+    <mat-label>Type</mat-label>
+    <mat-select [(ngModel)]="typesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange($event)">
+        @for (option of options(); track option) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
     </mat-select>
 </mat-form-field>

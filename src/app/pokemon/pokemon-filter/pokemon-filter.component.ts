@@ -1,8 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { PokemonService } from '../pokemon.service';
+import { PokemonFilterService } from './pokemon-filter.service';
 
 @Component({
   selector: 'app-pokemon-filter',
@@ -17,7 +18,18 @@ import { PokemonService } from '../pokemon.service';
   styleUrl: './pokemon-filter.component.scss',
 })
 export class PokemonFilterComponent {
+  pokemonFilterService = inject(PokemonFilterService);
   pokemonService = inject(PokemonService);
-  typesControl = new FormControl('');
-  typesList = computed(() => this.pokemonService.loadedTypes());
+  typesControl = new FormControl<string[]>([]);
+
+  options = computed(() =>
+    this.pokemonFilterService
+      .loadedTypes()
+      .map((type) => ({ label: type, value: type }))
+  );
+
+  onSingleTypeChange(event: MatSelectChange) {
+    const selected = event.value;
+    this.pokemonFilterService.filterBy('types', [selected]);
+  }
 }

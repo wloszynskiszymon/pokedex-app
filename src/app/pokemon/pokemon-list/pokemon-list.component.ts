@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { PokemonItemFields } from '../pokemon.model';
 import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
+import { PokemonFilterService } from '../pokemon-filter/pokemon-filter.service';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -12,5 +13,13 @@ import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
 })
 export class PokemonListComponent {
   private pokemonService = inject(PokemonService);
-  pokemons = computed(() => this.pokemonService.loadedPokemons());
+  private pokemonFilterService = inject(PokemonFilterService);
+
+  // if any value is selected in the filter, return filtered pokemons
+  pokemons = computed(() => {
+    const filtered = this.pokemonFilterService.loadedFilteredPokemons();
+    return filtered.length > 0
+      ? filtered
+      : this.pokemonService.loadedPokemons();
+  });
 }
