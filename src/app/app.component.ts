@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-import { PokemonListComponent } from './pokemon/pokemon-list/pokemon-list/pokemon-list.component';
+import { PokemonListComponent } from './pokemon/pokemon-list/pokemon-list.component';
 
 @Component({
   selector: 'app-root',

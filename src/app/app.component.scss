@@ -1,9 +1,21 @@
-.header__card {
+.app__container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  min-height: 100vh;
+  height: 100rem;
+  padding: 2rem;
+  gap: 4rem;
+  box-sizing: border-box;
+}
+
+.app__section {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 40rem;
-  margin: 4rem auto;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 2rem;
   box-sizing: border-box;
+  gap: 2rem;
 }

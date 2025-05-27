@@ -1,6 +1,7 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { SelectedPokemonFields } from '../pokemon.model';
+import { PokemonItemFields } from '../pokemon.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-item',
@@ -10,12 +11,17 @@ import { SelectedPokemonFields } from '../pokemon.model';
   styleUrl: './pokemon-item.component.scss',
 })
 export class PokemonItemComponent {
-  readonly pokemon = input.required<SelectedPokemonFields>();
+  readonly pokemon = input.required<PokemonItemFields>();
+  readonly router = inject(Router);
 
   ngOnInit() {
     console.log(
       'PokemonItemComponent initialized with pokemon:',
       this.pokemon()
     );
+  }
+
+  onClick(id: string) {
+    this.router.navigate(['/pokemon', id]);
   }
 }
