@@ -20,9 +20,9 @@ export class PokemonFilterService {
     'X-Api-Key': environment.apiKey || '',
   });
 
-  private supertypes = signal<string[]>([]);
-  private subtypes = signal<string[]>([]);
-  private types = signal<string[]>([]);
+  private supertypes = signal<string[] | null[]>([]);
+  private subtypes = signal<string[] | null[]>([]);
+  private types = signal<string[] | null[]>([]);
 
   private readonly filteredPokemons = signal<PokemonItemFields[]>([]);
 

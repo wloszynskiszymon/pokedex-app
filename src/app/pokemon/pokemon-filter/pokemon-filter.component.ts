@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { PokemonService } from '../pokemon.service';
 import { PokemonFilterService } from './pokemon-filter.service';
 
@@ -25,23 +25,26 @@ export class PokemonFilterComponent {
   subtypesControl = new FormControl<string | null>(null);
   supertypesControl = new FormControl<string | null>(null);
 
-  types = computed(() =>
-    this.pokemonFilterService
+  types = computed(() => [
+    { label: '-----', value: null },
+    ...this.pokemonFilterService
       .loadedTypes()
-      .map((type) => ({ label: type, value: type }))
-  );
+      .map((type) => ({ label: type, value: type })),
+  ]);
 
-  subtypes = computed(() =>
-    this.pokemonFilterService
+  subtypes = computed(() => [
+    { label: '-----', value: null },
+    ...this.pokemonFilterService
       .loadedSubtypes()
-      .map((type) => ({ label: type, value: type }))
-  );
+      .map((type) => ({ label: type, value: type })),
+  ]);
 
-  supertypes = computed(() =>
-    this.pokemonFilterService
+  supertypes = computed(() => [
+    { label: '-----', value: null },
+    ...this.pokemonFilterService
       .loadedSupertypes()
-      .map((type) => ({ label: type, value: type }))
-  );
+      .map((type) => ({ label: type, value: type })),
+  ]);
 
   onSingleTypeChange() {
     const types = this.typesControl.value ? [this.typesControl.value] : [];
