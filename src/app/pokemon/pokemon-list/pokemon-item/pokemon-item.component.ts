@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { PokemonItemFields } from '../pokemon.model';
+import { PokemonItemFields } from '../../pokemon.model';
 import { Router } from '@angular/router';
 
 @Component({

@@ -1,4 +1,4 @@
-import { baseUrl } from '../../app.config';
+import { baseUrl, pokemonsPerPage } from '../../app.config';
 import { PokemonFilters } from './pokemon-filter.model';
 
 export const prepareFilterUrl = ({
@@ -21,7 +21,7 @@ export const prepareFilterUrl = ({
   const query = queryParts.join(' AND ');
   const fullUrl = `${baseUrl}/cards?q=${encodeURIComponent(
     query
-  )}&select=name,id,images,supertype,subtypes,types&pageSize=10`;
+  )}&select=name,id,images,supertype,subtypes,types&pageSize=${pokemonsPerPage}`;
 
   return fullUrl;
 };

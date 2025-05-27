@@ -6,7 +6,7 @@ import {
   PokemonItemFields,
 } from './pokemon.model';
 import { environment } from '../../environments/environment';
-import { baseUrl } from '../app.config';
+import { baseUrl, pokemonsPerPage } from '../app.config';
 
 @Injectable({
   providedIn: 'root',
@@ -21,14 +21,17 @@ export class PokemonService {
   // pokemon data
   private pokemons = signal<PokemonItemFields[]>([]);
   private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
+  private pokemonsLoading = signal<boolean>(true);
 
   loadedPokemons = this.pokemons.asReadonly();
   loadedPokemonDetails = this.pokemonDetails.asReadonly();
+  isLoadingPokemons = this.pokemonsLoading.asReadonly();
 
   constructor() {
     this.loadPokemons().subscribe({
       next: (data) => {
         this.pokemons.set(data.data);
+        this.pokemonsLoading.set(false);
       },
       error: (err) => {
         console.error('Error loading pokemons:', err);
@@ -36,7 +39,7 @@ export class PokemonService {
     });
   }
 
-  private loadPokemons(limit: number = 10) {
+  private loadPokemons(limit: number = pokemonsPerPage) {
     return this.httpClient.get<PokemonApiResponse<PokemonItemFields[]>>(
       `${baseUrl}/cards?pageSize=${limit}&select=name,id,images,supertype,subtypes,types`,
       {

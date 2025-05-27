@@ -2,8 +2,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   box-sizing: border-box;
   cursor: pointer;
+  height: 4rem;
 }
 
 .pokemon__item img {

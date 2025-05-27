@@ -1,0 +1,16 @@
+@import url("../pokemon-item.component.scss");
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+    background-color: rgb(219, 218, 218);
+  }
+}
+
+.skeleton {
+  animation: pulse 1.5s ease-in-out infinite;
+}

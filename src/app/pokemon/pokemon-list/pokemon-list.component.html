@@ -1,7 +1,16 @@
+@if (isLoading()) {
+@for (_ of pageSize; track $index) {
+<app-pokemon-item-skeleton />
+}
+} @else {
+
+
 @if(pokemons().length === 0) {
 <p class="text--fallback">No results for these filtr options.</p> }
 @else {
+
 @for (pokemon of pokemons(); track pokemon.id) {
 <app-pokemon-item [pokemon]="pokemon" />
+}
 }
 }
