@@ -6,7 +6,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 // could be extracted as environment variable later
 export const baseUrl = 'https://api.pokemontcg.io/v2';
-export const pokemonsPerPage = 10;
+export const pokemonsPerPage = 5;
 
 export const appConfig: ApplicationConfig = {
   providers: [

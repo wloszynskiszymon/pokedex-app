@@ -15,6 +15,8 @@ export class PokemonItemComponent {
   readonly router = inject(Router);
 
   onClick(id: string) {
-    this.router.navigate(['/pokemon', id]);
+    this.router.navigate(['/pokemon', id], {
+      queryParamsHandling: 'preserve',
+    });
   }
 }
