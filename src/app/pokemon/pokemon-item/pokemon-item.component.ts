@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonItemFields } from '../pokemon.model';
 import { Router } from '@angular/router';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './pokemon-item.component.html',
   styleUrl: './pokemon-item.component.scss',
 })
-export class PokemonItemComponent {
+export class PokemonItemComponent implements OnInit {
   readonly pokemon = input.required<PokemonItemFields>();
   readonly router = inject(Router);
 

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { PokemonItemFields } from '../pokemon.model';
 import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
@@ -12,12 +12,5 @@ import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
 })
 export class PokemonListComponent {
   private pokemonService = inject(PokemonService);
-  pokemons = signal<PokemonItemFields[]>([]);
-
-  ngOnInit() {
-    this.pokemonService.loadPokemons().subscribe({
-      next: (data) => this.pokemons.set(data.data),
-      error: (err) => console.error('Failed to fetch pokemons', err),
-    });
-  }
+  pokemons = computed(() => this.pokemonService.loadedPokemons());
 }

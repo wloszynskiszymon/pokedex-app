@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 
 import { PokemonService } from '../pokemon.service';
@@ -14,21 +14,18 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PokemonDetailsComponent {
   pokemonService = inject(PokemonService);
-  activatedRoute = inject(ActivatedRoute);
-  pokemon = signal<PokemonDetails | undefined>(undefined);
+  route = inject(ActivatedRoute);
+  pokemon = computed(() => this.pokemonService.loadedPokemonDetails());
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
+    this.route.params.subscribe((params) => {
       const id = params['id'];
       if (!id) {
         console.error('No Pokemon ID found in route');
         return;
       }
 
-      this.pokemonService.loadPokemonById(id).subscribe({
-        next: (data) => this.pokemon.set(data.data),
-        error: (err) => console.error('Failed to fetch pokemon details', err),
-      });
+      this.pokemonService.loadPokemonById(id);
     });
   }
 }

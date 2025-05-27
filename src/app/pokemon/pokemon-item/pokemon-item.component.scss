@@ -2,14 +2,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 40rem;
-  margin: 1rem auto;
   box-sizing: border-box;
   cursor: pointer;
 }
 
 .pokemon__item img {
-  width: 6rem;
-  height: 6rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
 }
