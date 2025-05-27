@@ -1,6 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { PokemonApiResponse, PokemonItemFields } from './pokemon.model';
+import {
+  PokemonApiResponse,
+  PokemonDetails,
+  PokemonItemFields,
+} from './pokemon.model';
 import { environment } from '../../environments/environment';
 
 // could be extracted as environment variable later
@@ -26,7 +30,7 @@ export class PokemonService {
   }
 
   loadPokemonById(id: string) {
-    return this.httpClient.get<PokemonApiResponse<any>>(
+    return this.httpClient.get<PokemonApiResponse<PokemonDetails>>(
       `${baseUrl}/cards/${id}`,
       {
         headers: this.headers,

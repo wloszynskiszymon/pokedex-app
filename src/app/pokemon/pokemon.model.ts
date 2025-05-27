@@ -24,3 +24,7 @@ export interface PokemonItemFields {
   subtypes: string[];
   types: string[];
 }
+
+export interface PokemonDetails extends PokemonItemFields {
+  // TODO: select fields for details
+}
