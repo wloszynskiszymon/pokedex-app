@@ -23,6 +23,7 @@ export class PokemonFilterService {
   private supertypes = signal<string[] | null[]>([]);
   private subtypes = signal<string[] | null[]>([]);
   private types = signal<string[] | null[]>([]);
+  private isFilterNowActive = signal<boolean>(false);
 
   private readonly filteredPokemons = signal<PokemonItemFields[]>([]);
 
@@ -30,6 +31,7 @@ export class PokemonFilterService {
   loadedSubtypes = this.subtypes.asReadonly();
   loadedTypes = this.types.asReadonly();
   loadedFilteredPokemons = this.filteredPokemons.asReadonly();
+  isFilterActive = this.isFilterNowActive.asReadonly();
 
   constructor() {
     this.httpClient
@@ -87,8 +89,11 @@ export class PokemonFilterService {
     ) {
       console.warn('No types provided for filtering. Returning empty result.');
       this.filteredPokemons.set([]);
+      this.isFilterNowActive.set(false);
       return;
     }
+
+    this.isFilterNowActive.set(true);
 
     const fullUrl = prepareFilterUrl({ types, subtypes, supertypes });
 

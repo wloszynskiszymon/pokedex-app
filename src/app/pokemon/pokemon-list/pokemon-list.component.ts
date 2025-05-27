@@ -17,9 +17,11 @@ export class PokemonListComponent {
 
   // if any value is selected in the filter, return filtered pokemons
   pokemons = computed(() => {
+    if (!this.pokemonFilterService.isFilterActive()) {
+      return this.pokemonService.loadedPokemons();
+    }
+
     const filtered = this.pokemonFilterService.loadedFilteredPokemons();
-    return filtered.length > 0
-      ? filtered
-      : this.pokemonService.loadedPokemons();
+    return filtered.length > 0 ? filtered : [];
   });
 }
