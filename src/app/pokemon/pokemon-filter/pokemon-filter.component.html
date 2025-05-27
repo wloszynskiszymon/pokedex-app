@@ -1,7 +1,25 @@
 <mat-form-field>
     <mat-label>Type</mat-label>
-    <mat-select [(ngModel)]="typesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange($event)">
-        @for (option of options(); track option) {
+    <mat-select [formControl]="typesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+        @for (option of types(); track option) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Supertype</mat-label>
+    <mat-select [formControl]="supertypesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+        @for (option of supertypes(); track option) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Subtype</mat-label>
+    <mat-select [formControl]="subtypesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+        @for (option of subtypes(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
     </mat-select>

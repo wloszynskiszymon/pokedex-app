@@ -7,6 +7,8 @@ import {
 import { baseUrl } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { prepareFilterUrl } from './pokemon-filter.helpers';
+import { PokemonFilters } from './pokemon-filter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,38 +32,65 @@ export class PokemonFilterService {
   loadedFilteredPokemons = this.filteredPokemons.asReadonly();
 
   constructor() {
-    this.loadFilters().subscribe({
-      next: ({ data }) => {
-        console.log('Filters loaded:', data);
-        this.types.set(data);
-      },
-      error: (err) => {
-        console.error('Error loading filters:', err);
-      },
-    });
+    this.httpClient
+      .get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
+        headers: this.headers,
+      })
+      .subscribe({
+        next: ({ data }) => {
+          console.log('Filter types loaded:', data);
+          this.types.set(data);
+        },
+        error: (err) => {
+          console.error('Error loading filters:', err);
+        },
+      });
+
+    this.httpClient
+      .get<PokemonApiFilterResponse>(`${baseUrl}/subtypes`, {
+        headers: this.headers,
+      })
+      .subscribe({
+        next: ({ data }) => {
+          console.log('Filter subtypes loaded:', data);
+          this.subtypes.set(data);
+        },
+        error: (err) => {
+          console.error('Error loading filters:', err);
+        },
+      });
+
+    this.httpClient
+      .get<PokemonApiFilterResponse>(`${baseUrl}/supertypes`, {
+        headers: this.headers,
+      })
+      .subscribe({
+        next: ({ data }) => {
+          console.log('Filter supertypes loaded:', data);
+          this.supertypes.set(data);
+        },
+        error: (err) => {
+          console.error('Error loading filters:', err);
+        },
+      });
   }
 
-  private loadFilters() {
-    return this.httpClient.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
-      headers: this.headers,
-    });
-  }
-
-  filterBy(filterType: 'types' | 'subtypes' | 'xd', selectedValues: string[]) {
-    if (selectedValues.length === 0) {
+  filterBy({
+    types: types = [],
+    subtypes: subtypes = [],
+    supertypes: supertypes = [],
+  }: PokemonFilters) {
+    if (
+      types.length === 0 &&
+      subtypes.length === 0 &&
+      supertypes.length === 0
+    ) {
       console.warn('No types provided for filtering. Returning empty result.');
       this.filteredPokemons.set([]);
       return;
     }
 
-    const query = selectedValues
-      .map((val) => `${filterType}:"${val}"`)
-      .join(' AND ');
-    const fullUrl = `${baseUrl}/cards?q=${encodeURIComponent(
-      query
-    )}&select=name,id,images,supertype,subtypes,types&pageSize=10`;
-
-    console.log('Filtering Pokemons with query:', query);
+    const fullUrl = prepareFilterUrl({ types, subtypes, supertypes });
 
     this.httpClient
       .get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {

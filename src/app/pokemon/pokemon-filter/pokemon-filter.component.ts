@@ -20,16 +20,42 @@ import { PokemonFilterService } from './pokemon-filter.service';
 export class PokemonFilterComponent {
   pokemonFilterService = inject(PokemonFilterService);
   pokemonService = inject(PokemonService);
-  typesControl = new FormControl<string[]>([]);
 
-  options = computed(() =>
+  typesControl = new FormControl<string | null>(null);
+  subtypesControl = new FormControl<string | null>(null);
+  supertypesControl = new FormControl<string | null>(null);
+
+  types = computed(() =>
     this.pokemonFilterService
       .loadedTypes()
       .map((type) => ({ label: type, value: type }))
   );
 
-  onSingleTypeChange(event: MatSelectChange) {
-    const selected = event.value;
-    this.pokemonFilterService.filterBy('types', [selected]);
+  subtypes = computed(() =>
+    this.pokemonFilterService
+      .loadedSubtypes()
+      .map((type) => ({ label: type, value: type }))
+  );
+
+  supertypes = computed(() =>
+    this.pokemonFilterService
+      .loadedSupertypes()
+      .map((type) => ({ label: type, value: type }))
+  );
+
+  onSingleTypeChange() {
+    const types = this.typesControl.value ? [this.typesControl.value] : [];
+    const subtypes = this.subtypesControl.value
+      ? [this.subtypesControl.value]
+      : [];
+    const supertypes = this.supertypesControl.value
+      ? [this.supertypesControl.value]
+      : [];
+
+    this.pokemonFilterService.filterBy({
+      types,
+      subtypes,
+      supertypes,
+    });
   }
 }
