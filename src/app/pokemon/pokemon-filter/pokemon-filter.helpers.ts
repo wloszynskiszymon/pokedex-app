@@ -1,11 +1,13 @@
 import { baseUrl, pokemonsPerPage } from '../../app.config';
 import { PokemonFilters } from './pokemon-filter.model';
 
-export const prepareFilterUrl = ({
-  types = [],
-  subtypes = [],
-  supertypes = [],
-}: PokemonFilters): string => {
+export const prepareFilterUrl = (
+  filters: PokemonFilters,
+  pageIndex: number = 0,
+  pageSize: number = pokemonsPerPage
+): string => {
+  const { types = [], subtypes = [], supertypes = [] } = filters;
+
   const queryParts: string[] = [];
 
   if (types.length) {
@@ -21,7 +23,8 @@ export const prepareFilterUrl = ({
   const query = queryParts.join(' AND ');
   const fullUrl = `${baseUrl}/cards?q=${encodeURIComponent(
     query
-  )}&select=name,id,images,supertype,subtypes,types&pageSize=${pokemonsPerPage}`;
-
+  )}&select=name,id,images,supertype,subtypes,types&pageSize=${pageSize}&page=${
+    pageIndex + 1
+  }`;
   return fullUrl;
 };

@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonListComponent } from './pokemon/pokemon-list/pokemon-list.component';
 import { PokemonFilterComponent } from './pokemon/pokemon-filter/pokemon-filter.component';
+import { PokemonPaginatorComponent } from './pokemon/pokemon-paginator/pokemon-paginator.component';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { PokemonFilterComponent } from './pokemon/pokemon-filter/pokemon-filter.
     MatCardModule,
     PokemonListComponent,
     PokemonFilterComponent,
+    PokemonPaginatorComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
