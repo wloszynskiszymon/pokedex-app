@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import {
+  PokemonApiFilterResponse,
   PokemonApiResponse,
   PokemonDetails,
   PokemonItemFields,
@@ -15,28 +16,44 @@ const baseUrl = 'https://api.pokemontcg.io/v2';
 })
 export class PokemonService {
   private httpClient = inject(HttpClient);
-
-  private pokemons = signal<PokemonItemFields[]>([]);
-  private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
-
-  loadedPokemons = this.pokemons.asReadonly();
-  loadedPokemonDetails = this.pokemonDetails.asReadonly();
-
   // if api key is provided - could be set as interceptor later
   private headers = new HttpHeaders({
     'X-Api-Key': environment.apiKey || '',
   });
 
-  constructor() {
-    if (this.loadedPokemons.length !== 0) return;
+  // pokemon data
+  private pokemons = signal<PokemonItemFields[]>([]);
+  private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
 
-    console.log('PokemonService initialized, loading pokemons...');
+  // for filtering
+  private supertypes = signal<string[]>([]);
+  private subtypes = signal<string[]>([]);
+  private types = signal<string[]>([]);
+
+  loadedPokemons = this.pokemons.asReadonly();
+  loadedPokemonDetails = this.pokemonDetails.asReadonly();
+
+  loadedSupertypes = this.supertypes.asReadonly();
+  loadedSubtypes = this.subtypes.asReadonly();
+  loadedTypes = this.types.asReadonly();
+
+  constructor() {
     this.loadPokemons().subscribe({
       next: (data) => {
         this.pokemons.set(data.data);
       },
       error: (err) => {
         console.error('Error loading pokemons:', err);
+      },
+    });
+
+    this.loadFilters().subscribe({
+      next: ({ data }) => {
+        console.log('Filters loaded:', data);
+        this.types.set(data);
+      },
+      error: (err) => {
+        console.error('Error loading filters:', err);
       },
     });
   }
@@ -60,5 +77,11 @@ export class PokemonService {
           this.pokemonDetails.set(data.data);
         },
       });
+  }
+
+  private loadFilters() {
+    return this.httpClient.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
+      headers: this.headers,
+    });
   }
 }

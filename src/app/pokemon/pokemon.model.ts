@@ -28,3 +28,8 @@ export interface PokemonItemFields {
 export interface PokemonDetails extends PokemonItemFields {
   // TODO: select fields for details
 }
+
+// for /types /subtypes / supertypes endpoints
+export interface PokemonApiFilterResponse {
+  data: string[];
+}
