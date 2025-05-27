@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { PokemonService } from '../pokemon.service';
 import { PokemonFilterService } from './pokemon-filter.service';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-pokemon-filter',
@@ -13,6 +14,7 @@ import { PokemonFilterService } from './pokemon-filter.service';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatButton,
   ],
   templateUrl: './pokemon-filter.component.html',
   styleUrl: './pokemon-filter.component.scss',
@@ -60,5 +62,12 @@ export class PokemonFilterComponent {
       subtypes,
       supertypes,
     });
+  }
+
+  onReset() {
+    this.typesControl.setValue(null);
+    this.subtypesControl.setValue(null);
+    this.supertypesControl.setValue(null);
+    this.pokemonFilterService.reset();
   }
 }

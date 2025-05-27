@@ -24,3 +24,8 @@
         }
     </mat-select>
 </mat-form-field>
+
+<button mat-raised-button (click)="onReset()"
+    [disabled]="!typesControl.value && !supertypesControl.value && !subtypesControl.value">
+    Reset
+</button>

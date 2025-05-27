@@ -108,4 +108,9 @@ export class PokemonFilterService {
         },
       });
   }
+
+  reset() {
+    this.isFilterNowActive.set(false);
+    this.filteredPokemons.set([]);
+  }
 }
