@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
       // fetch filtered pokemons
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),
-        this.pokemonPaginatorService.currentPagination.page - 1 // page index starts from 0
+        this.pokemonPaginatorService.currentPagination.page
       );
     } else {
       // filtered data not needed

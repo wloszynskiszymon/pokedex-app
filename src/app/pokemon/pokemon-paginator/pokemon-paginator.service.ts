@@ -10,7 +10,7 @@ export class PokemonPaginatorService {
   private route = inject(ActivatedRoute);
 
   private pageSize = signal<number>(pokemonsPerPage);
-  private currentPage = signal<number>(0);
+  private currentPage = signal<number>(1);
   private totalCount = signal<number>(0);
 
   pageSize$ = this.pageSize.asReadonly();
@@ -38,7 +38,7 @@ export class PokemonPaginatorService {
 
   reset(totalCount: number) {
     console.log(`reset(${totalCount})`);
-    this.setPage(0);
+    this.setPage(1);
     this.setPageSize(pokemonsPerPage);
     this.setTotalCount(totalCount);
   }
@@ -56,12 +56,12 @@ export class PokemonPaginatorService {
     this.route.queryParamMap.subscribe((params) => {
       console.log(params);
       const page = Number(params.get('page'));
-      if (!isNaN(page) && page >= 0) {
+      if (!isNaN(page) && page > 0) {
         console.log(`Restoring page from URL: ${page}`);
         this.setPage(page);
       } else {
-        console.log('No valid page in URL, resetting to 0');
-        this.setPage(0);
+        console.log('No valid page in URL, resetting to 1');
+        this.setPage(1);
       }
     });
   }

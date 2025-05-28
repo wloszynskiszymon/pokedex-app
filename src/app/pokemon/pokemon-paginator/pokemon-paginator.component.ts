@@ -19,7 +19,11 @@ export class PokemonPaginatorComponent {
 
   totalLength = computed(() => this.pokemonPaginatorService.totalCount$());
   pageSize = computed(() => this.pokemonPaginatorService.pageSize$());
-  currentPage = computed(() => this.pokemonPaginatorService.currentPage$() - 1);
+  currentPage = computed(() => {
+    console.log('currentPage() - called');
+    console.log(this.pokemonPaginatorService.currentPage$());
+    return this.pokemonPaginatorService.currentPage$();
+  });
 
   isLoading = computed(
     () =>
@@ -28,14 +32,18 @@ export class PokemonPaginatorComponent {
   );
 
   onPageChange(event: PageEvent) {
+    const page = event.pageIndex + 1; // material paginator uses 0-based index
+    console.log(
+      `onPageChange() - pageIndex: ${event.pageIndex}, pageSize: ${event.pageSize}`
+    );
     if (this.pokemonFilterService.isFilterActive()) {
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),
-        event.pageIndex
+        page
       );
     } else {
-      this.pokemonService.fetchPokemons(event.pageIndex);
+      this.pokemonService.fetchPokemons(page);
     }
-    this.pokemonPaginatorService.updateUrlPageParam(event.pageIndex + 1);
+    this.pokemonPaginatorService.updateUrlPageParam(page);
   }
 }

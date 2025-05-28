@@ -106,9 +106,9 @@ export class PokemonFilterService {
     });
   }
 
-  filterBy(filters: PokemonFilters, pageIndex: number = 0) {
+  filterBy(filters: PokemonFilters, page: number = 1) {
     console.log(
-      `filterBy({types: ${filters.types}, subtypes: ${filters.subtypes}, supertypes: ${filters.supertypes}}, ${pageIndex})`
+      `filterBy({types: ${filters.types}, subtypes: ${filters.subtypes}, supertypes: ${filters.supertypes}}, ${page})`
     );
     const { types = [], subtypes = [], supertypes = [] } = filters;
 
@@ -128,17 +128,17 @@ export class PokemonFilterService {
 
     if (!types.length && !subtypes.length && !supertypes.length) {
       console.warn('No filters selected, resetting filtered pokemons');
+      const page = this.pokemonPaginatorService.currentPagination.page;
       this.filteredPokemons.set([]);
+      this.pokemonService.fetchPokemons(page);
       this.isFilterNowActive.set(false);
       return;
     }
     this.isFilterNowActive.set(true);
     this.filteredPokemonsLoading.set(true);
 
-    const fullUrl = prepareFilterUrl(
-      { types, subtypes, supertypes },
-      pageIndex + 1
-    );
+    const fullUrl = prepareFilterUrl({ types, subtypes, supertypes }, page);
+    console.log(fullUrl);
 
     this.httpClient
       .get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {
@@ -146,12 +146,16 @@ export class PokemonFilterService {
       })
       .subscribe({
         next: ({ data, totalCount, page }) => {
+          console.log(`filterBy() - received ${data.length} filtered pokemons`);
           this.filteredPokemons.set(data);
           this.filteredPokemonsLoading.set(false);
           this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
           this.pokemonPaginatorService.setPage(page);
         },
-        error: () => this.filteredPokemonsLoading.set(false),
+        error: (e) => {
+          console.error(e);
+          this.filteredPokemonsLoading.set(false);
+        },
       });
   }
 
@@ -175,6 +179,12 @@ export class PokemonFilterService {
       },
       queryParamsHandling: 'merge',
     });
+
+    if (this.pokemonService.loadedPokemons.length === 0) {
+      console.warn('No pokemons loaded, fetching all pokemons');
+
+      this.pokemonService.fetchPokemons();
+    }
   }
 
   getSelectedFilters(): PokemonFilters {

@@ -29,14 +29,12 @@ export class PokemonService {
     () => this.pokemonApiResponse()?.totalCount ?? 0
   );
 
-  fetchPokemons(pageIndex: number = 0) {
-    console.log(`fetchPokemons(${pageIndex})`);
+  fetchPokemons(page: number = 1) {
+    console.log(`fetchPokemons(${page})`);
     this.pokemonsLoading.set(true);
 
-    console.log('Fetching pokemons for page:', pageIndex);
-
     const params = new URLSearchParams({
-      page: (pageIndex + 1).toString(),
+      page: page.toString(),
       pageSize: pokemonsPerPage.toString(),
       select:
         'name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set',
@@ -49,11 +47,14 @@ export class PokemonService {
       .subscribe({
         next: (response) => {
           this.pokemonApiResponse.set(response);
-          this.paginator.setPage(response.page ?? 0);
+          this.paginator.setPage(response.page ?? 1);
           this.paginator.setTotalCount(response.totalCount ?? 0);
           this.pokemonsLoading.set(false);
         },
-        error: () => this.pokemonsLoading.set(false),
+        error: (e) => {
+          this.pokemonsLoading.set(false);
+          console.error(e);
+        },
       });
   }
 
