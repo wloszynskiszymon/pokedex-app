@@ -5,8 +5,7 @@ import {
   PokemonItemFields,
 } from '../pokemon.model';
 import { baseUrl } from '../../app.config';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { prepareFilterUrl } from './pokemon-filter.helpers';
 import { PokemonFilters } from './pokemon-filter.model';
 import { ActivatedRoute, Router } from '@angular/router';

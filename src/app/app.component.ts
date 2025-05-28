@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonListComponent } from './pokemon/pokemon-list/pokemon-list.component';
