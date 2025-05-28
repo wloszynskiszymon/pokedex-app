@@ -9,7 +9,7 @@
 
 <mat-form-field appearance="outline">
     <mat-label>Supertype</mat-label>
-    <mat-select [formControl]="controls.subtypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
+    <mat-select [formControl]="controls.supertypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
         @for (option of supertypes(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
