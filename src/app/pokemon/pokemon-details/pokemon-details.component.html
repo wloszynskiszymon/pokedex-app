@@ -63,7 +63,18 @@
     </div>
     }
 </div>
-<h3 class="heading heading--3">Sets:</h3>
+
+<h3 class="heading heading--3">Similar pokemons:</h3>
+@if(similarPokemons() !== undefined && similarPokemons().length > 0) {
+
+
+<div class="pokemon__similar">
+    @for(pokemon of similarPokemons(); track pokemon.id) {
+    <img (click)="navigateToThisPokemon(pokemon.id)" class="pokemon__similar__image" [src]="pokemon?.images?.small"
+        alt="{{ pokemon.name }}" />
+    }
+</div>
+}
 
 } @else {
 <div class="pokemon__loading">

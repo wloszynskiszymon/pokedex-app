@@ -7,6 +7,7 @@ import {
 } from './pokemon.model';
 import { baseUrl, pokemonsPerPage } from '../app.config';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -18,13 +19,19 @@ export class PokemonService {
   > | null>(null);
   private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
   private pokemonsLoading = signal<boolean>(true);
+  private pokemonsDetailsLoading = signal<boolean>(false);
+  private pokemonsSimilarLoading = signal<boolean>(true);
+  private pokemonsSimilar = signal<PokemonItemFields[]>([]);
 
   readonly loadedApiResponse = this.pokemonApiResponse.asReadonly();
   readonly loadedPokemons = computed(
     () => this.pokemonApiResponse()?.data ?? []
   );
+  readonly loadedSimilarPokemons = this.pokemonsSimilar.asReadonly();
   readonly loadedPokemonDetails = this.pokemonDetails.asReadonly();
   readonly isLoadingPokemons = this.pokemonsLoading.asReadonly();
+  readonly isLoadingSimilarPokemons = this.pokemonsSimilarLoading.asReadonly();
+  readonly isLoadingPokemonDetails = this.pokemonsDetailsLoading.asReadonly();
   readonly totalCount = computed(
     () => this.pokemonApiResponse()?.totalCount ?? 0
   );
@@ -58,14 +65,43 @@ export class PokemonService {
       });
   }
 
-  loadPokemonById(id: string) {
-    console.log(`loadPokemonById(${id})`);
-    this.http
+  loadPokemonById(id: string): Observable<PokemonApiResponse<PokemonDetails>> {
+    this.pokemonsDetailsLoading.set(true);
+    return this.http
       .get<PokemonApiResponse<PokemonDetails>>(`${baseUrl}/cards/${id}`)
-      .subscribe({
-        next: ({ data }) => this.pokemonDetails.set(data),
-        error: (err) => console.error('Error loading pokemon:', err),
-      });
+      .pipe(
+        tap((data) => {
+          this.pokemonDetails.set(data.data);
+          this.pokemonsDetailsLoading.set(false);
+        })
+      );
+  }
+
+  loadSimilarPokemons$(
+    pokemonSet: PokemonDetails['set'],
+    excludeId: string
+  ): Observable<PokemonApiResponse<PokemonItemFields[]>> {
+    console.log(`loadSimilarPokemons(${pokemonSet.name})`);
+    this.pokemonsSimilarLoading.set(true);
+
+    const query = `set.series:"${pokemonSet.series}" AND -id:${excludeId}`;
+
+    const params = new URLSearchParams({
+      page: '1',
+      pageSize: pokemonsPerPage.toString(),
+      select: 'name,id,images,set',
+      q: query,
+    });
+
+    const url = `${baseUrl}/cards?${params.toString()}`;
+    console.log(url);
+
+    return this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).pipe(
+      tap((response) => {
+        this.pokemonsSimilar.set(response.data ?? []);
+        this.pokemonsSimilarLoading.set(false);
+      })
+    );
   }
 
   disableLoading() {

@@ -10,7 +10,7 @@
       gap: 0.5rem;
 
       &__img {
-        width: 15rem;
+        width: 13rem;
       }
     }
 
@@ -138,6 +138,25 @@
         text-transform: uppercase;
       }
     }
+
+    &__similar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      margin-top: auto;
+
+      &__image {
+        width: 100%;
+        cursor: pointer;
+      }
+
+      &__description {
+        width: 60%;
+        font-size: 0.9rem;
+        color: #62598b;
+        margin-top: 0.5rem;
+      }
+    }
   }
 
   .thermometer {
@@ -211,6 +230,6 @@
 .heading--3 {
   font-size: 1.5rem;
   color: #363062;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.2rem;
 }
