@@ -4,7 +4,7 @@ import {
   PokemonApiResponse,
   PokemonItemFields,
 } from '../pokemon.model';
-import { baseUrl, pokemonsPerPage } from '../../app.config';
+import { baseUrl } from '../../app.config';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { prepareFilterUrl } from './pokemon-filter.helpers';
@@ -12,6 +12,8 @@ import { PokemonFilters } from './pokemon-filter.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
+import { forkJoin } from 'rxjs';
+import { createApiHeaders } from '../../api.helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +25,9 @@ export class PokemonFilterService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  private headers = new HttpHeaders({
-    'X-Api-Key': environment.apiKey || '',
-  });
+  private headers = createApiHeaders();
 
+  private isFiltersDataLoading = signal<boolean>(true);
   private supertypes = signal<string[] | null[]>([]);
   private subtypes = signal<string[] | null[]>([]);
   private types = signal<string[] | null[]>([]);
@@ -45,29 +46,44 @@ export class PokemonFilterService {
   loadedFilteredPokemons = this.filteredPokemons.asReadonly();
   isFilterActive = this.isFilterNowActive.asReadonly();
   isLoadingFilteredPokemons = this.filteredPokemonsLoading.asReadonly();
+  areFiltersLoading = this.isFiltersDataLoading.asReadonly();
 
   private loadFilters() {
-    this.httpClient
-      .get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
+    forkJoin({
+      types: this.httpClient.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
         headers: this.headers,
-      })
-      .subscribe({ next: ({ data }) => this.types.set(data) });
-
-    this.httpClient
-      .get<PokemonApiFilterResponse>(`${baseUrl}/subtypes`, {
-        headers: this.headers,
-      })
-      .subscribe({ next: ({ data }) => this.subtypes.set(data) });
-
-    this.httpClient
-      .get<PokemonApiFilterResponse>(`${baseUrl}/supertypes`, {
-        headers: this.headers,
-      })
-      .subscribe({ next: ({ data }) => this.supertypes.set(data) });
+      }),
+      subtypes: this.httpClient.get<PokemonApiFilterResponse>(
+        `${baseUrl}/subtypes`,
+        { headers: this.headers }
+      ),
+      supertypes: this.httpClient.get<PokemonApiFilterResponse>(
+        `${baseUrl}/supertypes`,
+        { headers: this.headers }
+      ),
+    }).subscribe({
+      next: ({ types, subtypes, supertypes }) => {
+        this.types.set(types.data);
+        this.subtypes.set(subtypes.data);
+        this.supertypes.set(supertypes.data);
+        this.isFiltersDataLoading.set(false);
+      },
+      error: (err) => {
+        this.isFiltersDataLoading.set(false);
+        console.error('Failed to load filters', err);
+      },
+    });
   }
 
   private restoreFiltersFromUrl() {
     this.route.queryParamMap.subscribe((params) => {
+      if (
+        !params.getAll('types').length &&
+        !params.getAll('subtypes').length &&
+        !params.getAll('supertypes').length
+      )
+        return;
+
       const types = params.getAll('types');
       const subtypes = params.getAll('subtypes');
       const supertypes = params.getAll('supertypes');
@@ -75,23 +91,13 @@ export class PokemonFilterService {
       this.selectedTypes.set(types);
       this.selectedSubtypes.set(subtypes);
       this.selectedSupertypes.set(supertypes);
-
-      if (types.length || subtypes.length || supertypes.length) {
-        this.filterBy({
-          types,
-          subtypes,
-          supertypes,
-        });
-      }
     });
   }
 
-  filterBy(
-    filters: PokemonFilters,
-    pageIndex: number = 0,
-    pageSize: number = pokemonsPerPage
-  ) {
+  filterBy(filters: PokemonFilters, pageIndex: number = 0) {
     const { types = [], subtypes = [], supertypes = [] } = filters;
+
+    console.log('Fetching pokemons for page:', pageIndex);
 
     this.selectedTypes.set(types);
     this.selectedSubtypes.set(subtypes);
@@ -103,7 +109,6 @@ export class PokemonFilterService {
         types: types.length ? types : null,
         subtypes: subtypes.length ? subtypes : null,
         supertypes: supertypes.length ? supertypes : null,
-        page: pageIndex + 1,
       },
       queryParamsHandling: 'merge',
     });
@@ -115,22 +120,23 @@ export class PokemonFilterService {
       return;
     }
     this.isFilterNowActive.set(true);
+    this.filteredPokemonsLoading.set(true);
 
     const fullUrl = prepareFilterUrl(
       { types, subtypes, supertypes },
-      pageIndex
+      pageIndex + 1
     );
 
-    this.filteredPokemonsLoading.set(true);
     this.httpClient
       .get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {
         headers: this.headers,
       })
       .subscribe({
-        next: ({ data, totalCount }) => {
+        next: ({ data, totalCount, page }) => {
           this.filteredPokemons.set(data);
           this.filteredPokemonsLoading.set(false);
           this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
+          this.pokemonPaginatorService.setPage(page);
         },
         error: () => this.filteredPokemonsLoading.set(false),
       });

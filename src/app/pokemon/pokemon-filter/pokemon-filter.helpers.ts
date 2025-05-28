@@ -3,8 +3,7 @@ import { PokemonFilters } from './pokemon-filter.model';
 
 export const prepareFilterUrl = (
   filters: PokemonFilters,
-  pageIndex: number = 0,
-  pageSize: number = pokemonsPerPage
+  page: number = 1
 ): string => {
   const { types = [], subtypes = [], supertypes = [] } = filters;
 
@@ -23,8 +22,7 @@ export const prepareFilterUrl = (
   const query = queryParts.join(' AND ');
   const fullUrl = `${baseUrl}/cards?q=${encodeURIComponent(
     query
-  )}&select=name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set&pageSize=${pageSize}&page=${
-    pageIndex + 1
-  }`;
+  )}&select=name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set&pageSize=${pokemonsPerPage}&page=${page}`;
+
   return fullUrl;
 };

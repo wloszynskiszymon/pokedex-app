@@ -29,12 +29,14 @@ export class PokemonService {
     () => this.pokemonApiResponse()?.totalCount ?? 0
   );
 
-  fetchPokemons(page: number = 0, limit: number = pokemonsPerPage) {
+  fetchPokemons(pageIndex: number = 0) {
     this.pokemonsLoading.set(true);
 
+    console.log('Fetching pokemons for page:', pageIndex);
+
     const params = new URLSearchParams({
-      page: (page + 1).toString(),
-      pageSize: limit.toString(),
+      page: (pageIndex + 1).toString(),
+      pageSize: pokemonsPerPage.toString(),
       select:
         'name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set',
     });
@@ -46,9 +48,9 @@ export class PokemonService {
       .subscribe({
         next: (response) => {
           this.pokemonApiResponse.set(response);
-          this.updatePagination(page, response.totalCount ?? 0);
+          this.paginator.setPage(response.page ?? 0);
+          this.paginator.setTotalCount(response.totalCount ?? 0);
           this.pokemonsLoading.set(false);
-          console.log('Pokemons loaded:', response.data);
         },
         error: () => this.pokemonsLoading.set(false),
       });
@@ -61,11 +63,5 @@ export class PokemonService {
         next: ({ data }) => this.pokemonDetails.set(data),
         error: (err) => console.error('Error loading pokemon:', err),
       });
-  }
-
-  private updatePagination(page: number, totalCount: number) {
-    this.paginator.setPage(page);
-    this.paginator.setTotalCount(totalCount);
-    this.paginator.setPageSize(pokemonsPerPage);
   }
 }

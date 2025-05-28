@@ -1,10 +1,13 @@
-import { Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { pokemonsPerPage } from '../../app.config';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonPaginatorService {
+  private router = inject(Router);
+
   private pageSize = signal<number>(pokemonsPerPage);
   private currentPage = signal<number>(0);
   private totalCount = signal<number>(0);
@@ -36,5 +39,12 @@ export class PokemonPaginatorService {
     this.setPage(0);
     this.setPageSize(pokemonsPerPage);
     this.setTotalCount(totalCount);
+  }
+
+  updateUrlPageParam(page: number) {
+    this.router.navigate([], {
+      queryParams: { page },
+      queryParamsHandling: 'merge',
+    });
   }
 }

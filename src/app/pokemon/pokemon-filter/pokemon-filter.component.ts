@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,10 +25,6 @@ export class PokemonFilterComponent implements OnInit {
   private paginator = inject(PokemonPaginatorService);
   private pokemonService = inject(PokemonService);
 
-  ngOnInit(): void {
-    this.filterService.init();
-  }
-
   controls = {
     types: new FormControl<string | null>(null),
     subtypes: new FormControl<string | null>(null),
@@ -43,13 +39,32 @@ export class PokemonFilterComponent implements OnInit {
     this.withDefault(this.filterService.loadedSupertypes())
   );
 
+  isLoading = computed(
+    () =>
+      this.filterService.isLoadingFilteredPokemons() ||
+      this.pokemonService.isLoadingPokemons() ||
+      this.filterService.areFiltersLoading()
+  );
+
+  ngOnInit(): void {
+    this.filterService.init();
+  }
+
+  constructor() {
+    effect(() => {
+      const loading = this.isLoading();
+      Object.values(this.controls).forEach((control) => {
+        loading ? control.disable() : control.enable();
+      });
+    });
+  }
+
   onFilterChange() {
     const filters = {
       types: this.toArray(this.controls.types.value),
       subtypes: this.toArray(this.controls.subtypes.value),
       supertypes: this.toArray(this.controls.supertypes.value),
     };
-
     this.paginator.reset(0);
     this.filterService.filterBy(filters);
   }

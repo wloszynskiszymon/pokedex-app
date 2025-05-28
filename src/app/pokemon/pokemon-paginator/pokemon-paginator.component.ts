@@ -19,17 +19,23 @@ export class PokemonPaginatorComponent {
 
   totalLength = computed(() => this.pokemonPaginatorService.totalCount$());
   pageSize = computed(() => this.pokemonPaginatorService.pageSize$());
-  currentPage = computed(() => this.pokemonPaginatorService.currentPage$());
+  currentPage = computed(() => this.pokemonPaginatorService.currentPage$() - 1);
+
+  isLoading = computed(
+    () =>
+      this.pokemonFilterService.isLoadingFilteredPokemons() ||
+      this.pokemonService.isLoadingPokemons()
+  );
 
   onPageChange(event: PageEvent) {
     if (this.pokemonFilterService.isFilterActive()) {
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),
-        event.pageIndex,
-        event.pageSize
+        event.pageIndex
       );
     } else {
-      this.pokemonService.fetchPokemons(event.pageIndex, event.pageSize);
+      this.pokemonService.fetchPokemons(event.pageIndex);
     }
+    this.pokemonPaginatorService.updateUrlPageParam(event.pageIndex + 1);
   }
 }
