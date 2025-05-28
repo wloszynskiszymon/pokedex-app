@@ -20,10 +20,9 @@
       align-items: center;
 
       &__name {
-        font-size: 3rem;
-
+        font-size: 2.5rem;
         color: #363062;
-        letter-spacing: 3px;
+        letter-spacing: -1px;
         font-weight: bold;
         text-transform: uppercase;
       }
@@ -43,7 +42,7 @@
     }
 
     &__stats {
-      margin-top: 2rem;
+      margin-top: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -171,7 +170,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      margin-top: 2rem;
+      margin-top: 0.75rem;
     }
 
     &__content {

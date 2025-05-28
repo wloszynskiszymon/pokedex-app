@@ -2,11 +2,11 @@ import { Component, computed, inject } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [],
+  imports: [MatTooltipModule],
   templateUrl: './pokemon-details.component.html',
   styleUrl: './pokemon-details.component.scss',
 })

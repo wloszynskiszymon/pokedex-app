@@ -51,15 +51,13 @@
 <h3 class="heading--3">Attacks:</h3>
 <div class="pokemon__attack">
     @for(attack of pokemon()?.attacks ?? []; track attack.name){
-    <div class="pokemon__attack__container">
+    <div class="pokemon__attack__container ">
         <div class="pokemon__attack__container--top">
             <p class="pokemon__attack__name">{{ attack?.name ?? defaultValue }}</p>
-            <p class="pokemon__attack__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
+            <p [matTooltip]="attack.text" class="pokemon__attack__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
         </div>
         <p class="pokemon__attack__cost">🏷️ {{ attack?.cost?.join(', ') ?? defaultValue }}</p>
-        <div class="pokemon__attack__container--bottom">
-            <p class="pokemon__attack__text">{{ attack?.text ?? defaultValue }}</p>
-        </div>
+
     </div>
     }
 </div>
@@ -74,6 +72,7 @@
         alt="{{ pokemon.name }}" />
     }
 </div>
+
 }
 
 } @else {
