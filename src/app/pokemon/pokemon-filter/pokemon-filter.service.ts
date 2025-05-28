@@ -48,7 +48,12 @@ export class PokemonFilterService {
   isLoadingFilteredPokemons = this.filteredPokemonsLoading.asReadonly();
   areFiltersLoading = this.isFiltersDataLoading.asReadonly();
 
-  private loadFilters() {
+  selectedType = this.selectedTypes.asReadonly();
+  selectedSubtype = this.selectedSubtypes.asReadonly();
+  selectedSupertype = this.selectedSupertypes.asReadonly();
+
+  loadFilters() {
+    console.log('loadFilters()');
     forkJoin({
       types: this.httpClient.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
         headers: this.headers,
@@ -75,7 +80,8 @@ export class PokemonFilterService {
     });
   }
 
-  private restoreFiltersFromUrl() {
+  async restoreFiltersFromUrl() {
+    console.log('restoreFiltersFromUrl()');
     this.route.queryParamMap.subscribe((params) => {
       if (
         !params.getAll('types').length &&
@@ -84,20 +90,27 @@ export class PokemonFilterService {
       )
         return;
 
+      console.log('Restoring filters from URL');
+      console.log('Loading when restoring: ', this.isFiltersDataLoading());
+
       const types = params.getAll('types');
       const subtypes = params.getAll('subtypes');
       const supertypes = params.getAll('supertypes');
 
+      console.log(types, subtypes, supertypes);
+
       this.selectedTypes.set(types);
       this.selectedSubtypes.set(subtypes);
       this.selectedSupertypes.set(supertypes);
+      this.isFilterNowActive.set(true);
     });
   }
 
   filterBy(filters: PokemonFilters, pageIndex: number = 0) {
+    console.log(
+      `filterBy({types: ${filters.types}, subtypes: ${filters.subtypes}, supertypes: ${filters.supertypes}}, ${pageIndex})`
+    );
     const { types = [], subtypes = [], supertypes = [] } = filters;
-
-    console.log('Fetching pokemons for page:', pageIndex);
 
     this.selectedTypes.set(types);
     this.selectedSubtypes.set(subtypes);
@@ -143,6 +156,7 @@ export class PokemonFilterService {
   }
 
   reset() {
+    console.log('reset()');
     this.selectedTypes.set([]);
     this.selectedSubtypes.set([]);
     this.selectedSupertypes.set([]);
@@ -164,6 +178,7 @@ export class PokemonFilterService {
   }
 
   getSelectedFilters(): PokemonFilters {
+    console.log('getSelectedFilters()');
     return {
       types: this.selectedTypes(),
       subtypes: this.selectedSubtypes(),
@@ -171,8 +186,8 @@ export class PokemonFilterService {
     };
   }
 
-  init() {
-    this.loadFilters();
-    this.restoreFiltersFromUrl();
+  disableLoading() {
+    console.log('disableLoading()');
+    this.filteredPokemonsLoading.set(false);
   }
 }

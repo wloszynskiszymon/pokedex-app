@@ -1,12 +1,13 @@
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { pokemonsPerPage } from '../../app.config';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PokemonPaginatorService {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   private pageSize = signal<number>(pokemonsPerPage);
   private currentPage = signal<number>(0);
@@ -36,15 +37,32 @@ export class PokemonPaginatorService {
   }
 
   reset(totalCount: number) {
+    console.log(`reset(${totalCount})`);
     this.setPage(0);
     this.setPageSize(pokemonsPerPage);
     this.setTotalCount(totalCount);
   }
 
   updateUrlPageParam(page: number) {
+    console.log(`updateUrlPageParam(${page})`);
     this.router.navigate([], {
       queryParams: { page },
       queryParamsHandling: 'merge',
+    });
+  }
+
+  async restorePageFromUrl() {
+    console.log('restorePageFromUrl()');
+    this.route.queryParamMap.subscribe((params) => {
+      console.log(params);
+      const page = Number(params.get('page'));
+      if (!isNaN(page) && page >= 0) {
+        console.log(`Restoring page from URL: ${page}`);
+        this.setPage(page);
+      } else {
+        console.log('No valid page in URL, resetting to 0');
+        this.setPage(0);
+      }
     });
   }
 }

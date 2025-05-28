@@ -30,6 +30,7 @@ export class PokemonService {
   );
 
   fetchPokemons(pageIndex: number = 0) {
+    console.log(`fetchPokemons(${pageIndex})`);
     this.pokemonsLoading.set(true);
 
     console.log('Fetching pokemons for page:', pageIndex);
@@ -57,11 +58,17 @@ export class PokemonService {
   }
 
   loadPokemonById(id: string) {
+    console.log(`loadPokemonById(${id})`);
     this.http
       .get<PokemonApiResponse<PokemonDetails>>(`${baseUrl}/cards/${id}`)
       .subscribe({
         next: ({ data }) => this.pokemonDetails.set(data),
         error: (err) => console.error('Error loading pokemon:', err),
       });
+  }
+
+  disableLoading() {
+    console.log('disableLoading()');
+    this.pokemonsLoading.set(false);
   }
 }
