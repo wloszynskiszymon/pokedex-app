@@ -1,9 +1,10 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { PokemonFilterService } from '../pokemon-filter/pokemon-filter.service';
 import { PokemonItemSkeletonComponent } from './pokemon-item/pokemon-item-skeleton/pokemon-item-skeleton.component';
 import { PokemonItemComponent } from './pokemon-item/pokemon-item.component';
 import { pokemonsPerPage } from '../../app.config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -13,10 +14,13 @@ import { pokemonsPerPage } from '../../app.config';
   styleUrl: './pokemon-list.component.scss',
 })
 export class PokemonListComponent {
+  readonly router = inject(Router);
+
   private pokemonService = inject(PokemonService);
   private pokemonFilterService = inject(PokemonFilterService);
 
   pageSize = new Array(pokemonsPerPage);
+  selectedPokemonId = signal<string | null>(null);
 
   isLoading = computed(() => {
     return (
@@ -39,4 +43,11 @@ export class PokemonListComponent {
 
     return this.pokemonService.loadedPokemons();
   });
+
+  onPokemonItemClick(id: string) {
+    this.selectedPokemonId.set(id);
+    this.router.navigate(['/pokemon', id], {
+      queryParamsHandling: 'preserve',
+    });
+  }
 }

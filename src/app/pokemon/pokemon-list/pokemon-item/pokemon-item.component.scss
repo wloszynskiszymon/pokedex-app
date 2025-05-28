@@ -1,3 +1,7 @@
+:host(.pokemon__item--active) {
+  background: #352963;
+}
+
 :host {
   display: flex;
   flex-direction: row;
@@ -71,6 +75,3 @@
 :host:hover {
   background-color: #453973;
 }
-
-// https://colorhunt.co/palette/363062435585818fb4f5e8c7
-// https://www.google.com/search?q=list+web+app+visual&sca_esv=748a1dba1c2e2658&rlz=1C1GCEU_plPL1161PL1161&udm=2&biw=1680&bih=889&sxsrf=AE3TifNRvQ_Yn2y3DAFc79LMvyOi4RftYQ%3A1748392069312&ei=hVg2aInrEqq5wPAP-oeBqAc&ved=0ahUKEwjJweCB9MSNAxWqHBAIHfpDAHUQ4dUDCBE&uact=5&oq=list+web+app+visual&gs_lp=EgNpbWciE2xpc3Qgd2ViIGFwcCB2aXN1YWxI5AlQ9ANY6QdwAngAkAEAmAFqoAGcA6oBAzAuNLgBA8gBAPgBAZgCAqACBsICBhAAGAgYHpgDAIgGAZIHATKgB7QBsgcAuAcAwgcDMC4yyAcE&sclient=img#vhid=r_yC0to6ULSmoM&vssid=mosaic

@@ -12,11 +12,4 @@ import { Router } from '@angular/router';
 })
 export class PokemonItemComponent {
   readonly pokemon = input.required<PokemonItemFields>();
-  readonly router = inject(Router);
-
-  onClick(id: string) {
-    this.router.navigate(['/pokemon', id], {
-      queryParamsHandling: 'preserve',
-    });
-  }
 }

@@ -10,7 +10,7 @@
 @else {
 
 @for (pokemon of pokemons(); track pokemon.id) {
-<app-pokemon-item [pokemon]="pokemon" />
-}
+<app-pokemon-item [class.pokemon__item--active]="selectedPokemonId() === pokemon.id"
+    (click)="onPokemonItemClick(pokemon.id)" [pokemon]="pokemon" /> }
 }
 }
