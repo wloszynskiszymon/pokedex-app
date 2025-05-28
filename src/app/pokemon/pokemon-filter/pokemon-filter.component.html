@@ -1,6 +1,6 @@
 <mat-form-field>
     <mat-label>Type</mat-label>
-    <mat-select [formControl]="typesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+    <mat-select [formControl]="controls.types" canSelectNullableOptions (selectionChange)="onFilterChange()">
         @for (option of types(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
@@ -9,7 +9,7 @@
 
 <mat-form-field>
     <mat-label>Supertype</mat-label>
-    <mat-select [formControl]="supertypesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+    <mat-select [formControl]="controls.subtypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
         @for (option of supertypes(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
@@ -18,7 +18,7 @@
 
 <mat-form-field>
     <mat-label>Subtype</mat-label>
-    <mat-select [formControl]="subtypesControl" canSelectNullableOptions (selectionChange)="onSingleTypeChange()">
+    <mat-select [formControl]="controls.subtypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
         @for (option of subtypes(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
@@ -26,6 +26,6 @@
 </mat-form-field>
 
 <button mat-raised-button (click)="onReset()"
-    [disabled]="!typesControl.value && !supertypesControl.value && !subtypesControl.value">
+    [disabled]="!controls.types.value && !controls.supertypes.value && !controls.subtypes.value">
     Reset
 </button>

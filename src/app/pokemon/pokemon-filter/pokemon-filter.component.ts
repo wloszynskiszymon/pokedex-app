@@ -1,9 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { PokemonFilterService } from './pokemon-filter.service';
 import { MatButton } from '@angular/material/button';
+import { PokemonFilterService } from './pokemon-filter.service';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
 
@@ -20,59 +20,52 @@ import { PokemonService } from '../pokemon.service';
   templateUrl: './pokemon-filter.component.html',
   styleUrl: './pokemon-filter.component.scss',
 })
-export class PokemonFilterComponent {
-  private readonly pokemonService = inject(PokemonService);
-  private readonly pokemonFilterService = inject(PokemonFilterService);
-  private readonly pokemonPaginatorService = inject(PokemonPaginatorService);
+export class PokemonFilterComponent implements OnInit {
+  private filterService = inject(PokemonFilterService);
+  private paginator = inject(PokemonPaginatorService);
+  private pokemonService = inject(PokemonService);
 
-  typesControl = new FormControl<string | null>(null);
-  subtypesControl = new FormControl<string | null>(null);
-  supertypesControl = new FormControl<string | null>(null);
+  ngOnInit(): void {
+    this.filterService.init();
+  }
 
-  types = computed(() => [
-    { label: '-----', value: null },
-    ...this.pokemonFilterService
-      .loadedTypes()
-      .map((type) => ({ label: type, value: type })),
-  ]);
+  controls = {
+    types: new FormControl<string | null>(null),
+    subtypes: new FormControl<string | null>(null),
+    supertypes: new FormControl<string | null>(null),
+  };
 
-  subtypes = computed(() => [
-    { label: '-----', value: null },
-    ...this.pokemonFilterService
-      .loadedSubtypes()
-      .map((type) => ({ label: type, value: type })),
-  ]);
+  types = computed(() => this.withDefault(this.filterService.loadedTypes()));
+  subtypes = computed(() =>
+    this.withDefault(this.filterService.loadedSubtypes())
+  );
+  supertypes = computed(() =>
+    this.withDefault(this.filterService.loadedSupertypes())
+  );
 
-  supertypes = computed(() => [
-    { label: '-----', value: null },
-    ...this.pokemonFilterService
-      .loadedSupertypes()
-      .map((type) => ({ label: type, value: type })),
-  ]);
+  onFilterChange() {
+    const filters = {
+      types: this.toArray(this.controls.types.value),
+      subtypes: this.toArray(this.controls.subtypes.value),
+      supertypes: this.toArray(this.controls.supertypes.value),
+    };
 
-  onSingleTypeChange() {
-    const types = this.typesControl.value ? [this.typesControl.value] : [];
-    const subtypes = this.subtypesControl.value
-      ? [this.subtypesControl.value]
-      : [];
-    const supertypes = this.supertypesControl.value
-      ? [this.supertypesControl.value]
-      : [];
-
-    this.pokemonPaginatorService.reset(0);
-
-    this.pokemonFilterService.filterBy({
-      types,
-      subtypes,
-      supertypes,
-    });
+    this.paginator.reset(0);
+    this.filterService.filterBy(filters);
   }
 
   onReset() {
-    this.typesControl.setValue(null);
-    this.subtypesControl.setValue(null);
-    this.supertypesControl.setValue(null);
-    this.pokemonFilterService.reset();
-    this.pokemonPaginatorService.reset(this.pokemonService.totalCount());
+    Object.values(this.controls).forEach((control) => control.setValue(null));
+    this.filterService.reset();
+    this.paginator.reset(this.pokemonService.totalCount());
   }
+
+  private toArray(value: string | null): string[] {
+    return value ? [value] : [];
+  }
+
+  private withDefault = (values: string[] | null[]) => [
+    { label: '-----', value: null },
+    ...values.map((val) => ({ label: val, value: val })),
+  ];
 }

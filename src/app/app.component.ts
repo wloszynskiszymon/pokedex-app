@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { PokemonListComponent } from './pokemon/pokemon-list/pokemon-list.component';
 import { PokemonFilterComponent } from './pokemon/pokemon-filter/pokemon-filter.component';
 import { PokemonPaginatorComponent } from './pokemon/pokemon-paginator/pokemon-paginator.component';
+import { PokemonService } from './pokemon/pokemon.service';
 
 @Component({
   selector: 'app-root',
@@ -18,4 +19,11 @@ import { PokemonPaginatorComponent } from './pokemon/pokemon-paginator/pokemon-p
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  private readonly pokemonService = inject(PokemonService);
+
+  ngOnInit() {
+    console.log('AppComponent initialized');
+    this.pokemonService.fetchPokemons();
+  }
+}

@@ -46,11 +46,6 @@ export class PokemonFilterService {
   isFilterActive = this.isFilterNowActive.asReadonly();
   isLoadingFilteredPokemons = this.filteredPokemonsLoading.asReadonly();
 
-  constructor() {
-    this.loadFilters();
-    this.restoreFiltersFromUrl();
-  }
-
   private loadFilters() {
     this.httpClient
       .get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
@@ -168,5 +163,10 @@ export class PokemonFilterService {
       subtypes: this.selectedSubtypes(),
       supertypes: this.selectedSupertypes(),
     };
+  }
+
+  init() {
+    this.loadFilters();
+    this.restoreFiltersFromUrl();
   }
 }

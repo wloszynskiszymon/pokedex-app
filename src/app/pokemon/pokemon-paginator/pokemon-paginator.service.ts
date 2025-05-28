@@ -1,4 +1,3 @@
-// pokemon-paginator.service.ts
 import { Injectable, signal } from '@angular/core';
 import { pokemonsPerPage } from '../../app.config';
 
