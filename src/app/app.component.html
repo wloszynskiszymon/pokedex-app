@@ -1,35 +1,26 @@
-<main class="app__container">
-  <section class="app__section">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Welcome to the Pokémon App!</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Find your favorite pokémons here!</p>
-
-        <app-pokemon-filter />
-      </mat-card-content>
-    </mat-card>
-
+<main class="app">
+  <!-- Dark mode for this section -->
+  <section class="app__section app__section--left">
+    <div class="app__header">
+      <h1 class="app__title">Welcome!</h1>
+      <p class="app__description">Find your favorite pokémons here!</p>
+    </div>
+    <app-pokemon-filter />
     <app-pokemon-list />
-
     <app-pokemon-paginator />
   </section>
 
   <section class="app__section">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Pokemon details</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Press any pokemon to see it's details.</p>
-      </mat-card-content>
+    <mat-card class="app__card">
+      <router-outlet />
     </mat-card>
-
-    <router-outlet />
-
   </section>
 
 
+
+  <!-- From japanese wikipedia :D  https://ja.wikipedia.org/wiki/%E3%83%9D%E3%82%B1%E3%83%83%E3%83%88%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC-->
+  <p class="japanese">ポケットモンスターの原案は、1996年2月27日に発売されたゲームボーイ用RPG『ポケットモンスター
+    赤・緑』である。開発はゲームフリーク。コンセプトメーカーにしてディレクターを務めたのは、同社代表取締役でもある田尻智。この作品が小学生を中心に、口コミから火が点き大ヒットとなり、以降も多くの続編が発売されている（詳しくは「ポケットモンスター（ゲーム）」を参照）。ゲーム本編作品だけでなく、派生作品や関連作品が数多く発売されている（詳しくはポケットモンスターの関連ゲームを参照）。
+  </p>
 
 </main>

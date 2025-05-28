@@ -23,7 +23,7 @@ export const prepareFilterUrl = (
   const query = queryParts.join(' AND ');
   const fullUrl = `${baseUrl}/cards?q=${encodeURIComponent(
     query
-  )}&select=name,id,images,supertype,subtypes,types&pageSize=${pageSize}&page=${
+  )}&select=name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set&pageSize=${pageSize}&page=${
     pageIndex + 1
   }`;
   return fullUrl;

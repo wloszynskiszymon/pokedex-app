@@ -1,9 +1,3 @@
-<mat-card>
-    <mat-card-content>
-        @if(totalLength() > 0) {
-        <mat-paginator [length]="totalLength()" [pageSize]="pageSize()" [pageIndex]="currentPage()"
-            (page)="onPageChange($event)" hidePageSize>
-        </mat-paginator>
-        }
-    </mat-card-content>
-</mat-card>
+<mat-paginator [length]="totalLength()" [pageSize]="pageSize()" [pageIndex]="currentPage()"
+    (page)="onPageChange($event)" hidePageSize>
+</mat-paginator>

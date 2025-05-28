@@ -1,8 +1,14 @@
-<mat-card class="pokemon__item" (click)="onClick(pokemon().id)">
-    <mat-card-header>
-        <mat-card-title>{{ pokemon().name }}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <img [src]="pokemon().images.small" alt="{{ pokemon().name }}" />
-    </mat-card-content>
-</mat-card>
+<img class="pokemon__image" [src]="pokemon().set.images.symbol" alt="{{ pokemon().name }}" />
+<div class="pokemon__content">
+    <div class="pokemon__info">
+        <p class="pokemon__name">{{ pokemon().name }}</p>
+        <div class="pokemon__badges">
+            <p class="pokemon__badge">{{ pokemon().types }}</p>
+            <p class="pokemon__badge">{{ pokemon().supertype }}</p>
+        </div>
+    </div>
+
+    <div class="pokemon__stats">
+        <p class="pokemon__stat">{{ pokemon().rarity }}</p>
+    </div>
+</div>

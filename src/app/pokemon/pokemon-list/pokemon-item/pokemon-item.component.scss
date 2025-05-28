@@ -1,15 +1,76 @@
-.pokemon__item {
+:host {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  box-sizing: border-box;
-  cursor: pointer;
+  padding: 0.5rem;
   height: 4rem;
+  border: 1px solid #aaa;
+  background-color: #504478;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  gap: 0.75rem;
+
+  .pokemon {
+    &__image {
+      width: 3rem;
+      height: 3rem;
+      background-size: cover;
+      background-position: center;
+      opacity: 0.8;
+    }
+
+    &__name {
+      color: #eee;
+      font-size: 1.2rem;
+      margin: 0;
+      line-height: 0.75rem;
+    }
+
+    &__content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex: 1;
+    }
+
+    &__info {
+      padding: 0;
+      margin: 0;
+      height: 2.5rem;
+    }
+
+    &__stats {
+      display: flex;
+      align-items: center;
+      color: #eee;
+    }
+
+    &__stat {
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    &__badges {
+      display: flex;
+      height: 100%;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    &__badge {
+      background-color: #635791;
+      display: inline-block;
+      padding: 0.2rem 0.4rem;
+      border-radius: 12px;
+      color: #ddd;
+    }
+  }
 }
 
-.pokemon__item img {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
+:host:hover {
+  background-color: #453973;
 }
+
+// https://colorhunt.co/palette/363062435585818fb4f5e8c7
+// https://www.google.com/search?q=list+web+app+visual&sca_esv=748a1dba1c2e2658&rlz=1C1GCEU_plPL1161PL1161&udm=2&biw=1680&bih=889&sxsrf=AE3TifNRvQ_Yn2y3DAFc79LMvyOi4RftYQ%3A1748392069312&ei=hVg2aInrEqq5wPAP-oeBqAc&ved=0ahUKEwjJweCB9MSNAxWqHBAIHfpDAHUQ4dUDCBE&uact=5&oq=list+web+app+visual&gs_lp=EgNpbWciE2xpc3Qgd2ViIGFwcCB2aXN1YWxI5AlQ9ANY6QdwAngAkAEAmAFqoAGcA6oBAzAuNLgBA8gBAPgBAZgCAqACBsICBhAAGAgYHpgDAIgGAZIHATKgB7QBsgcAuAcAwgcDMC4yyAcE&sclient=img#vhid=r_yC0to6ULSmoM&vssid=mosaic

@@ -1,14 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-
+import { Component, computed, inject } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
-import { PokemonDetails } from '../pokemon.model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [MatCardModule],
+  imports: [],
   templateUrl: './pokemon-details.component.html',
   styleUrl: './pokemon-details.component.scss',
 })

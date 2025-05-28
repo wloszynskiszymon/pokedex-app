@@ -17,14 +17,37 @@ interface CardImages {
 
 // only selected fields for the Pokemon model as well as it's nested types
 export interface PokemonItemFields {
-  name: string;
   id: string;
+  name: string;
   images: CardImages;
   supertype: string;
   subtypes: string[];
   types: string[];
+  hp: string;
+  rarity: string;
+  evolvesFrom: string;
+  number: string;
+  set: PokemonSet;
 }
 
+interface PokemonSet {
+  id: string;
+  name: string;
+  series: string;
+  printedTotal: number;
+  total: number;
+  legalities: {
+    unlimited: string;
+    expanded: string;
+    standard: string;
+  };
+  images: {
+    symbol: string;
+    logo: string;
+  };
+  releaseDate: string;
+  updatedAt: string;
+}
 export interface PokemonDetails extends PokemonItemFields {
   // TODO: select fields for details
 }

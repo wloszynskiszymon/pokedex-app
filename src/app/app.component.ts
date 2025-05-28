@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
   private readonly pokemonService = inject(PokemonService);
 
   ngOnInit() {
-    console.log('AppComponent initialized');
     this.pokemonService.fetchPokemons();
   }
 }

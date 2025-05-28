@@ -35,7 +35,8 @@ export class PokemonService {
     const params = new URLSearchParams({
       page: (page + 1).toString(),
       pageSize: limit.toString(),
-      select: 'name,id,images,supertype,subtypes,types',
+      select:
+        'name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set',
     });
 
     this.http
@@ -47,6 +48,7 @@ export class PokemonService {
           this.pokemonApiResponse.set(response);
           this.updatePagination(page, response.totalCount ?? 0);
           this.pokemonsLoading.set(false);
+          console.log('Pokemons loaded:', response.data);
         },
         error: () => this.pokemonsLoading.set(false),
       });
