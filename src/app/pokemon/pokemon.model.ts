@@ -48,9 +48,79 @@ interface PokemonSet {
   releaseDate: string;
   updatedAt: string;
 }
-export interface PokemonDetails extends PokemonItemFields {
+export interface PokemonDetails extends PokemonCard {
   // TODO: select fields for details
 }
+
+export type PokemonCard = {
+  id: string;
+  name: string;
+  supertype: string;
+  subtypes: string[];
+  hp: string;
+  types: string[];
+  evolvesFrom?: string;
+  flavorText?: string;
+  nationalPokedexNumbers: number[];
+  rarity?: string;
+  number: string;
+  artist?: string;
+  attacks?: {
+    name: string;
+    cost: string[];
+    convertedEnergyCost: number;
+    damage: string;
+    text: string;
+  }[];
+  weaknesses?: {
+    type: string;
+    value: string;
+  }[];
+  resistances?: {
+    type: string;
+    value: string;
+  }[];
+  retreatCost?: string[];
+  convertedRetreatCost?: number;
+  legalities: {
+    unlimited: string;
+  };
+  images: {
+    small: string;
+    large: string;
+  };
+  set: {
+    id: string;
+    name: string;
+    series: string;
+    printedTotal: number;
+    total: number;
+    legalities: {
+      unlimited: string;
+    };
+    ptcgoCode: string;
+    releaseDate: string;
+    updatedAt: string;
+    images: {
+      symbol: string;
+      logo: string;
+    };
+  };
+  cardmarket?: {
+    url: string;
+    updatedAt: string;
+    prices: {
+      averageSellPrice: number;
+      lowPrice: number;
+      trendPrice: number;
+      germanProLow: number;
+      suggestedPrice: number;
+      reverseHoloSell: number;
+      reverseHoloLow: number;
+      reverseHoloTrend: number;
+    };
+  };
+};
 
 // for /types /subtypes / supertypes endpoints
 export interface PokemonApiFilterResponse {

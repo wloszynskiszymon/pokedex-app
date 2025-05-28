@@ -28,7 +28,6 @@
       color: #eee;
       font-size: 1.2rem;
       margin: 0;
-      line-height: 0.75rem;
     }
 
     &__content {
@@ -39,9 +38,9 @@
     }
 
     &__info {
-      padding: 0;
-      margin: 0;
-      height: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
     }
 
     &__stats {

@@ -1,1 +1,70 @@
-<div>{{pokemon()?.id}}</div>
+@if(pokemon()) {
+
+<div class="pokemon__header">
+    <img class="pokemon__header__img" [src]="pokemon()?.images?.small" alt="{{ pokemon()?.name }}" />
+    <div>
+        <div class="pokemon__title">
+            <h2 class="pokemon__title__name">{{ pokemon()?.name ?? defaultValue }}</h2>
+            <p class="pokemon__title__id">#{{ pokemon()?.id ?? defaultValue }}</p>
+        </div>
+
+        <p class="artist"><span class="stats__name">Artist:</span> <span class="artist--value">{{
+                pokemon()?.artist ?? defaultValue }}</span></p>
+
+
+        <div class="pokemon__stats">
+            <span class="stats__name">type stats: </span>
+            <p class="pokemon__badge pokemon__badge--supertype">{{ pokemon()?.supertype ?? defaultValue}}</p>
+            <p class="pokemon__badge pokemon__badge--type">{{ pokemon()?.types?.join(', ') ?? defaultValue}}</p>
+            <p class="pokemon__badge pokemon__badge--subtype">{{ pokemon()?.subtypes?.join(', ') ?? defaultValue}}</p>
+        </div>
+
+        <div class="thermometer__container">
+            <div class="thermometer">
+                <span class="stats__name">HP:</span>
+                @if(pokemon()?.hp) {
+                <div class="thermometer__content">
+                    <div class="thermometer__bar">
+                        <div class="thermometer__bar__fill" [style.width.%]="normalizeToUnit(pokemon()?.hp, 150) * 100">
+                        </div>
+                    </div>
+                    <span class="thermometer__bar__value">{{ pokemon()?.hp ?? defaultValue }}</span>
+                </div> }
+            </div>
+
+            @for(reistance of pokemon()?.resistances ?? []; track reistance.type){
+            <div class="thermometer">
+                <span class="stats__name">{{reistance.type}} resistance</span>
+                <div class="thermometer__content">
+                    <div class="thermometer__bar">
+                        <div class="thermometer__bar__fill"
+                            [style.width.%]="normalizeToUnit(reistance.value, 100) * 100">
+                        </div>
+                    </div>
+                    <span class="thermometer__bar__value">{{ reistance.value }}</span>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+
+<h3 class="heading--3">Attacks:</h3>
+<div class="pokemon__attack">
+    @for(attack of pokemon()?.attacks ?? []; track attack.name){
+    <div class="pokemon__attack__container">
+        <div class="pokemon__attack__container--top">
+            <p class="pokemon__attack__name">{{ attack?.name ?? defaultValue }}</p>
+            <p class="pokemon__attack__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
+        </div>
+        <p class="pokemon__attack__cost">🏷️ {{ attack?.cost?.join(', ') ?? defaultValue }}</p>
+        <div class="pokemon__attack__container--bottom">
+            <p class="pokemon__attack__text">{{ attack?.text ?? defaultValue }}</p>
+        </div>
+    </div>
+    }
+</div>
+<h3 class="heading heading--3">Sets:</h3>
+
+
+}
