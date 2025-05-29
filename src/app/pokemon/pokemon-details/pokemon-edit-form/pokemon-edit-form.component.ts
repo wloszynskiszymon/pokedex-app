@@ -1,12 +1,18 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PokemonDetails } from '../../pokemon.model';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PokemonFilterService } from '../../pokemon-filter/pokemon-filter.service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-pokemon-edit-form',
@@ -19,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSliderModule,
     ReactiveFormsModule,
     MatSelectModule,
+    MatTooltipModule,
   ],
   templateUrl: './pokemon-edit-form.component.html',
   styleUrl: './pokemon-edit-form.component.scss',
@@ -27,6 +34,7 @@ export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
   hpControl = new FormControl(this.pokemon?.hp ?? 50);
   private filterService = inject(PokemonFilterService);
+  private dialog = inject(MatDialog);
 
   types = computed(() => this.filterService.loadedTypes());
   subtypes = computed(() => this.filterService.loadedSubtypes());
@@ -46,6 +54,10 @@ export class PokemonEditFormComponent implements OnInit {
 
     this.controls.types.setValue(this.pokemon.types ?? []);
     this.controls.subtypes.setValue(this.pokemon.subtypes ?? []);
-    this.controls.supertype.setValue(this.pokemon.supertype?.[0] ?? null);
+    this.controls.supertype.setValue(this.pokemon.supertype ?? null);
+  }
+
+  onCancel() {
+    this.dialog.closeAll();
   }
 }

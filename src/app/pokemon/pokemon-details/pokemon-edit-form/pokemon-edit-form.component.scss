@@ -1,5 +1,35 @@
-.select__others {
-  opacity: 0.75;
-  font-size: 0.75em;
-  line-height: 1;
+:host {
+  ::ng-deep .mdc-text-field {
+    width: 100%;
+  }
+}
+
+.form {
+  &__slider {
+    width: 50%;
+    &__container {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+    &__description {
+      font-size: 0.75rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &__select {
+    &__container {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    &__others {
+      opacity: 0.75;
+      font-size: 0.75em;
+      line-height: 1;
+    }
+  }
 }
