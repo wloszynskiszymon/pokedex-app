@@ -8,7 +8,6 @@ import { PokemonService } from './pokemon/pokemon.service';
 import { PokemonFilterService } from './pokemon/pokemon-filter/pokemon-filter.service';
 import { PokemonPaginatorService } from './pokemon/pokemon-paginator/pokemon-paginator.service';
 import { filter, first, firstValueFrom } from 'rxjs';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +46,7 @@ export class AppComponent implements OnInit {
     this.pokemonFilterService.loadFilters();
 
     const isFilterActive = this.pokemonFilterService.isFilterActive();
+    const page = this.pokemonPaginatorService.currentPagination.page;
 
     console.log('Is filted active: ', isFilterActive);
     if (isFilterActive) {
@@ -56,13 +56,13 @@ export class AppComponent implements OnInit {
       // fetch filtered pokemons
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),
-        this.pokemonPaginatorService.currentPagination.page
+        page
       );
     } else {
       // filtered data not needed
       this.pokemonFilterService.disableLoading();
       // fetch all pokemons
-      this.pokemonService.fetchPokemons();
+      this.pokemonService.fetchPokemons(page);
     }
   }
 }

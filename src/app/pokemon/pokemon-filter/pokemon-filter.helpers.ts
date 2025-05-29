@@ -5,7 +5,7 @@ export const prepareFilterUrl = (
   filters: PokemonFilters,
   page: number = 1
 ): string => {
-  const { types = [], subtypes = [], supertypes = [] } = filters;
+  const { types = [], subtypes = [], supertype = [] } = filters;
 
   const queryParts: string[] = [];
 
@@ -15,8 +15,8 @@ export const prepareFilterUrl = (
   if (subtypes.length) {
     queryParts.push(...subtypes.map((val) => `subtypes:"${val}"`));
   }
-  if (supertypes.length) {
-    queryParts.push(...supertypes.map((val) => `supertype:"${val}"`));
+  if (supertype) {
+    queryParts.push(`supertype:"${supertype}"`);
   }
 
   const query = queryParts.join(' AND ');

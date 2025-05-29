@@ -66,10 +66,9 @@ export class PokemonFilterComponent {
       this.controls.subtypes.setValue(subtype.length ? subtype[0] : null, {
         emitEvent: false,
       });
-      this.controls.supertypes.setValue(
-        supertype.length ? supertype[0] : null,
-        { emitEvent: false }
-      );
+      this.controls.supertypes.setValue(supertype ?? null, {
+        emitEvent: false,
+      });
 
       console.log(
         `effect() - selected filters updated: types=${type}, subtypes=${subtype}, supertypes=${supertype}`
@@ -81,7 +80,7 @@ export class PokemonFilterComponent {
     const filters = {
       types: this.toArray(this.controls.types.value),
       subtypes: this.toArray(this.controls.subtypes.value),
-      supertypes: this.toArray(this.controls.supertypes.value),
+      supertype: this.controls.supertypes.value,
     };
     this.paginator.reset(0);
     this.filterService.filterBy(filters);
