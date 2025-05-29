@@ -1,7 +1,6 @@
 <h2 mat-dialog-title>Edit pokemon</h2>
 <mat-dialog-content>
     <p>You can edit some choosen statistics. You will be able to see the changes by switching to "edited view"</p>
-
     <form>
         <div class="form__slider__container">
             <span class="form__slider__label">HP</span>
@@ -16,7 +15,6 @@
                 Set the HP value (0–150)
             </p>
         </div>
-
 
         <div class="form__select__container">
             <mat-form-field appearance="outline">
@@ -70,10 +68,9 @@
             </mat-form-field>
         </div>
     </form>
-
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button matTooltip="Reset to original values" mat-button>Reset</button>
+    <button (click)="onReset()" matTooltip="Reset to original values" mat-button>Reset</button>
     <button (click)="onCancel()" mat-button>Cancel</button>
-    <button mat-flat-button mat-dialog-close cdkFocusInitial>Ok</button>
+    <button mat-flat-button mat-dialog-close cdkFocusInitial>Save</button>
 </mat-dialog-actions>

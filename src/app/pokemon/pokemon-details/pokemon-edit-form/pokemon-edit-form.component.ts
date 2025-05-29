@@ -32,7 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
-  hpControl = new FormControl(this.pokemon?.hp ?? 50);
+  hpControl = new FormControl(this.pokemon?.hp ?? 1);
   private filterService = inject(PokemonFilterService);
   private dialog = inject(MatDialog);
 
@@ -55,6 +55,13 @@ export class PokemonEditFormComponent implements OnInit {
     this.controls.types.setValue(this.pokemon.types ?? []);
     this.controls.subtypes.setValue(this.pokemon.subtypes ?? []);
     this.controls.supertype.setValue(this.pokemon.supertype ?? null);
+  }
+
+  onReset() {
+    this.hpControl.setValue(this.pokemon?.hp ?? 1);
+    this.controls.types.setValue(this.pokemon.types);
+    this.controls.subtypes.setValue(this.pokemon.subtypes);
+    this.controls.supertype.setValue(this.pokemon.supertype);
   }
 
   onCancel() {
