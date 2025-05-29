@@ -4,6 +4,9 @@
   padding: 1rem;
 
   .pokemon {
+    &__edit__button {
+      width: fit-content;
+    }
     &__header {
       display: flex;
       align-items: flex-start;

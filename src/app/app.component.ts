@@ -8,6 +8,7 @@ import { PokemonService } from './pokemon/pokemon.service';
 import { PokemonFilterService } from './pokemon/pokemon-filter/pokemon-filter.service';
 import { PokemonPaginatorService } from './pokemon/pokemon-paginator/pokemon-paginator.service';
 import { filter, first, firstValueFrom } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',

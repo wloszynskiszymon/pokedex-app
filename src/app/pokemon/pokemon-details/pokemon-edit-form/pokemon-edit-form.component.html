@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Edit pokemon</h2>
+<mat-dialog-content>
+    <p>You can edit some choosen statistics. You will be able to see the changes by switching to "edited view"</p>
+
+    <form>
+        <div class="form__field">
+            <label for="hp-slider" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">HP</label>
+            <mat-slider id="hp-slider" [min]="0" [max]="150" [step]="1" tickInterval="10">
+                <input matSliderThumb [formControl]="hpControl" />
+            </mat-slider>
+            <span class="mat-slider
+                -thumb-label">
+                {{ hpControl.value }}
+            </span>
+            <div style="font-size: 0.85em; color: #888; margin-top: 0.25rem;">
+                Set the HP value (0–150)
+            </div>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button>No Thanks</button>
+    <button mat-flat-button mat-dialog-close cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

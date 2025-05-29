@@ -3,10 +3,13 @@ import { PokemonService } from '../pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { PokemonEditFormComponent } from './pokemon-edit-form/pokemon-edit-form.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [MatTooltipModule],
+  imports: [MatTooltipModule, MatButtonModule],
   templateUrl: './pokemon-details.component.html',
   styleUrl: './pokemon-details.component.scss',
 })
@@ -14,6 +17,7 @@ export class PokemonDetailsComponent {
   pokemonService = inject(PokemonService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  dialog = inject(MatDialog);
 
   pokemon = computed(() => {
     console.log(this.pokemonService.loadedPokemonDetails());
@@ -76,6 +80,12 @@ export class PokemonDetailsComponent {
     this.router.navigate(['../', pokemonId], {
       relativeTo: this.route,
       queryParamsHandling: 'preserve',
+    });
+  }
+
+  openEditDialog() {
+    this.dialog.open(PokemonEditFormComponent, {
+      data: this.pokemon(),
     });
   }
 }
