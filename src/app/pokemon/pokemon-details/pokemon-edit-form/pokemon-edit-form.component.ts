@@ -8,10 +8,9 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PokemonDetails } from '../../pokemon.model';
 import { MatSliderModule } from '@angular/material/slider';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PokemonFilterService } from '../../pokemon-filter/pokemon-filter.service';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -32,39 +31,43 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
-  hpControl = new FormControl(this.pokemon?.hp ?? 1);
   private filterService = inject(PokemonFilterService);
   private dialog = inject(MatDialog);
 
   types = computed(() => this.filterService.loadedTypes());
   subtypes = computed(() => this.filterService.loadedSubtypes());
   supertype = computed(() => this.filterService.loadedSupertypes());
-  isLoading = computed(() => this.filterService.areFiltersLoading());
 
-  controls = {
+  form = new FormGroup({
+    hp: new FormControl<number>(Number(this.pokemon?.hp) ?? 1),
     types: new FormControl<string[] | null[]>([]),
     supertype: new FormControl<string | null>(null),
     subtypes: new FormControl<string[] | null[]>([]),
-  };
+  });
 
   ngOnInit() {
     if (!this.pokemon) {
       throw new Error('Pokemon data is required for editing');
     }
 
-    this.controls.types.setValue(this.pokemon.types ?? []);
-    this.controls.subtypes.setValue(this.pokemon.subtypes ?? []);
-    this.controls.supertype.setValue(this.pokemon.supertype ?? null);
+    this.form.controls.types.setValue(this.pokemon.types ?? []);
+    this.form.controls.subtypes.setValue(this.pokemon.subtypes ?? []);
+    this.form.controls.supertype.setValue(this.pokemon.supertype ?? null);
   }
 
   onReset() {
-    this.hpControl.setValue(this.pokemon?.hp ?? 1);
-    this.controls.types.setValue(this.pokemon.types);
-    this.controls.subtypes.setValue(this.pokemon.subtypes);
-    this.controls.supertype.setValue(this.pokemon.supertype);
+    this.form.controls.hp.setValue(Number(this.pokemon?.hp) ?? 1);
+    this.form.controls.types.setValue(this.pokemon.types);
+    this.form.controls.subtypes.setValue(this.pokemon.subtypes);
+    this.form.controls.supertype.setValue(this.pokemon.supertype);
+    this.form.markAsPristine();
   }
 
   onCancel() {
     this.dialog.closeAll();
+  }
+
+  onSave() {
+    console.log('Saving Pokemon');
   }
 }
