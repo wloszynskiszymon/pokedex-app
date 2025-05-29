@@ -1,10 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PokemonDetails } from '../../pokemon.model';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { PokemonFilterService } from '../../pokemon-filter/pokemon-filter.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-pokemon-edit-form',
@@ -16,6 +18,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatSliderModule,
     ReactiveFormsModule,
+    MatSelectModule,
   ],
   templateUrl: './pokemon-edit-form.component.html',
   styleUrl: './pokemon-edit-form.component.scss',
@@ -23,10 +26,26 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
   hpControl = new FormControl(this.pokemon?.hp ?? 50);
+  private filterService = inject(PokemonFilterService);
+
+  types = computed(() => this.filterService.loadedTypes());
+  subtypes = computed(() => this.filterService.loadedSubtypes());
+  supertype = computed(() => this.filterService.loadedSupertypes());
+  isLoading = computed(() => this.filterService.areFiltersLoading());
+
+  controls = {
+    types: new FormControl<string[] | null[]>([]),
+    supertype: new FormControl<string | null>(null),
+    subtypes: new FormControl<string[] | null[]>([]),
+  };
 
   ngOnInit() {
     if (!this.pokemon) {
       throw new Error('Pokemon data is required for editing');
     }
+
+    this.controls.types.setValue(this.pokemon.types ?? []);
+    this.controls.subtypes.setValue(this.pokemon.subtypes ?? []);
+    this.controls.supertype.setValue(this.pokemon.supertype?.[0] ?? null);
   }
 }

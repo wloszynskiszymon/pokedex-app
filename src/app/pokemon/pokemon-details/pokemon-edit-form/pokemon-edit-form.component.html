@@ -16,6 +16,53 @@
                 Set the HP value (0–150)
             </div>
         </div>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select [formControl]="controls.types" multiple>
+                <mat-select-trigger>
+                    {{ (controls.types.value?.[0]) || '' }}
+                    @if ((controls.types.value?.length || 0) > 1) {
+                    <span class="select__others">
+                        (+{{ (controls.types.value?.length || 0) - 1 }} {{ controls.types.value?.length === 2 ? 'other'
+                        :
+                        'others' }})
+                    </span>
+                    }
+                </mat-select-trigger>
+                @for (option of types(); track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Supertype</mat-label>
+            <mat-select [formControl]="controls.supertype">
+                @for (option of supertype(); track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Subtype</mat-label>
+            <mat-select [formControl]="controls.subtypes" multiple>
+                <mat-select-trigger>
+                    {{ (controls.subtypes.value?.[0]) || '' }}
+                    @if ((controls.subtypes.value?.length || 0) > 1) {
+                    <span class="select__others">
+                        (+{{ (controls.subtypes.value?.length || 0) - 1 }} {{ controls.subtypes.value?.length === 2 ?
+                        'other' :
+                        'others' }})
+                    </span>
+                    }
+                </mat-select-trigger>
+                @for (option of subtypes(); track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
     </form>
 
 </mat-dialog-content>
