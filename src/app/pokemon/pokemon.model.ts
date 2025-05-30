@@ -126,3 +126,11 @@ export type PokemonCard = {
 export interface PokemonApiFilterResponse {
   data: string[];
 }
+
+export interface PokemonEditable {
+  id: string;
+  hp: string;
+  type: string[];
+  subtypes: string[];
+  supertype: string;
+}

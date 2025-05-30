@@ -12,6 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PokemonFilterService } from '../../pokemon-filter/pokemon-filter.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-pokemon-edit-form',
@@ -25,6 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ReactiveFormsModule,
     MatSelectModule,
     MatTooltipModule,
+    MatSnackBarModule,
   ],
   templateUrl: './pokemon-edit-form.component.html',
   styleUrl: './pokemon-edit-form.component.scss',
@@ -33,6 +35,7 @@ export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
   private filterService = inject(PokemonFilterService);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   types = computed(() => this.filterService.loadedTypes());
   subtypes = computed(() => this.filterService.loadedSubtypes());
@@ -67,7 +70,38 @@ export class PokemonEditFormComponent implements OnInit {
     this.dialog.closeAll();
   }
 
+  // TODO: Perhaps some validation logic
   onSave() {
-    console.log('Saving Pokemon');
+    try {
+      if (this.form.invalid) {
+        console.error('Form is invalid, cannot save');
+        return;
+      }
+
+      const pokemonDataToStore = {
+        id: this.pokemon.id,
+        hp: this.form.controls.hp.value,
+        types: this.form.controls.types.value,
+        subtypes: this.form.controls.subtypes.value,
+        supertype: this.form.controls.supertype.value,
+      };
+
+      // keys of stored pokemons could be stored as well for easier removal
+      localStorage.setItem(this.pokemon.id, JSON.stringify(pokemonDataToStore));
+
+      this.showSnackbar(`Pokemon ${this.pokemon.name} saved successfully!`);
+
+      this.dialog.closeAll();
+    } catch (error) {
+      console.error('Error saving Pokemon:', error);
+    }
+  }
+
+  showSnackbar(message: string) {
+    this.snackBar.open(message, undefined, {
+      verticalPosition: 'top',
+      duration: 2000,
+      panelClass: ['app-snackbar'],
+    });
   }
 }

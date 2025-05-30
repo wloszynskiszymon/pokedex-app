@@ -72,8 +72,8 @@
 
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button (click)="onReset()" matTooltip="Reset to original values" mat-button>Reset</button>
-        <button (click)="onCancel()" mat-button>Cancel</button>
+        <button type="button" (click)="onReset()" matTooltip="Reset to original values" mat-button>Reset</button>
+        <button type="button" (click)="onCancel()" mat-button>Cancel</button>
         <button type="submit" [disabled]="form.pristine" mat-flat-button>Save</button>
     </mat-dialog-actions>
 </form>
