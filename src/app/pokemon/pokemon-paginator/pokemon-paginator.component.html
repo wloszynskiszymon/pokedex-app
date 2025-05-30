@@ -1,3 +1,6 @@
+@if(!shouldHide()) {
 <mat-paginator [length]="totalLength()" [pageSize]="pageSize()" [pageIndex]="currentPage() - 1"
     (page)="onPageChange($event)" [disabled]="isLoading()" hidePageSize>
 </mat-paginator>
+
+}

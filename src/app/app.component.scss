@@ -1,31 +1,22 @@
 .app {
   display: flex;
-  align-items: center;
   justify-content: center;
   min-height: 40rem;
   height: 100vh;
   max-height: 100vh;
   background-color: #363062;
   overflow: hidden;
-
   position: relative;
 
   &__section {
-    position: relative;
-    display: flex;
-    flex-direction: column;
     padding: 1rem;
-    box-sizing: border-box;
     z-index: 10;
     max-width: 45rem;
     max-height: 45rem;
 
-    &--left {
-      align-self: center;
-    }
+    margin-top: 6rem;
 
     &--right {
-      align-self: center;
       flex: 1;
     }
   }

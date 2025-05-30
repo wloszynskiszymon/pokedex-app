@@ -31,6 +31,23 @@ export class PokemonPaginatorComponent {
       this.pokemonService.isLoadingPokemons()
   );
 
+  // when no results or error
+  shouldHide = computed(() => {
+    const isFilterActive = this.pokemonFilterService.isFilterActive();
+    const isLoading = this.isLoading();
+    const totalCount = this.pokemonPaginatorService.totalCount$();
+    const xd =
+      (isFilterActive && !isLoading && totalCount === 0) ||
+      (!isFilterActive && !isLoading && totalCount === 0);
+
+    console.log('=========== shouldHide() ===========');
+    console.log(xd);
+    return (
+      (isFilterActive && !isLoading && totalCount === 0) ||
+      (!isFilterActive && !isLoading && totalCount === 0)
+    );
+  });
+
   onPageChange(event: PageEvent) {
     const page = event.pageIndex + 1; // material paginator uses 0-based index
     console.log(
