@@ -66,66 +66,9 @@
       width: fit-content;
     }
 
-    &__attack {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: auto auto;
-      gap: 0.5rem;
-      margin-top: 1rem;
-
-      &__container {
-        gap: 0.5rem;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        border: 1px solid #ccc;
-        background-color: #d1d7f7;
-
-        &--top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        &--bottom {
-          margin-top: 0.4rem;
-        }
-      }
-
-      &__name {
-        font-size: 1rem;
-        color: #62598b;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-      }
-
-      &__text {
-        font-size: 0.7rem;
-        color: #62598b;
-        line-clamp: 3;
-        text-overflow: ellipsis;
-        text-align: justify;
-        text-justify: inter-word;
-      }
-
-      &__cost {
-        font-size: 0.8rem;
-        color: #9086c0;
-        font-weight: bold;
-      }
-
-      &__damage {
-        font-size: 1.2rem;
-        color: #62598b;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-      }
-    }
-
     &__loading {
-      width: 100%;
-      height: 100%;
+      height: 70vh;
+      min-height: 30rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -164,59 +107,6 @@
       }
     }
   }
-
-  .thermometer {
-    display: flex;
-    flex-direction: column;
-
-    & > span {
-      margin-left: 0.5rem;
-    }
-
-    &__container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-
-    &__content {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      height: 1rem;
-      padding: 0.25rem 0.5rem;
-    }
-
-    &__bar {
-      width: 20rem;
-      height: 1rem;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      background-color: #e0e0e0;
-      border: 1px solid #333;
-
-      &__fill {
-        display: block;
-        height: 100%;
-        background-color: #424461;
-        width: 0;
-        transition: width 0.3s ease-in-out;
-      }
-
-      &__value {
-        font-size: 0.85rem;
-        color: #333;
-      }
-    }
-  }
-}
-
-.stats__name {
-  font-size: 1rem;
-  font-style: italic;
-  text-transform: lowercase;
-  color: #aaa;
 }
 
 .artist {

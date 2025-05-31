@@ -41,3 +41,40 @@ body {
   white-space: nowrap;
   overflow: hidden;
 }
+
+.stats__name {
+  font-size: 1rem;
+  font-style: italic;
+  text-transform: lowercase;
+  color: #aaa;
+}
+
+@mixin skeleton-pulse(
+  $property: background-color,
+  $color: #403468,
+  $name: pulse
+) {
+  @keyframes #{$name} {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+      #{$property}: #{$color};
+    }
+  }
+  animation: #{$name} 1.5s ease-in-out infinite;
+}
+
+.skeleton--dark {
+  @include skeleton-pulse(background-color, #403468, pulse-dark);
+}
+
+.skeleton--light {
+  @include skeleton-pulse(background-color, #bdbdbd, pulse-light);
+}
+
+.skeleton__text--dark {
+  @include skeleton-pulse(color, #403468, pulse-text);
+}

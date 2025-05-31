@@ -21,32 +21,12 @@
 
         <div class="thermometer__container">
             @if(pokemon()?.hp) {
-
-            <div class="thermometer">
-                <span class="stats__name">HP:</span>
-                @if(pokemon()?.hp) {
-                <div class="thermometer__content">
-                    <div class="thermometer__bar">
-                        <div class="thermometer__bar__fill" [style.width.%]="normalizeToUnit(pokemon()?.hp, 150) * 100">
-                        </div>
-                    </div>
-                    <span class="thermometer__bar__value">{{ pokemon()?.hp ?? defaultValue }}</span>
-                </div> }
-            </div>
+            <app-thermometer [value]="pokemon()?.hp" [maxValue]="150" [label]="'HP:'"></app-thermometer>
             }
 
             @for(reistance of pokemon()?.resistances ?? []; track reistance.type){
-            <div class="thermometer">
-                <span class="stats__name">{{reistance.type}} resistance</span>
-                <div class="thermometer__content">
-                    <div class="thermometer__bar">
-                        <div class="thermometer__bar__fill"
-                            [style.width.%]="normalizeToUnit(reistance.value, 100) * 100">
-                        </div>
-                    </div>
-                    <span class="thermometer__bar__value">{{ reistance.value }}</span>
-                </div>
-            </div>
+            <app-thermometer [value]="reistance.value" [maxValue]="100"
+                [label]="reistance.type + ' resistance'"></app-thermometer>
             }
 
             <button class="pokemon__edit__button" mat-stroked-button (click)="openEditDialog()">
@@ -55,43 +35,28 @@
     </div>
 </div>
 
-@if(pokemon()?.attacks ) {
+@if(pokemon() && pokemon()?.attacks ) {
 <h3 class="heading">Attacks:</h3>
-<div class="pokemon__attack">
-    @for(attack of pokemon()?.attacks ?? []; track attack.name){
-    <div class="pokemon__attack__container ">
-        <div class="pokemon__attack__container--top">
-            <p class="pokemon__attack__name">{{ attack?.name ?? defaultValue }}</p>
-            <p [matTooltip]="attack.text" class="pokemon__attack__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
-        </div>
-        <p class="pokemon__attack__cost">🏷️ {{ attack?.cost?.join(', ') ?? defaultValue }}</p>
-
-    </div>
-    }
-</div>
+<app-pokemon-attacks [attacks]="pokemon()!.attacks"></app-pokemon-attacks>
 }
 
 <h3 class="heading">Similar pokemons:</h3>
 @if(similarPokemons() !== undefined && similarPokemons().length > 0) {
-
-
 <div class="pokemon__similar">
     @for(pokemon of similarPokemons(); track pokemon.id) {
     <img (click)="navigateToThisPokemon(pokemon.id)" class="pokemon__similar__image" [src]="pokemon?.images?.small"
         alt="{{ pokemon.name }}" />
     }
 </div>
-
-
 }
 
 } @else {
-<div class="pokemon__loading">
+<div class="pokemon__loading ">
     <img class="pokemon__loading__image"
         src="https://assets-v2.lottiefiles.com/a/051fa598-201e-11ef-b23d-ff15534e86bc/PL0Rkn51iL.gif"
         alt="Loading..." />
 
-    <p class="pokemon__loading__text">Loading you card...</p>
+    <p class="pokemon__loading__text skeleton__text--dark">Loading pokemon data...</p>
 </div>
 
 }

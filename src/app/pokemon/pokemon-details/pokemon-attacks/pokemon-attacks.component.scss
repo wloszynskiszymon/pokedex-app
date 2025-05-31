@@ -1,0 +1,43 @@
+:host {
+  .attacks {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0.5rem;
+
+    &__container {
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      background-color: #d1d7f7;
+
+      &--top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    &__name {
+      font-size: 1rem;
+      color: #62598b;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    &__cost {
+      font-size: 0.8rem;
+      color: #9086c0;
+      font-weight: bold;
+    }
+
+    &__damage {
+      font-size: 1.2rem;
+      color: #62598b;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+  }
+}

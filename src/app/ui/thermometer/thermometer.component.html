@@ -1,0 +1,13 @@
+<div class="thermometer">
+
+    @if(label()) { <span class="stats__name">HP:</span> }
+
+    <div class="thermometer__content">
+        <div class="thermometer__bar">
+            <div class="thermometer__bar__fill" [style.width.%]="normalizeToUnit(value(), maxValue()) * 100">
+            </div>
+        </div>
+        <span class="thermometer__bar__value">{{ value() }}</span>
+    </div>
+
+</div>

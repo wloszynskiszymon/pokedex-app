@@ -1,0 +1,45 @@
+.thermometer {
+  display: flex;
+  flex-direction: column;
+
+  & > span {
+    margin-left: 0.5rem;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 1rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  &__bar {
+    width: 20rem;
+    height: 1rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    border: 1px solid #333;
+
+    &__fill {
+      display: block;
+      height: 100%;
+      background-color: #424461;
+      width: 0;
+      transition: width 0.3s ease-in-out;
+    }
+
+    &__value {
+      font-size: 0.85rem;
+      color: #333;
+    }
+  }
+}

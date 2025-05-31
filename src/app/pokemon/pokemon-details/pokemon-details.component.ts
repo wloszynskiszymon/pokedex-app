@@ -6,10 +6,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { PokemonEditFormComponent } from './pokemon-edit-form/pokemon-edit-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.component';
+import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
-  imports: [MatTooltipModule, MatButtonModule],
+  imports: [
+    MatTooltipModule,
+    MatButtonModule,
+    PokemonAttacksComponent,
+    ThermometerComponent,
+  ],
   templateUrl: './pokemon-details.component.html',
   styleUrl: './pokemon-details.component.scss',
 })
@@ -64,16 +71,6 @@ export class PokemonDetailsComponent {
           console.log(data);
         },
       });
-  }
-
-  normalizeToUnit(
-    value: number | string | null | undefined,
-    max: number = 100
-  ): number {
-    if (value === null || value === undefined) return 0;
-    const num = Math.abs(+value); // take absolute value
-    if (isNaN(num)) return 0;
-    return Math.max(0, Math.min(1, num / max));
   }
 
   navigateToThisPokemon(pokemonId: string) {
