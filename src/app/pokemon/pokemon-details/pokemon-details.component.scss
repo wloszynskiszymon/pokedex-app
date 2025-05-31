@@ -5,6 +5,7 @@
 
   .pokemon {
     &__edit__button {
+      margin-top: 1rem;
       width: fit-content;
     }
     &__header {
@@ -12,40 +13,43 @@
       align-items: flex-start;
       gap: 0.5rem;
 
+      &__content {
+        flex: 1;
+      }
+
       &__img {
         width: 13rem;
       }
     }
+    &__name {
+      font-size: 2.5rem;
+      color: #363062;
+      letter-spacing: -1px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-    &__title {
+    &__id {
+      font-size: 1.2rem;
+      color: #464072;
+      border: 1px solid #ccc;
+      border-radius: 0.75rem;
+      width: fit-content;
+      padding: 0.15rem 1rem;
+    }
+
+    &__id:hover {
+      background-color: #f0f0f0;
+    }
+
+    &__row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      &__name {
-        font-size: 2.5rem;
-        color: #363062;
-        letter-spacing: -1px;
-        font-weight: bold;
-        text-transform: uppercase;
-      }
-
-      &__id {
-        font-size: 1.2rem;
-        color: #464072;
-        border: 1px solid #ccc;
-        border-radius: 0.75rem;
-        width: fit-content;
-        padding: 0.15rem 1rem;
-      }
-
-      &__id:hover {
-        background-color: #f0f0f0;
-      }
     }
 
     &__stats {
-      margin-top: 0.75rem;
+      margin-top: 0.25rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -229,9 +233,9 @@
   }
 }
 
-.heading--3 {
+.heading {
   font-size: 1.5rem;
   color: #363062;
   margin-top: 1rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.5rem;
 }

@@ -1,15 +1,16 @@
 @if(pokemon()) {
 <div class="pokemon__header">
     <img class="pokemon__header__img" [src]="pokemon()?.images?.small" alt="{{ pokemon()?.name }}" />
-    <div>
-        <div class="pokemon__title">
-            <h2 class="pokemon__title__name">{{ pokemon()?.name ?? defaultValue }}</h2>
-            <p class="pokemon__title__id">#{{ pokemon()?.id ?? defaultValue }}</p>
+    <div class="pokemon__header__content">
+        <div class="pokemon__row">
+            <h2 class="pokemon__name ellipsis">{{ pokemon()?.name ?? defaultValue }}</h2>
         </div>
 
-        <p class="artist"><span class="stats__name">Artist:</span> <span class="artist--value">{{
-                pokemon()?.artist ?? defaultValue }}</span></p>
-
+        <div class="pokemon__row">
+            <p class="artist"><span class="stats__name">Artist:</span> <span class="artist--value">{{
+                    pokemon()?.artist ?? defaultValue }}</span></p>
+            <p class="pokemon__id">#{{ pokemon()?.id ?? defaultValue }}</p>
+        </div>
 
         <div class="pokemon__stats">
             <span class="stats__name">type stats: </span>
@@ -19,6 +20,8 @@
         </div>
 
         <div class="thermometer__container">
+            @if(pokemon()?.hp) {
+
             <div class="thermometer">
                 <span class="stats__name">HP:</span>
                 @if(pokemon()?.hp) {
@@ -30,6 +33,7 @@
                     <span class="thermometer__bar__value">{{ pokemon()?.hp ?? defaultValue }}</span>
                 </div> }
             </div>
+            }
 
             @for(reistance of pokemon()?.resistances ?? []; track reistance.type){
             <div class="thermometer">
@@ -45,13 +49,14 @@
             </div>
             }
 
-            <button class="pokemon__edit__button" mat-button (click)="openEditDialog()">
+            <button class="pokemon__edit__button" mat-stroked-button (click)="openEditDialog()">
                 Edit </button>
         </div>
     </div>
 </div>
 
-<h3 class="heading--3">Attacks:</h3>
+@if(pokemon()?.attacks ) {
+<h3 class="heading">Attacks:</h3>
 <div class="pokemon__attack">
     @for(attack of pokemon()?.attacks ?? []; track attack.name){
     <div class="pokemon__attack__container ">
@@ -64,8 +69,9 @@
     </div>
     }
 </div>
+}
 
-<h3 class="heading heading--3">Similar pokemons:</h3>
+<h3 class="heading">Similar pokemons:</h3>
 @if(similarPokemons() !== undefined && similarPokemons().length > 0) {
 
 
@@ -75,6 +81,7 @@
         alt="{{ pokemon.name }}" />
     }
 </div>
+
 
 }
 
