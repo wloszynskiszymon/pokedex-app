@@ -104,7 +104,19 @@ export class PokemonEditFormComponent implements OnInit {
         return;
       }
 
-      savePokemonToLocalStorage(parsedPokemon.data);
+      savePokemonToLocalStorage({
+        oldData: {
+          id: this.pokemon.id,
+          hp: +this.pokemon.hp,
+          types: this.pokemon.types,
+          subtypes: this.pokemon.subtypes,
+          supertype: this.pokemon.supertype,
+        },
+        updatedData: {
+          ...parsedPokemon.data,
+          _updatedAt: Date.now(),
+        },
+      });
 
       this.showSnackbar(`Pokemon ${this.pokemon.name} saved successfully!`);
 

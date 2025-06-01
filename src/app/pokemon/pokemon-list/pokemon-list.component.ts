@@ -5,6 +5,9 @@ import { PokemonItemSkeletonComponent } from './pokemon-item/pokemon-item-skelet
 import { PokemonItemComponent } from './pokemon-item/pokemon-item.component';
 import { pokemonsPerPage } from '../../app.config';
 import { Router } from '@angular/router';
+import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
+import { filterEditedPokemons } from '../pokemon.helpers';
+import { PokemonItemFields } from '../pokemon.model';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -37,11 +40,16 @@ export class PokemonListComponent {
 
     if (this.pokemonFilterService.isFilterActive()) {
       const filtered = this.pokemonFilterService.loadedFilteredPokemons();
+      if (filtered.length === 0) return [];
       console.log(filtered);
-      return filtered.length > 0 ? filtered : [];
+      return this.includeEditedPokemons(filtered);
     }
 
-    return this.pokemonService.loadedPokemons();
+    const allPokemons = this.pokemonService.loadedPokemons();
+
+    if (allPokemons.length === 0) return [];
+
+    return this.includeEditedPokemons(allPokemons);
   });
 
   onPokemonItemClick(id: string) {
@@ -50,4 +58,39 @@ export class PokemonListComponent {
       queryParamsHandling: 'preserve',
     });
   }
+
+  private includeEditedPokemons = (
+    pokemons: PokemonItemFields[]
+  ): PokemonItemFields[] => {
+    const selectedType = this.pokemonFilterService.selectedType();
+    const selectedSubtype = this.pokemonFilterService.selectedSubtype();
+    const selectedSupertype = this.pokemonFilterService.selectedSupertype();
+
+    const editedPokemons = getEditedPokemonsFromLocalStorage();
+    const { includedPokemons } = filterEditedPokemons(editedPokemons, {
+      types: selectedType,
+      subtypes: selectedSubtype,
+      supertype: selectedSupertype || undefined,
+    });
+
+    if (!includedPokemons || includedPokemons.length === 0) {
+      return pokemons; // no edited pokemons to include
+    }
+
+    // replace original pokemons in the list with the editted pokemons
+    return pokemons.map((pokemon) => {
+      const editedPokemon = includedPokemons.find((ep) => ep.id === pokemon.id);
+      if (editedPokemon) {
+        return {
+          ...pokemon,
+          types: editedPokemon.types,
+          subtypes: editedPokemon.subtypes,
+          supertype: editedPokemon.supertype,
+          hp: editedPokemon.hp + '',
+          _updatedAt: editedPokemon._updatedAt,
+        };
+      }
+      return pokemon;
+    });
+  };
 }

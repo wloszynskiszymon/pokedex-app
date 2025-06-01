@@ -20,7 +20,7 @@ export interface PokemonItemFields {
   id: string;
   name: string;
   images: CardImages;
-  supertype: string;
+  supertype: string | null;
   subtypes: string[];
   types: string[];
   hp: string;
@@ -28,6 +28,7 @@ export interface PokemonItemFields {
   evolvesFrom: string;
   number: string;
   set: PokemonSet;
+  _updatedAt: number; // _ because it's local, not from API
 }
 
 interface PokemonSet {
@@ -137,4 +138,9 @@ export interface PokemonEditable {
 
 export interface EditedPokemon extends PokemonEditable {
   _updatedAt: number; // _ because it's local, not from API
+}
+
+export interface LocalStoragePokemon {
+  oldData: PokemonEditable;
+  updatedData: EditedPokemon;
 }

@@ -1,27 +1,34 @@
-import { EditedPokemon } from './pokemon.model';
+import {
+  EditedPokemon,
+  LocalStoragePokemon,
+  PokemonEditable,
+} from './pokemon.model';
 
-type PokemonFilter = {
+export interface PokemonFilter {
   types?: string[];
   subtypes?: string[];
   supertype?: string;
-};
+}
 
-// this function returns just the pokemon ids!
+export interface FilterResult {
+  includedPokemons: EditedPokemon[];
+  excludedPokemons: EditedPokemon[];
+}
+
 export const filterEditedPokemons = (
-  pokemons: EditedPokemon[],
+  pokemons: LocalStoragePokemon[],
   filter: PokemonFilter = {}
-): EditedPokemon[] => {
-  if (!filter || Object.keys(filter).length === 0) {
-    return pokemons; // no filter applied, return all ids
-  }
-
-  return pokemons.filter((p) => {
+): FilterResult => {
+  const matchesFilter = (
+    p: PokemonEditable,
+    filter: PokemonFilter
+  ): boolean => {
     const matchesType =
       !filter.types ||
       filter.types.length === 0 ||
       (Array.isArray(p.types) &&
-        p.types &&
         p.types.some((type) => type && filter.types!.includes(type)));
+
     const matchesSubtype =
       !filter.subtypes ||
       filter.subtypes.length === 0 ||
@@ -29,9 +36,27 @@ export const filterEditedPokemons = (
         p.subtypes.some(
           (subtype) => subtype && filter.subtypes!.includes(subtype)
         ));
+
     const matchesSupertype =
       !filter.supertype || p.supertype === filter.supertype;
 
     return matchesType && matchesSubtype && matchesSupertype;
-  });
+  };
+
+  const includedPokemons: EditedPokemon[] = [];
+  const excludedPokemons: EditedPokemon[] = [];
+
+  for (const pokemon of pokemons) {
+    const matchesUpdated = matchesFilter(pokemon.updatedData, filter);
+    const matchesOld = matchesFilter(pokemon.oldData, filter);
+
+    if (matchesUpdated) {
+      includedPokemons.push(pokemon.updatedData);
+    } else if (matchesOld) {
+      excludedPokemons.push(pokemon.updatedData);
+    }
+    // If neither matches, we skip the pokemon
+  }
+
+  return { includedPokemons, excludedPokemons };
 };

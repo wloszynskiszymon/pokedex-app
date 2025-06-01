@@ -10,6 +10,7 @@
     </div>
 
     <div class="pokemon__stats">
+        @if(pokemon()._updatedAt) { <p class="pokemon__editted">{{ 'editted' }}</p> }
         <p class="pokemon__stat">{{ pokemon().rarity }}</p>
     </div>
 </div>

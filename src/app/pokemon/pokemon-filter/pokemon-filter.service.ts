@@ -13,6 +13,8 @@ import { PokemonService } from '../pokemon.service';
 import { forkJoin } from 'rxjs';
 import { createApiHeaders, preparePokemonApiUrl } from '../pokemon.api';
 import { API_SELECTS } from '../pokemon.constants';
+import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
+import { filterEditedPokemons } from '../pokemon.helpers';
 
 @Injectable({
   providedIn: 'root',
@@ -136,12 +138,29 @@ export class PokemonFilterService {
     this.isFilterNowActive.set(true);
     this.filteredPokemonsLoading.set(true);
 
+    const editedPokemons = getEditedPokemonsFromLocalStorage();
+    console.log('XDXDXDXDDXDXDDXDXDXXDDXDXDXDXDXDXDXDXDXDX');
+    console.log(editedPokemons);
+    const filteredPokemonObj = filterEditedPokemons(editedPokemons, {
+      types: types,
+      subtypes: subtypes,
+      supertype: supertype ?? undefined,
+    });
+
+    const filteredIds = {
+      include: filteredPokemonObj.includedPokemons.map((p) => p.id),
+      exclude: filteredPokemonObj.excludedPokemons.map((p) => p.id),
+    };
+
     const fullUrl = preparePokemonApiUrl({
       route: '/cards',
       filters,
       page,
       select: API_SELECTS.pokemonItem,
+      idsToInclude: filteredIds.include,
+      idsToExclude: filteredIds.exclude,
     });
+
     console.log(fullUrl);
 
     this.httpClient

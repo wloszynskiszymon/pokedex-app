@@ -8,8 +8,9 @@ type PokemonApi = {
   filters?: PokemonFilters;
   page?: number;
   idsToInclude?: string[];
+  idsToExclude?: string[];
   select?: string;
-  overriddenQuery?: string; // overrides filers and idsToInclude!!!!
+  overriddenQuery?: string; // overrides "q" - filers, idsToInclude and idsToExclude!!!!
 };
 
 export const preparePokemonApiUrl = ({
@@ -17,6 +18,7 @@ export const preparePokemonApiUrl = ({
   filters,
   page = 1,
   idsToInclude = [],
+  idsToExclude = [],
   select,
   overriddenQuery,
 }: PokemonApi): string => {
@@ -28,27 +30,39 @@ export const preparePokemonApiUrl = ({
   if (overriddenQuery) {
     query = overriddenQuery;
   } else {
-    if (Array.isArray(types) && types.length) {
-      queryParts.push(...types.map((val: string) => `types:"${val}"`));
+    if (types.length) {
+      queryParts.push(...types.map((val) => `types:"${val}"`));
     }
-    if (Array.isArray(subtypes) && subtypes.length) {
-      queryParts.push(...subtypes.map((val: string) => `subtypes:"${val}"`));
+    if (subtypes.length) {
+      queryParts.push(...subtypes.map((val) => `subtypes:"${val}"`));
     }
-    if (typeof supertype === 'string' && supertype) {
+    if (supertype) {
       queryParts.push(`supertype:"${supertype}"`);
     }
 
-    query = queryParts.join(' AND ');
+    const filterQuery = queryParts.join(' AND ');
 
+    let includeQuery = '';
     if (idsToInclude.length) {
-      const orIds = idsToInclude.map((id) => `id:${id}`).join(' OR ');
-      query = query ? `(${query}) OR (${orIds})` : orIds;
+      const orIds = idsToInclude.map((id) => `id:"${id}"`).join(' OR ');
+      includeQuery = `(${orIds})`;
+    }
+
+    if (filterQuery && includeQuery) {
+      query = `(${filterQuery}) OR ${includeQuery}`;
+    } else {
+      query = filterQuery || includeQuery;
+    }
+
+    if (idsToExclude.length) {
+      const excludeQuery = idsToExclude.map((id) => `-id:"${id}"`).join(' ');
+      query = query ? `${query} ${excludeQuery}` : excludeQuery;
     }
   }
 
-  const fullUrl = `${baseUrl}/${route}?q=${encodeURIComponent(query)}&${
-    select ? '&select:' + select : ''
-  }&pageSize=${pokemonsPerPage}&page=${page}`;
+  const fullUrl = `${baseUrl}${route}?q=${encodeURIComponent(query)}&${
+    select ? 'select=' + select + '&' : ''
+  }pageSize=${pokemonsPerPage}&page=${page}`;
 
   return fullUrl;
 };

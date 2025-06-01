@@ -1,4 +1,8 @@
-import { EditedPokemon, PokemonEditable } from './pokemon.model';
+import {
+  EditedPokemon,
+  LocalStoragePokemon,
+  PokemonEditable,
+} from './pokemon.model';
 
 // makes it easier to remove all edited pokemons from local storage
 // excluding other potential local storage items in the future
@@ -6,23 +10,17 @@ const prefix = 'edited-pokemon:';
 const attachPrefix = (key: string) => prefix + key;
 
 export const savePokemonToLocalStorage = (
-  pokemon: PokemonEditable
+  pokemonObj: LocalStoragePokemon
 ): boolean => {
   try {
-    if (!pokemon || !pokemon.id) {
+    if (!pokemonObj || !pokemonObj.oldData.id) {
       console.warn('Invalid Pokemon data provided for local storage.');
       return false;
     }
-    const timestamp = Date.now();
-
-    const pokemonToStore: EditedPokemon = {
-      ...pokemon,
-      _updatedAt: timestamp,
-    };
 
     localStorage.setItem(
-      attachPrefix(pokemon.id),
-      JSON.stringify(pokemonToStore)
+      attachPrefix(pokemonObj.oldData.id),
+      JSON.stringify(pokemonObj)
     );
     return true;
   } catch (error) {
@@ -31,8 +29,8 @@ export const savePokemonToLocalStorage = (
   }
 };
 
-export const getEditedPokemonsFromLocalStorage = (): EditedPokemon[] => {
-  const editedPokemons: EditedPokemon[] = [];
+export const getEditedPokemonsFromLocalStorage = (): LocalStoragePokemon[] => {
+  const editedPokemons: LocalStoragePokemon[] = [];
   const keys = Object.keys(localStorage);
 
   for (const key of keys) {
@@ -40,7 +38,7 @@ export const getEditedPokemonsFromLocalStorage = (): EditedPokemon[] => {
       try {
         const pokemonData = localStorage.getItem(key);
         if (pokemonData) {
-          const parsedPokemon: EditedPokemon = JSON.parse(pokemonData);
+          const parsedPokemon: LocalStoragePokemon = JSON.parse(pokemonData);
           editedPokemons.push(parsedPokemon);
         }
       } catch (error) {

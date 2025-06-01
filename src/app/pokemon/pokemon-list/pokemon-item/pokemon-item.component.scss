@@ -24,6 +24,14 @@
       opacity: 0.8;
     }
 
+    &__editted {
+      color: #bbb;
+      font-size: 0.85rem;
+      margin-right: 1rem;
+      font-style: italic;
+      letter-spacing: 0.05rem;
+    }
+
     &__name {
       color: #eee;
       font-size: 1.2rem;
