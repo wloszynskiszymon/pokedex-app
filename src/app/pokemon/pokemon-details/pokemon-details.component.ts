@@ -1,13 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, switchMap, tap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { PokemonEditFormComponent } from './pokemon-edit-form/pokemon-edit-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.component';
 import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
+import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
@@ -27,8 +28,16 @@ export class PokemonDetailsComponent {
   dialog = inject(MatDialog);
 
   pokemon = computed(() => {
-    console.log(this.pokemonService.loadedPokemonDetails());
-    return this.pokemonService.loadedPokemonDetails();
+    const edittedPokemon = getEditedPokemonsFromLocalStorage();
+    if (!edittedPokemon) return this.pokemonService.loadedPokemonDetails();
+    const pokemon = this.pokemonService.loadedPokemonDetails();
+    const foundPokemon = edittedPokemon.find(
+      (p) => p.updatedData.id === pokemon?.id
+    );
+    return {
+      ...pokemon,
+      ...foundPokemon?.updatedData,
+    };
   });
 
   similarPokemons = computed(() => {
