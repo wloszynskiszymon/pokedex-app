@@ -54,6 +54,9 @@ body {
   $color: #403468,
   $name: pulse
 ) {
+  & {
+    animation: #{$name} 1.5s ease-in-out infinite;
+  }
   @keyframes #{$name} {
     0%,
     100% {
@@ -64,7 +67,6 @@ body {
       #{$property}: #{$color};
     }
   }
-  animation: #{$name} 1.5s ease-in-out infinite;
 }
 
 .skeleton--dark {
