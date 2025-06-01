@@ -129,8 +129,12 @@ export interface PokemonApiFilterResponse {
 
 export interface PokemonEditable {
   id: string;
-  hp: string;
+  hp: number;
   type: string[];
   subtypes: string[];
   supertype: string;
+}
+
+export interface EditedPokemon extends PokemonEditable {
+  _updatedAt: number; // _ because it's local, not from API
 }

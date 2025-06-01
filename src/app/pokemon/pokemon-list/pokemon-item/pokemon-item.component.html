@@ -3,8 +3,9 @@
     <div class="pokemon__info">
         <p class="pokemon__name">{{ pokemon().name }}</p>
         <div class="pokemon__badges">
-            <p class="pokemon__badge">{{ pokemon().types }}</p>
-            <p class="pokemon__badge">{{ pokemon().supertype }}</p>
+            @if(pokemon().types) { <p class="pokemon__badge">{{ pokemon().types }}</p>}
+            @if(pokemon().supertype) { <p class="pokemon__badge">{{ pokemon().supertype }}</p>}
+            @if(pokemon().subtypes) { <p class="pokemon__badge">{{ pokemon().subtypes }}</p>}
         </div>
     </div>
 

@@ -8,6 +8,8 @@ import {
 import { baseUrl, pokemonsPerPage } from '../app.config';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
 import { Observable, tap } from 'rxjs';
+import { preparePokemonApiUrl } from './pokemon.api';
+import { API_SELECTS } from './pokemon.constants';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -67,14 +69,17 @@ export class PokemonService {
 
   loadPokemonById(id: string): Observable<PokemonApiResponse<PokemonDetails>> {
     this.pokemonsDetailsLoading.set(true);
-    return this.http
-      .get<PokemonApiResponse<PokemonDetails>>(`${baseUrl}/cards/${id}`)
-      .pipe(
-        tap((data) => {
-          this.pokemonDetails.set(data.data);
-          this.pokemonsDetailsLoading.set(false);
-        })
-      );
+    const url = preparePokemonApiUrl({
+      route: `/cards/${id}`,
+      select: API_SELECTS.pokemonDetails,
+    });
+
+    return this.http.get<PokemonApiResponse<PokemonDetails>>(url).pipe(
+      tap((data) => {
+        this.pokemonDetails.set(data.data);
+        this.pokemonsDetailsLoading.set(false);
+      })
+    );
   }
 
   loadSimilarPokemons$(
@@ -85,17 +90,14 @@ export class PokemonService {
     this.pokemonsSimilarLoading.set(true);
 
     const query = `set.series:"${pokemonSet.series}" AND -id:${excludeId}`;
-
-    const params = new URLSearchParams({
-      page: '1',
-      pageSize: pokemonsPerPage.toString(),
-      select: 'name,id,images,set',
-      q: query,
+    const url = preparePokemonApiUrl({
+      route: '/cards',
+      overriddenQuery: query,
+      page: 1,
+      select: API_SELECTS.pokemonSimilar,
     });
 
-    const url = `${baseUrl}/cards?${params.toString()}`;
     console.log(url);
-
     return this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).pipe(
       tap((response) => {
         this.pokemonsSimilar.set(response.data ?? []);

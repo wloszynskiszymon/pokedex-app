@@ -6,13 +6,14 @@ import {
 } from '../pokemon.model';
 import { baseUrl } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
-import { prepareFilterUrl } from './pokemon-filter.helpers';
 import { PokemonFilters } from './pokemon-filter.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
 import { forkJoin } from 'rxjs';
 import { createApiHeaders } from '../../api.helpers';
+import { preparePokemonApiUrl } from '../pokemon.api';
+import { API_SELECTS } from '../pokemon.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -136,7 +137,12 @@ export class PokemonFilterService {
     this.isFilterNowActive.set(true);
     this.filteredPokemonsLoading.set(true);
 
-    const fullUrl = prepareFilterUrl({ types, subtypes, supertype }, page);
+    const fullUrl = preparePokemonApiUrl({
+      route: '/cards',
+      filters,
+      page,
+      select: API_SELECTS.pokemonItem,
+    });
     console.log(fullUrl);
 
     this.httpClient
