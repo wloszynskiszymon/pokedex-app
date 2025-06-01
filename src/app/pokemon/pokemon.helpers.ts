@@ -2,6 +2,7 @@ import {
   EditedPokemon,
   LocalStoragePokemon,
   PokemonEditable,
+  PokemonItemFields,
 } from './pokemon.model';
 
 export interface PokemonFilter {
@@ -59,4 +60,23 @@ export const filterEditedPokemons = (
   }
 
   return { includedPokemons, excludedPokemons };
+};
+
+export const updatePokemons = (
+  pokemons: PokemonItemFields[],
+  newData: PokemonEditable[]
+): PokemonItemFields[] => {
+  return pokemons.map((pokemon) => {
+    const updatedData = newData.find((p) => p.id === pokemon.id);
+    if (updatedData) {
+      return {
+        ...pokemon,
+        hp: updatedData.hp + '',
+        types: updatedData.types || [],
+        subtypes: updatedData.subtypes || [],
+        supertype: updatedData.supertype || null,
+      };
+    }
+    return pokemon;
+  });
 };

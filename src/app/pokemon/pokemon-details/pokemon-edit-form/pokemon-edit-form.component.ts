@@ -15,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { savePokemonToLocalStorage } from '../../pokemon.localstorage';
 import { pokemonSchema } from './pokemon-edit-form.validator';
+import { PokemonService } from '../../pokemon.service';
 
 @Component({
   selector: 'app-pokemon-edit-form',
@@ -36,6 +37,7 @@ import { pokemonSchema } from './pokemon-edit-form.validator';
 export class PokemonEditFormComponent implements OnInit {
   pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
   private filterService = inject(PokemonFilterService);
+  private pokemonService = inject(PokemonService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -72,7 +74,6 @@ export class PokemonEditFormComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  // TODO: Perhaps some validation logic
   onSave() {
     try {
       if (this.form.invalid) {
@@ -104,6 +105,11 @@ export class PokemonEditFormComponent implements OnInit {
         return;
       }
 
+      const pokemonDataToSave = {
+        ...parsedPokemon.data,
+        _updatedAt: Date.now(),
+      };
+
       savePokemonToLocalStorage({
         oldData: {
           id: this.pokemon.id,
@@ -112,11 +118,16 @@ export class PokemonEditFormComponent implements OnInit {
           subtypes: this.pokemon.subtypes,
           supertype: this.pokemon.supertype,
         },
-        updatedData: {
-          ...parsedPokemon.data,
-          _updatedAt: Date.now(),
-        },
+        updatedData: pokemonDataToSave,
       });
+
+      if (this.filterService.isFilterActive()) {
+        // filter
+        this.filterService.updatePokemons(pokemonDataToSave);
+      } else {
+        // not filter
+        this.pokemonService.updatePokemons(pokemonDataToSave);
+      }
 
       this.showSnackbar(`Pokemon ${this.pokemon.name} saved successfully!`);
 

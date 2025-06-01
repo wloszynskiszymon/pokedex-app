@@ -1,7 +1,9 @@
+import { updatePokemons } from './../pokemon.helpers';
 import { inject, Injectable, signal } from '@angular/core';
 import {
   PokemonApiFilterResponse,
   PokemonApiResponse,
+  PokemonEditable,
   PokemonItemFields,
 } from '../pokemon.model';
 import { baseUrl } from '../../app.config';
@@ -139,8 +141,6 @@ export class PokemonFilterService {
     this.filteredPokemonsLoading.set(true);
 
     const editedPokemons = getEditedPokemonsFromLocalStorage();
-    console.log('XDXDXDXDDXDXDDXDXDXXDDXDXDXDXDXDXDXDXDXDX');
-    console.log(editedPokemons);
     const filteredPokemonObj = filterEditedPokemons(editedPokemons, {
       types: types,
       subtypes: subtypes,
@@ -222,5 +222,11 @@ export class PokemonFilterService {
   disableLoading() {
     console.log('disableLoading()');
     this.filteredPokemonsLoading.set(false);
+  }
+
+  updatePokemons(pokemons: PokemonEditable) {
+    if (!this.filteredPokemons()) return;
+    const updatedPokemons = updatePokemons(this.filteredPokemons(), [pokemons]);
+    this.filteredPokemons.set(updatedPokemons);
   }
 }

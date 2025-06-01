@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.component';
 import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
+import { PokemonEditable } from '../pokemon.model';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,

@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, computed } from '@angular/core';
 import {
+  EditedPokemon,
   PokemonApiResponse,
   PokemonDetails,
   PokemonItemFields,
 } from './pokemon.model';
-import { baseUrl, pokemonsPerPage } from '../app.config';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
 import { Observable, tap } from 'rxjs';
 import { preparePokemonApiUrl } from './pokemon.api';
 import { API_SELECTS } from './pokemon.constants';
-import { getEditedPokemonsFromLocalStorage } from './pokemon.localstorage';
+import { updatePokemons } from './pokemon.helpers';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -107,5 +107,19 @@ export class PokemonService {
   disableLoading() {
     console.log('disableLoading()');
     this.pokemonsLoading.set(false);
+  }
+
+  updatePokemons(pokemon: EditedPokemon) {
+    if (!this.pokemonApiResponse()?.data) return;
+    const updated = updatePokemons(this.pokemonApiResponse()!.data, [pokemon]);
+
+    this.pokemonApiResponse.set({
+      ...this.pokemonApiResponse()!,
+      data: updated,
+    });
+    this.pokemonDetails.set({
+      ...this.pokemonDetails()!,
+      ...updated,
+    });
   }
 }
