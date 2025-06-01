@@ -1,5 +1,7 @@
 import { PokemonFilters } from './pokemon-filter/pokemon-filter.model';
 import { baseUrl, pokemonsPerPage } from './../app.config';
+import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 type PokemonApi = {
   route: PokemonApiSuportedRoutes;
@@ -59,3 +61,9 @@ type PokemonApiSuportedRoutes =
   | '/supertypes'
   | '/rarities'
   | `/cards/${string}`;
+
+export function createApiHeaders(): HttpHeaders {
+  return new HttpHeaders({
+    'X-Api-Key': environment.apiKey || '',
+  });
+}

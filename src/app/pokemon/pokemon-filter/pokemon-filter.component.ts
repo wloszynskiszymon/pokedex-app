@@ -97,7 +97,7 @@ export class PokemonFilterComponent {
     return value ? [value] : [];
   }
 
-  private withDefault = (values: string[] | null[]) => [
+  private withDefault = (values: string[]) => [
     { label: '-----', value: null },
     ...values.map((val) => ({ label: val, value: val })),
   ];

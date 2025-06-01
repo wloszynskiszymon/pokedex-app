@@ -130,9 +130,9 @@ export interface PokemonApiFilterResponse {
 export interface PokemonEditable {
   id: string;
   hp: number;
-  type: string[];
+  types: string[];
   subtypes: string[];
-  supertype: string;
+  supertype: string | null;
 }
 
 export interface EditedPokemon extends PokemonEditable {

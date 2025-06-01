@@ -13,6 +13,8 @@ import { PokemonFilterService } from '../../pokemon-filter/pokemon-filter.servic
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { savePokemonToLocalStorage } from '../../pokemon.localstorage';
+import { pokemonSchema } from './pokemon-edit-form.validator';
 
 @Component({
   selector: 'app-pokemon-edit-form',
@@ -43,9 +45,9 @@ export class PokemonEditFormComponent implements OnInit {
 
   form = new FormGroup({
     hp: new FormControl<number>(Number(this.pokemon?.hp) ?? 1),
-    types: new FormControl<string[] | null[]>([]),
+    types: new FormControl<string[]>([]),
     supertype: new FormControl<string | null>(null),
-    subtypes: new FormControl<string[] | null[]>([]),
+    subtypes: new FormControl<string[]>([]),
   });
 
   ngOnInit() {
@@ -77,6 +79,14 @@ export class PokemonEditFormComponent implements OnInit {
         console.error('Form is invalid, cannot save');
         return;
       }
+      let types = this.form.controls.types.value;
+
+      const hp = Number(this.form.controls.hp.value);
+      if (isNaN(hp) || hp < 1) {
+        // could be error snackbar
+        alert('HP must be a valid number greater than 0');
+      }
+      if (!types) types = [];
 
       const pokemonDataToStore = {
         id: this.pokemon.id,
@@ -86,8 +96,15 @@ export class PokemonEditFormComponent implements OnInit {
         supertype: this.form.controls.supertype.value,
       };
 
-      // keys of stored pokemons could be stored as well for easier removal
-      localStorage.setItem(this.pokemon.id, JSON.stringify(pokemonDataToStore));
+      const parsedPokemon = pokemonSchema.safeParse(pokemonDataToStore);
+
+      if (!parsedPokemon.success) {
+        alert(parsedPokemon.error.errors.map((e) => e.message).join(', '));
+        console.error('Validation failed:', parsedPokemon.error);
+        return;
+      }
+
+      savePokemonToLocalStorage(parsedPokemon.data);
 
       this.showSnackbar(`Pokemon ${this.pokemon.name} saved successfully!`);
 

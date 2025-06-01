@@ -11,8 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
 import { forkJoin } from 'rxjs';
-import { createApiHeaders } from '../../api.helpers';
-import { preparePokemonApiUrl } from '../pokemon.api';
+import { createApiHeaders, preparePokemonApiUrl } from '../pokemon.api';
 import { API_SELECTS } from '../pokemon.constants';
 
 @Injectable({
@@ -28,9 +27,9 @@ export class PokemonFilterService {
   private headers = createApiHeaders();
 
   private isFiltersDataLoading = signal<boolean>(true);
-  private supertypes = signal<string[] | null[]>([]);
-  private subtypes = signal<string[] | null[]>([]);
-  private types = signal<string[] | null[]>([]);
+  private supertypes = signal<string[]>([]);
+  private subtypes = signal<string[]>([]);
+  private types = signal<string[]>([]);
 
   private _selectedType = signal<string[]>([]);
   private _selectedSubtype = signal<string[]>([]);

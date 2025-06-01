@@ -10,6 +10,7 @@ import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.s
 import { Observable, tap } from 'rxjs';
 import { preparePokemonApiUrl } from './pokemon.api';
 import { API_SELECTS } from './pokemon.constants';
+import { getEditedPokemonsFromLocalStorage } from './pokemon.localstorage';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
@@ -42,29 +43,26 @@ export class PokemonService {
     console.log(`fetchPokemons(${page})`);
     this.pokemonsLoading.set(true);
 
-    const params = new URLSearchParams({
-      page: page.toString(),
-      pageSize: pokemonsPerPage.toString(),
-      select:
-        'name,id,supertype,subtypes,types,hp,rarity,evolvesFrom,number,set',
+    if (!localStorage) throw new Error('LocalStorage is not available');
+
+    const url = preparePokemonApiUrl({
+      route: '/cards',
+      page,
+      select: API_SELECTS.pokemonItem,
     });
 
-    this.http
-      .get<PokemonApiResponse<PokemonItemFields[]>>(
-        `${baseUrl}/cards?${params.toString()}`
-      )
-      .subscribe({
-        next: (response) => {
-          this.pokemonApiResponse.set(response);
-          this.paginator.setPage(response.page ?? 1);
-          this.paginator.setTotalCount(response.totalCount ?? 0);
-          this.pokemonsLoading.set(false);
-        },
-        error: (e) => {
-          this.pokemonsLoading.set(false);
-          console.error(e);
-        },
-      });
+    this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).subscribe({
+      next: (response) => {
+        this.pokemonApiResponse.set(response);
+        this.paginator.setPage(response.page ?? 1);
+        this.paginator.setTotalCount(response.totalCount ?? 0);
+        this.pokemonsLoading.set(false);
+      },
+      error: (e) => {
+        this.pokemonsLoading.set(false);
+        console.error(e);
+      },
+    });
   }
 
   loadPokemonById(id: string): Observable<PokemonApiResponse<PokemonDetails>> {
