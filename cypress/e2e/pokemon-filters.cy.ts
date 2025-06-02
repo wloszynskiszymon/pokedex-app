@@ -1,4 +1,4 @@
-describe('Pokedex App', () => {
+describe('Pokemon filters', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'

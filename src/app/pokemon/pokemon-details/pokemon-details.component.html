@@ -1,4 +1,14 @@
-@if(pokemon()) {
+@if(pokemonLoading()) {
+<div class="pokemon__loading ">
+    <img class="pokemon__loading__image"
+        src="https://assets-v2.lottiefiles.com/a/051fa598-201e-11ef-b23d-ff15534e86bc/PL0Rkn51iL.gif"
+        alt="Loading..." />
+
+    <p class="pokemon__loading__text skeleton__text--dark">Loading pokemon data...</p>
+</div> }
+
+
+@else if(pokemon()) {
 <div class="pokemon__header">
     <img class="pokemon__header__img" [src]="pokemon()?.images?.small" alt="{{ pokemon()?.name }}" />
     <div class="pokemon__header__content">
@@ -58,19 +68,10 @@
 <h3 class="heading">Similar pokemons:</h3>
 <div class="pokemon__similar">
     @for(pokemon of similarPokemons(); track pokemon.id) {
-    <img (click)="navigateToThisPokemon(pokemon.id)" class="pokemon__similar__image" [src]="pokemon?.images?.small"
-        alt="{{ pokemon.name }}" />
+    <img [attr.data-cy]="'similar-pokemon-item'" (click)="navigateToThisPokemon(pokemon.id)"
+        class="pokemon__similar__image" [src]="pokemon?.images?.small" alt="{{ pokemon.name }}" />
     }
 </div>
 }
-
-} @else {
-<div class="pokemon__loading ">
-    <img class="pokemon__loading__image"
-        src="https://assets-v2.lottiefiles.com/a/051fa598-201e-11ef-b23d-ff15534e86bc/PL0Rkn51iL.gif"
-        alt="Loading..." />
-
-    <p class="pokemon__loading__text skeleton__text--dark">Loading pokemon data...</p>
-</div>
 
 }
