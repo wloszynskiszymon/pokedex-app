@@ -10,6 +10,7 @@ import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.compo
 import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
 import { PokemonEditable } from '../pokemon.model';
+import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
@@ -23,10 +24,11 @@ import { PokemonEditable } from '../pokemon.model';
   styleUrl: './pokemon-details.component.scss',
 })
 export class PokemonDetailsComponent {
-  pokemonService = inject(PokemonService);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  dialog = inject(MatDialog);
+  private pokemonService = inject(PokemonService);
+  private pokemonPaginator = inject(PokemonPaginatorService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
   pokemonLoading = computed(() => {
     const detailsLoading = this.pokemonService.isLoadingPokemonDetails();
     const similarLoading = this.pokemonService.isLoadingSimilarPokemons();
@@ -89,6 +91,7 @@ export class PokemonDetailsComponent {
   }
 
   navigateToThisPokemon(pokemonId: string) {
+    this.pokemonPaginator.setSelectedPokemonId(pokemonId);
     this.router.navigate(['../', pokemonId], {
       relativeTo: this.route,
       queryParamsHandling: 'preserve',

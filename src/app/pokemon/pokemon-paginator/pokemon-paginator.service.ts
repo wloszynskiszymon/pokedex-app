@@ -12,6 +12,8 @@ export class PokemonPaginatorService {
   private pageSize = signal<number>(pokemonsPerPage);
   private currentPage = signal<number>(1);
   private totalCount = signal<number>(0);
+  private _selctedPokemonId = signal<string | null>(null);
+  readonly selectedPokemonId = this._selctedPokemonId.asReadonly();
 
   pageSize$ = this.pageSize.asReadonly();
   currentPage$ = this.currentPage.asReadonly();
@@ -27,6 +29,11 @@ export class PokemonPaginatorService {
 
   setTotalCount(count: number) {
     this.totalCount.set(count);
+  }
+
+  setSelectedPokemonId(id: string | null) {
+    console.log(`setSelectedPokemonId(${id})`);
+    this._selctedPokemonId.set(id);
   }
 
   get currentPagination() {
