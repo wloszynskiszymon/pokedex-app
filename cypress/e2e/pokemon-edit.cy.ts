@@ -1,5 +1,6 @@
+import { baseAppUrl } from '../config';
+
 describe('Pokemon App', () => {
-  const baseUrl = 'http://localhost:4200/';
   const editedData = {
     oldData: {
       id: 'hgss4-1',
@@ -22,7 +23,7 @@ describe('Pokemon App', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit(baseUrl);
+    cy.visit(baseAppUrl);
     cy.wait('@getAllPokemons', { timeout: 5000 });
   });
 

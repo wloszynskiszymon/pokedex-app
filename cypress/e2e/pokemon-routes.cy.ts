@@ -1,6 +1,6 @@
-describe('Pokemon App Routes', () => {
-  const baseUrl = 'http://localhost:4200/';
+import { baseAppUrl } from '../config';
 
+describe('Pokemon App Routes', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/supertypes*', {
       fixture: 'supertypes.json',
@@ -19,7 +19,7 @@ describe('Pokemon App Routes', () => {
     const subtype = 'Stage 2';
     const page = 2;
 
-    cy.visit(baseUrl, {
+    cy.visit(baseAppUrl, {
       qs: {
         page,
         supertype: superType,
@@ -44,7 +44,7 @@ describe('Pokemon App Routes', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit(baseUrl);
+    cy.visit(baseAppUrl);
     cy.wait('@getAllPokemons', { timeout: 5000 });
     cy.get('[data-cy=pokemon-item]').first().click();
     cy.url().should('include', '/pokemon/');
@@ -54,7 +54,7 @@ describe('Pokemon App Routes', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit(baseUrl);
+    cy.visit(baseAppUrl);
     cy.wait('@getAllPokemons', { timeout: 5000 });
     cy.get('[data-cy=pokemon-item]').first().click(); // Aggron (hgss4-1) is first pokemon
     cy.intercept('GET', '**/cards*', {

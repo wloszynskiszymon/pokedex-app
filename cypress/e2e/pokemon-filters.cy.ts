@@ -1,3 +1,5 @@
+import { baseAppUrl } from "../config";
+
 describe('Pokemon filters', () => {
   beforeEach(() => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
@@ -12,7 +14,7 @@ describe('Pokemon filters', () => {
     cy.intercept('GET', '**/subtypes*', {
       fixture: 'subtypes.json',
     }).as('getSubtypes');
-    cy.visit('http://localhost:4200/');
+    cy.visit(baseAppUrl);
   });
 
   it('should filter Pokemons by "Colorless" type', () => {

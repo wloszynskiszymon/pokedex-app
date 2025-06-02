@@ -1,8 +1,9 @@
+import { baseAppUrl } from "../config";
+
 describe('Pokedex App', () => {
-  const baseUrl = 'http://localhost:4200/';
 
   beforeEach(() => {
-    cy.visit(baseUrl);
+    cy.visit(baseAppUrl);
   });
 
   it('should display the title', () => {
