@@ -12,7 +12,7 @@ import { PokemonFilters } from './pokemon-filter.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
-import { forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 import { createApiHeaders, preparePokemonApiUrl } from '../pokemon.api';
 import { API_SELECTS } from '../pokemon.constants';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
@@ -109,7 +109,7 @@ export class PokemonFilterService {
     });
   }
 
-  filterBy(filters: PokemonFilters, page: number = 1) {
+  async filterBy(filters: PokemonFilters, page: number = 1): Promise<void> {
     console.log(
       `filterBy({types: ${filters.types}, subtypes: ${filters.subtypes}, supertype: ${filters.supertype}}, ${page})`
     );
@@ -163,23 +163,21 @@ export class PokemonFilterService {
 
     console.log(fullUrl);
 
-    this.httpClient
-      .get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {
-        headers: this.headers,
-      })
-      .subscribe({
-        next: ({ data, totalCount, page }) => {
-          console.log(`filterBy() - received ${data.length} filtered pokemons`);
-          this.filteredPokemons.set(data);
-          this.filteredPokemonsLoading.set(false);
-          this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
-          this.pokemonPaginatorService.setPage(page);
-        },
-        error: (e) => {
-          console.error(e);
-          this.filteredPokemonsLoading.set(false);
-        },
-      });
+    try {
+      const { data, totalCount } = await firstValueFrom(
+        this.httpClient.get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {
+          headers: this.headers,
+        })
+      );
+      console.log(`filterBy() - received ${data.length} filtered pokemons`);
+      this.filteredPokemons.set(data);
+      this.filteredPokemonsLoading.set(false);
+      this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
+      this.pokemonPaginatorService.setPage(page);
+    } catch (e) {
+      console.error(e);
+      this.filteredPokemonsLoading.set(false);
+    }
   }
 
   reset() {
@@ -224,9 +222,19 @@ export class PokemonFilterService {
     this.filteredPokemonsLoading.set(false);
   }
 
-  updatePokemons(pokemons: PokemonEditable) {
+  updatePokemons(pokemon: PokemonEditable) {
     if (!this.filteredPokemons()) return;
-    const updatedPokemons = updatePokemons(this.filteredPokemons(), [pokemons]);
+
+    const updatedPokemons = updatePokemons(this.filteredPokemons(), [pokemon]);
     this.filteredPokemons.set(updatedPokemons);
+    this.pokemonService.updatePokemonDetails(updatedPokemons);
+
+    const found = updatedPokemons.some((p) => p.id === pokemon.id);
+
+    if (found) {
+      const filters = this.getSelectedFilters();
+      const page = this.pokemonPaginatorService.currentPagination.page;
+      this.filterBy(filters, page);
+    }
   }
 }

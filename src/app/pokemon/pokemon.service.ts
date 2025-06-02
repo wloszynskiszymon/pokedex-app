@@ -109,6 +109,13 @@ export class PokemonService {
     this.pokemonsLoading.set(false);
   }
 
+  updatePokemonDetails(pokemon: PokemonItemFields[]) {
+    this.pokemonDetails.set({
+      ...this.pokemonDetails()!,
+      ...pokemon,
+    });
+  }
+
   updatePokemons(pokemon: EditedPokemon) {
     if (!this.pokemonApiResponse()?.data) return;
     const updated = updatePokemons(this.pokemonApiResponse()!.data, [pokemon]);
@@ -117,9 +124,6 @@ export class PokemonService {
       ...this.pokemonApiResponse()!,
       data: updated,
     });
-    this.pokemonDetails.set({
-      ...this.pokemonDetails()!,
-      ...updated,
-    });
+    this.updatePokemonDetails(updated);
   }
 }
