@@ -70,14 +70,27 @@
       }
     }
 
+    &__editted {
+      font-size: 0.9rem;
+      color: #bbb;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+      font-style: italic;
+
+      @include respond(mini-tablet) {
+        font-size: 0.75rem;
+      }
+    }
+
     &__badge {
       border-radius: 0.8rem;
-      padding: 0.25rem 0.5rem;
+      padding: 0.2rem 0.4rem;
       border: 1px solid #ccc;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       color: #424461;
       background-color: #e7e1ff;
-      font-weight: bold;
+      font-weight: 600;
       width: fit-content;
 
       @include respond(mini-tablet) {

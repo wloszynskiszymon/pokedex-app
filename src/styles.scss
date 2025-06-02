@@ -84,6 +84,8 @@ body {
   font-style: italic;
   text-transform: lowercase;
   color: #aaa;
+  white-space: nowrap;
+  overflow: hidden;
 
   @include respond(mini-tablet) {
     font-size: 0.75rem;

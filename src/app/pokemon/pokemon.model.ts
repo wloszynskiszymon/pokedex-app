@@ -51,6 +51,7 @@ interface PokemonSet {
 }
 export interface PokemonDetails extends PokemonCard {
   // TODO: select fields for details
+  _updatedAt: number | undefined; // _ because it's local, not from API
 }
 
 export type PokemonCard = {

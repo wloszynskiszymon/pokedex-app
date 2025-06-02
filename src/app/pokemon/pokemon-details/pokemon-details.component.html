@@ -14,9 +14,19 @@
 
         <div class="pokemon__stats">
             <span class="stats__name">type stats: </span>
-            <p class="pokemon__badge pokemon__badge--supertype">{{ pokemon()?.supertype ?? defaultValue}}</p>
-            <p class="pokemon__badge pokemon__badge--type">{{ pokemon()?.types?.join(', ') ?? defaultValue}}</p>
-            <p class="pokemon__badge pokemon__badge--subtype">{{ pokemon()?.subtypes?.join(', ') ?? defaultValue}}</p>
+            @if(pokemon()?.supertype) { <p [matTooltip]="`Supertype: ${pokemon()?.supertype} `"
+                class="pokemon__badge pokemon__badge--supertype">{{
+                pokemon()?.supertype ?? pokemon()?.supertype }}</p> }
+
+            @if(pokemon()?.types) { <p [matTooltip]="`Types: ${pokemon()?.types?.join(', ')}`"
+                class="pokemon__badge pokemon__badge--supertype">{{
+                pokemon()!.types!.length >= 2 ?
+                `${pokemon()!.types![0]} + ${pokemon()!.types!.length - 1} others` : pokemon()!.types }}</p> }
+
+            @if(pokemon()?.subtypes) { <p [matTooltip]="`Types: ${pokemon()?.subtypes?.join(', ')} `"
+                class="pokemon__badge pokemon__badge--supertype">{{
+                pokemon()!.subtypes!.length >= 2 ?
+                `${pokemon()!.subtypes![0]} + ${pokemon()!.subtypes!.length - 1} others` : pokemon()!.subtypes }}</p> }
         </div>
 
         <div class="thermometer__container">
@@ -29,8 +39,12 @@
                 [label]="reistance.type + ' resistance'"></app-thermometer>
             }
 
+
             <button class="pokemon__edit__button" mat-stroked-button (click)="openEditDialog()">
                 Edit </button>
+
+            @if(pokemon()?._updatedAt) { <p class="pokemon__editted">editted</p> }
+
         </div>
     </div>
 </div>
@@ -40,8 +54,8 @@
 <app-pokemon-attacks [attacks]="pokemon()!.attacks"></app-pokemon-attacks>
 }
 
-<h3 class="heading">Similar pokemons:</h3>
 @if(similarPokemons() !== undefined && similarPokemons().length > 0) {
+<h3 class="heading">Similar pokemons:</h3>
 <div class="pokemon__similar">
     @for(pokemon of similarPokemons(); track pokemon.id) {
     <img (click)="navigateToThisPokemon(pokemon.id)" class="pokemon__similar__image" [src]="pokemon?.images?.small"

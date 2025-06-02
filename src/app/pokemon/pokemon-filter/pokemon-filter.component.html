@@ -1,16 +1,16 @@
 <mat-form-field appearance="outline">
-    <mat-label>Type</mat-label>
-    <mat-select [formControl]="controls.types" canSelectNullableOptions (selectionChange)="onFilterChange()">
-        @for (option of types(); track option) {
+    <mat-label>Supertype</mat-label>
+    <mat-select [formControl]="controls.supertypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
+        @for (option of supertypes(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
     </mat-select>
 </mat-form-field>
 
 <mat-form-field appearance="outline">
-    <mat-label>Supertype</mat-label>
-    <mat-select [formControl]="controls.supertypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
-        @for (option of supertypes(); track option) {
+    <mat-label>Type</mat-label>
+    <mat-select [formControl]="controls.types" canSelectNullableOptions (selectionChange)="onFilterChange()">
+        @for (option of types(); track option) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
         }
     </mat-select>

@@ -3,9 +3,13 @@
     <div class="pokemon__info">
         <p class="pokemon__name">{{ pokemon().name }}</p>
         <div class="pokemon__badges">
-            @if(pokemon().types) { <p class="pokemon__badge">{{ pokemon().types }}</p>}
             @if(pokemon().supertype) { <p class="pokemon__badge">{{ pokemon().supertype }}</p>}
-            @if(pokemon().subtypes) { <p class="pokemon__badge">{{ pokemon().subtypes }}</p>}
+
+            @if(pokemon().types) { <p class="pokemon__badge">{{ pokemon().types.length >= 2 ? `${pokemon().types[0]} +
+                ${pokemon().types.length - 1} others` : pokemon().types }}</p>}
+
+            @if(pokemon().subtypes) { <p class="pokemon__badge">{{ pokemon().subtypes.length >= 2 ?
+                `${pokemon().subtypes[0]} + ${pokemon().subtypes.length - 1} others` : pokemon().subtypes }}</p>}
         </div>
     </div>
 

@@ -80,14 +80,6 @@ export class PokemonEditFormComponent implements OnInit {
         console.error('Form is invalid, cannot save');
         return;
       }
-      let types = this.form.controls.types.value;
-
-      const hp = Number(this.form.controls.hp.value);
-      if (isNaN(hp) || hp < 1) {
-        // could be error snackbar
-        alert('HP must be a valid number greater than 0');
-      }
-      if (!types) types = [];
 
       const pokemonDataToStore = {
         id: this.pokemon.id,
