@@ -1,31 +1,37 @@
 <mat-form-field appearance="outline">
     <mat-label>Supertype</mat-label>
-    <mat-select [formControl]="controls.supertypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
+    <mat-select [attr.data-cy]="`filter-supertype`" [formControl]="controls.supertypes" canSelectNullableOptions
+        (selectionChange)="onFilterChange()">
         @for (option of supertypes(); track option) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        <mat-option [attr.data-cy]="`filter-supertype-option-${option.label}`" [value]="option.value">{{ option.label
+            }}</mat-option>
         }
     </mat-select>
 </mat-form-field>
 
 <mat-form-field appearance="outline">
     <mat-label>Type</mat-label>
-    <mat-select [formControl]="controls.types" canSelectNullableOptions (selectionChange)="onFilterChange()">
+    <mat-select [attr.data-cy]="'filter-type'" [formControl]="controls.types" canSelectNullableOptions
+        (selectionChange)="onFilterChange()">
         @for (option of types(); track option) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        <mat-option [attr.data-cy]="`filter-type-option-${option.label}`" [value]="option.value">{{ option.label
+            }}</mat-option>
         }
     </mat-select>
 </mat-form-field>
 
 <mat-form-field appearance="outline">
     <mat-label>Subtype</mat-label>
-    <mat-select [formControl]="controls.subtypes" canSelectNullableOptions (selectionChange)="onFilterChange()">
+    <mat-select [attr.data-cy]="`filter-subtype`" [formControl]="controls.subtypes" canSelectNullableOptions
+        (selectionChange)="onFilterChange()">
         @for (option of subtypes(); track option) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+        <mat-option [attr.data-cy]="`filter-subtype-option-${option.label}`" [value]="option.value">{{ option.label
+            }}</mat-option>
         }
     </mat-select>
 </mat-form-field>
 
-<button mat-flat-button (click)="onReset()"
+<button [attr.data-cy]="`filter-reset`" mat-flat-button (click)="onReset()"
     [disabled]="!controls.types.value && !controls.supertypes.value && !controls.subtypes.value">
     Reset
 </button>

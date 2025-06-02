@@ -13,7 +13,7 @@ describe('Pokedex App', () => {
     );
     cy.visit('http://localhost:4200/');
     cy.wait('@getAllPokemons', { timeout: 10000 });
-    cy.get('[data-cy=pokemon-card]')
+    cy.get('[data-cy=pokemon-item]')
       .should('exist')
       .should('have.length.greaterThan', 0);
   });
@@ -24,7 +24,7 @@ describe('Pokedex App', () => {
     );
     cy.visit('http://localhost:4200/');
     cy.wait('@getEmptyPokemons', { timeout: 10000 });
-    cy.get('[data-cy=pokemon-card]').should('not.exist');
+    cy.get('[data-cy=pokemon-item]').should('not.exist');
     cy.get('[data-cy=pokemon-no-results]').should('exist');
   });
 });
