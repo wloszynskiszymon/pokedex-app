@@ -1,9 +1,14 @@
 describe('Pokedex App', () => {
+  const baseUrl = 'http://localhost:4200/';
+
+  beforeEach(() => {
+    cy.visit(baseUrl);
+  });
+
   it('should display the title', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit('http://localhost:4200/');
     cy.get('h1').contains('Welcome!');
   });
 
@@ -11,7 +16,6 @@ describe('Pokedex App', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit('http://localhost:4200/');
     cy.wait('@getAllPokemons', { timeout: 10000 });
     cy.get('[data-cy=pokemon-item]')
       .should('exist')
@@ -22,7 +26,6 @@ describe('Pokedex App', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-empty-list.json' }).as(
       'getEmptyPokemons'
     );
-    cy.visit('http://localhost:4200/');
     cy.wait('@getEmptyPokemons', { timeout: 10000 });
     cy.get('[data-cy=pokemon-item]').should('not.exist');
     cy.get('[data-cy=pokemon-no-results]').should('exist');

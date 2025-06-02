@@ -13,7 +13,6 @@ describe('Pokemon filters', () => {
       fixture: 'subtypes.json',
     }).as('getSubtypes');
     cy.visit('http://localhost:4200/');
-    cy.wait(500);
   });
 
   it('should filter Pokemons by "Colorless" type', () => {

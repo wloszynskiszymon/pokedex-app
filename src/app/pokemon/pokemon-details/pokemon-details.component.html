@@ -1,10 +1,18 @@
-@if(pokemonLoading()) {
-<div class="pokemon__loading ">
-    <img class="pokemon__loading__image"
+@if(pokemonError()) {
+<div class="pokemon__fallback">
+    <img class="pokemon__fallback__image" src="https://media.tenor.com/jUVNbVGdEqwAAAAj/pikachu-pokemon.gif"
+        alt="Error loading pokemon" />
+    <p class="pokemon__fallback__status">{{pokemonError()?.status}}</p>
+    <p class="pokemon__fallback__text">{{pokemonError()?.message}}</p>
+</div>
+
+} @else if(pokemonLoading()) {
+<div class="pokemon__fallback ">
+    <img class="pokemon__fallback__image"
         src="https://assets-v2.lottiefiles.com/a/051fa598-201e-11ef-b23d-ff15534e86bc/PL0Rkn51iL.gif"
         alt="Loading..." />
 
-    <p class="pokemon__loading__text skeleton__text--dark">Loading pokemon data...</p>
+    <p class="pokemon__fallback__text skeleton__text--dark">Loading pokemon data...</p>
 </div> }
 
 
@@ -36,7 +44,8 @@
             @if(pokemon()?.subtypes) { <p [matTooltip]="`Types: ${pokemon()?.subtypes?.join(', ')} `"
                 class="pokemon__badge pokemon__badge--supertype">{{
                 pokemon()!.subtypes!.length >= 2 ?
-                `${pokemon()!.subtypes![0]} + ${pokemon()!.subtypes!.length - 1} others` : pokemon()!.subtypes }}</p> }
+                `${pokemon()!.subtypes![0]} + ${pokemon()!.subtypes!.length - 1} others` : pokemon()!.subtypes }}
+            </p> }
         </div>
 
         <div class="thermometer__container">

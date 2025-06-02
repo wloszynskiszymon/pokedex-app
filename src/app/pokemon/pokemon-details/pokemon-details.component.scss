@@ -99,7 +99,7 @@
       }
     }
 
-    &__loading {
+    &__fallback {
       height: 70vh;
       min-height: 30rem;
       display: flex;
@@ -109,6 +109,17 @@
 
       &__image {
         width: 50%;
+      }
+
+      &__status {
+        font-size: 5rem;
+        color: #363062;
+        margin-top: 1rem;
+        font-weight: bold;
+
+        @include respond(mini-tablet) {
+          font-size: 3rem;
+        }
       }
 
       &__text {

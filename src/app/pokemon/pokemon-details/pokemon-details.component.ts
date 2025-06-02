@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
@@ -11,6 +11,7 @@ import { ThermometerComponent } from '../../ui/thermometer/thermometer.component
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
 import { PokemonEditable } from '../pokemon.model';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
@@ -34,6 +35,10 @@ export class PokemonDetailsComponent {
     const similarLoading = this.pokemonService.isLoadingSimilarPokemons();
     return detailsLoading || similarLoading;
   });
+
+  pokemonError = signal<{ status: number; message: string } | undefined>(
+    undefined
+  );
 
   pokemon = computed(() => {
     const edittedPokemon = getEditedPokemonsFromLocalStorage();
@@ -80,6 +85,19 @@ export class PokemonDetailsComponent {
             'Failed to load pokemon details or similar pokemons',
             err
           );
+          const pokemonError = err as HttpErrorResponse;
+
+          if (pokemonError.status === 404) {
+            this.pokemonError.set({
+              status: pokemonError.status,
+              message: `Pokemon with this ID not found.`,
+            });
+          } else {
+            this.pokemonError.set({
+              status: pokemonError.status,
+              message: pokemonError.message,
+            });
+          }
         },
         next: (data) => {
           console.log(

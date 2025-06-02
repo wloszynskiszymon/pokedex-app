@@ -1,4 +1,6 @@
 describe('Pokemon App Routes', () => {
+  const baseUrl = 'http://localhost:4200/';
+
   beforeEach(() => {
     cy.intercept('GET', '**/supertypes*', {
       fixture: 'supertypes.json',
@@ -11,13 +13,13 @@ describe('Pokemon App Routes', () => {
     }).as('getSubtypes');
   });
 
-  it('should extract query params (filters and page) and pass them in app components', () => {
+  it('should pre-fill filters and set correct page based on URL query parameters', () => {
     const superType = 'Pokémon';
     const type = 'Fairy';
     const subtype = 'Stage 2';
     const page = 2;
 
-    cy.visit('http://localhost:4200/', {
+    cy.visit(baseUrl, {
       qs: {
         page,
         supertype: superType,
@@ -35,14 +37,14 @@ describe('Pokemon App Routes', () => {
     cy.get('[data-cy=filter-supertype]').should('contain', superType);
 
     cy.get('[data-cy=pokemon-item]').should('have.length.greaterThan', 0);
-    cy.get(`[data-cy=page-${page}`);
+    cy.get(`[data-cy=page-${page}]`);
   });
 
   it('should navigate to the Pokemon details page', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit('http://localhost:4200/');
+    cy.visit(baseUrl);
     cy.wait('@getAllPokemons', { timeout: 5000 });
     cy.get('[data-cy=pokemon-item]').first().click();
     cy.url().should('include', '/pokemon/');
@@ -52,7 +54,7 @@ describe('Pokemon App Routes', () => {
     cy.intercept('GET', '**/cards*', { fixture: 'pokemon-list.json' }).as(
       'getAllPokemons'
     );
-    cy.visit('http://localhost:4200/');
+    cy.visit(baseUrl);
     cy.wait('@getAllPokemons', { timeout: 5000 });
     cy.get('[data-cy=pokemon-item]').first().click(); // Aggron (hgss4-1) is first pokemon
     cy.intercept('GET', '**/cards*', {

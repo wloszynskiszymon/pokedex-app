@@ -7,7 +7,7 @@ import {
   PokemonItemFields,
 } from './pokemon.model';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { preparePokemonApiUrl } from './pokemon.api';
 import { API_SELECTS } from './pokemon.constants';
 import { updatePokemons } from './pokemon.helpers';
