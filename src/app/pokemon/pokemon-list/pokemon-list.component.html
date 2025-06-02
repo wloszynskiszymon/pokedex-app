@@ -6,11 +6,11 @@
 
 
 @if(pokemons().length === 0) {
-<p class="text--fallback">No results for these filtr options.</p> }
+<p [attr.data-cy]="'pokemon-no-results'" class="text--fallback">No results for these filtr options.</p> }
 @else {
 
 @for (pokemon of pokemons(); track pokemon.id) {
 <app-pokemon-item [class.pokemon__item--active]="selectedPokemonId() === pokemon.id"
-    (click)="onPokemonItemClick(pokemon.id)" [pokemon]="pokemon" /> }
+    (click)="onPokemonItemClick(pokemon.id)" [pokemon]="pokemon" [attr.data-cy]="'pokemon-card'" /> }
 }
 }
