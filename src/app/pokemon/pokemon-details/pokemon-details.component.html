@@ -50,10 +50,12 @@
             }
 
 
-            <button class="pokemon__edit__button" mat-stroked-button (click)="openEditDialog()">
+            <button [attr.data-cy]="'pokemon-edit-button'" class="pokemon__edit__button" mat-stroked-button
+                (click)="openEditDialog()">
                 Edit </button>
 
-            @if(pokemon()?._updatedAt) { <p class="pokemon__editted">editted</p> }
+            @if(pokemon()?._updatedAt) { <p [attr.data-cy]="'pokemon-edited-label'" class="pokemon__editted">editted
+            </p> }
 
         </div>
     </div>
