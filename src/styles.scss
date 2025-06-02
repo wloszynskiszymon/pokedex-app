@@ -1,6 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 @use "@angular/material" as mat;
 
+@mixin respond($breakpoint) {
+  @if $breakpoint == phone-small {
+    @media only screen and (max-width: 25em) {
+      @content;
+    } //400px
+  }
+
+  @if $breakpoint == phone {
+    @media only screen and (max-width: 30em) {
+      @content;
+    } //480px
+  }
+
+  @if $breakpoint == mini-tablet {
+    @media only screen and (max-width: 40em) {
+      @content;
+    } //640px
+  }
+  @if $breakpoint == tablet {
+    @media only screen and (max-width: 48em) {
+      @content;
+    } //768px
+  }
+
+  @if $breakpoint == laptop {
+    @media only screen and (max-width: 64em) {
+      @content;
+    } //1024px
+  }
+
+  @if $breakpoint == desktop {
+    @media only screen and (max-width: 75em) {
+      @content;
+    } //1200px
+  }
+}
+
 html,
 body {
   height: 100%;
@@ -47,6 +84,10 @@ body {
   font-style: italic;
   text-transform: lowercase;
   color: #aaa;
+
+  @include respond(mini-tablet) {
+    font-size: 0.75rem;
+  }
 }
 
 @mixin skeleton-pulse(

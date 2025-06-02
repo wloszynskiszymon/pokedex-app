@@ -1,6 +1,14 @@
+@use "../styles.scss" as *;
+
 .app {
   display: flex;
   justify-content: center;
+
+  @include respond(desktop) {
+    flex-direction: column;
+    align-items: center;
+  }
+
   min-height: 100vh;
   background-color: #363062;
   overflow-y: auto;
@@ -17,7 +25,10 @@
 
     &--right {
       flex: 1;
-      transition: height 0.3s ease-in-out;
+
+      @include respond(desktop) {
+        margin-top: 0rem;
+      }
     }
   }
 
@@ -49,6 +60,10 @@
   margin: 0;
   padding: 0;
   margin: 0 2rem;
+  @include respond(tablet) {
+    margin: 0 1rem;
+  }
+
   font-family: "Noto Sans JP", sans-serif;
   font-size: 5rem;
   font-weight: 700;
@@ -56,4 +71,5 @@
   color: #42366a;
   pointer-events: none;
   user-select: none;
+  z-index: 1;
 }

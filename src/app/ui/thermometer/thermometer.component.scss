@@ -1,10 +1,8 @@
+@use "../../../styles.scss" as *;
+
 .thermometer {
   display: flex;
   flex-direction: column;
-
-  & > span {
-    margin-left: 0.5rem;
-  }
 
   &__container {
     display: flex;
@@ -18,11 +16,20 @@
     align-items: center;
     gap: 0.5rem;
     height: 1rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0;
   }
 
   &__bar {
     width: 20rem;
+
+    @include respond(mini-tablet) {
+      width: 15rem;
+    }
+
+    @include respond(phone) {
+      width: 13rem;
+    }
+
     height: 1rem;
     border-radius: 0.5rem;
     overflow: hidden;
