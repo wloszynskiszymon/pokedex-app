@@ -1,9 +1,9 @@
 <div class="attacks">
     @for(attack of attacks(); track attack.name){
-    <div class="attacks__container ">
+    <div [matTooltip]="attack.text" class="attacks__container ">
         <div class="attacks__container--top">
             <p class="attacks__name">{{ attack?.name ?? defaultValue }}</p>
-            <p [matTooltip]="attack.text" class="attacks__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
+            <p class="attacks__damage">⚔️{{ attack?.damage ?? defaultValue }}</p>
         </div>
         <p class="attacks__cost">🏷️ {{ attack?.cost?.join(', ') ?? defaultValue }}</p>
     </div>

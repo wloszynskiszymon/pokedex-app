@@ -121,6 +121,7 @@ export class PokemonFilterService {
         type: type ?? null,
         subtype: subtype ?? null,
         supertype: supertype ?? null,
+        page: 1,
       },
       queryParamsHandling: 'merge',
     });

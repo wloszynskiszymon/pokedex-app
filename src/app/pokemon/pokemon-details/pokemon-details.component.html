@@ -41,7 +41,7 @@
                 pokemon()!.types!.length >= 2 ?
                 `${pokemon()!.types![0]} + ${pokemon()!.types!.length - 1} others` : pokemon()!.types }}</p> }
 
-            @if(pokemon()?.subtypes) { <p [matTooltip]="`Types: ${pokemon()?.subtypes?.join(', ')} `"
+            @if(pokemon()?.subtypes) { <p [matTooltip]="`Subtypes: ${pokemon()?.subtypes?.join(', ')} `"
                 class="pokemon__badge pokemon__badge--supertype">{{
                 pokemon()!.subtypes!.length >= 2 ?
                 `${pokemon()!.subtypes![0]} + ${pokemon()!.subtypes!.length - 1} others` : pokemon()!.subtypes }}
