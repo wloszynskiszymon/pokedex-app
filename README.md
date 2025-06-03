@@ -53,7 +53,7 @@ The app allows you to browse, filter, and edit (locally) Pokémon cards, view de
 
 ## 📸 Visualization
 
-> _TODO_
+![Demo](docs/demo.gif)
 
 ---
 
