@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     this.pokemonFilterService.loadFilters();
 
     const isFilterActive = this.pokemonFilterService.isFilterActive();
-    const page = this.pokemonPaginatorService.currentPagination.page;
+    const page = this.pokemonPaginatorService.getCurrentPagination().page;
 
     console.log('Is filted active: ', isFilterActive);
     if (isFilterActive) {

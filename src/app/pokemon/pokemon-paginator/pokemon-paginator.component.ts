@@ -17,12 +17,12 @@ export class PokemonPaginatorComponent {
   private pokemonPaginatorService = inject(PokemonPaginatorService);
   private pokemonFilterService = inject(PokemonFilterService);
 
-  totalLength = computed(() => this.pokemonPaginatorService.totalCount$());
-  pageSize = computed(() => this.pokemonPaginatorService.pageSize$());
+  totalLength = computed(() => this.pokemonPaginatorService.totalCount());
+  pageSize = computed(() => this.pokemonPaginatorService.pageSize());
   currentPage = computed(() => {
     console.log('currentPage() - called');
-    console.log(this.pokemonPaginatorService.currentPage$());
-    return this.pokemonPaginatorService.currentPage$();
+    console.log(this.pokemonPaginatorService.currentPage());
+    return this.pokemonPaginatorService.currentPage();
   });
 
   isLoading = computed(
@@ -35,7 +35,7 @@ export class PokemonPaginatorComponent {
   shouldHide = computed(() => {
     const isFilterActive = this.pokemonFilterService.isFilterActive();
     const isLoading = this.isLoading();
-    const totalCount = this.pokemonPaginatorService.totalCount$();
+    const totalCount = this.pokemonPaginatorService.totalCount();
     const xd =
       (isFilterActive && !isLoading && totalCount === 0) ||
       (!isFilterActive && !isLoading && totalCount === 0);

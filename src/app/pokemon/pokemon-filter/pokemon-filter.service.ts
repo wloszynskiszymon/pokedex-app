@@ -131,7 +131,7 @@ export class PokemonFilterService {
 
     if (!types.length && !subtypes.length && !supertype) {
       console.warn('No filters selected, resetting filtered pokemons');
-      const page = this.pokemonPaginatorService.currentPagination.page;
+      const page = this.pokemonPaginatorService.getCurrentPagination().page;
       this.filteredPokemons.set([]);
       this.pokemonService.fetchAllPokemons(page);
       this.isFilterNowActive.set(false);
@@ -173,7 +173,7 @@ export class PokemonFilterService {
       this.filteredPokemons.set(data);
       this.filteredPokemonsLoading.set(false);
       this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
-      this.pokemonPaginatorService.setPage(page);
+      this.pokemonPaginatorService.setCurrentPage(page);
     } catch (e) {
       console.error(e);
       this.filteredPokemonsLoading.set(false);
@@ -188,7 +188,7 @@ export class PokemonFilterService {
     this.isFilterNowActive.set(false);
     this.filteredPokemons.set([]);
     this.filteredPokemonsLoading.set(false);
-    this.pokemonPaginatorService.reset(
+    this.pokemonPaginatorService.resetPagination(
       this.pokemonService.allPokemonsTotalCount()
     );
 
@@ -235,7 +235,7 @@ export class PokemonFilterService {
 
     if (found) {
       const filters = this.getSelectedFilters();
-      const page = this.pokemonPaginatorService.currentPagination.page;
+      const page = this.pokemonPaginatorService.getCurrentPagination().page;
       this.filterBy(filters, page);
     }
   }

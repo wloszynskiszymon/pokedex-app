@@ -82,7 +82,7 @@ export class PokemonFilterComponent {
       subtypes: this.toArray(this.controls.subtypes.value),
       supertype: this.controls.supertypes.value,
     };
-    this.paginator.reset(0);
+    this.paginator.resetPagination(0);
     this.filterService.filterBy(filters);
   }
 
@@ -90,7 +90,7 @@ export class PokemonFilterComponent {
     console.log('onReset() - resetting filters');
     Object.values(this.controls).forEach((control) => control.setValue(null));
     this.filterService.reset();
-    this.paginator.reset(this.pokemonService.allPokemonsTotalCount());
+    this.paginator.resetPagination(this.pokemonService.allPokemonsTotalCount());
   }
 
   private toArray(value: string | null): string[] {

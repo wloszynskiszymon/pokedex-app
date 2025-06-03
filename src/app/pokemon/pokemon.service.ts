@@ -63,7 +63,7 @@ export class PokemonService {
     this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).subscribe({
       next: (response) => {
         this._allPokemonsApiResponse.set(response);
-        this.paginator.setPage(response.page ?? 1);
+        this.paginator.setCurrentPage(response.page ?? 1);
         this.paginator.setTotalCount(response.totalCount ?? 0);
         this._isLoadingAllPokemons.set(false);
       },
