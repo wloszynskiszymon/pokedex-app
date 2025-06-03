@@ -8,6 +8,8 @@ import { PokemonService } from './pokemon/pokemon.service';
 import { PokemonFilterService } from './pokemon/pokemon-filter/pokemon-filter.service';
 import { PokemonPaginatorService } from './pokemon/pokemon-paginator/pokemon-paginator.service';
 import { filter, first, firstValueFrom } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +20,8 @@ import { filter, first, firstValueFrom } from 'rxjs';
     PokemonListComponent,
     PokemonFilterComponent,
     PokemonPaginatorComponent,
+    MatTooltipModule,
+    MatButtonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -63,6 +67,16 @@ export class AppComponent implements OnInit {
       this.pokemonFilterService.disableLoading();
       // fetch all pokemons
       this.pokemonService.fetchPokemons(page);
+    }
+  }
+
+  onClearLocalStorage() {
+    if (localStorage.length === 0) return;
+    if (localStorage) {
+      localStorage.clear();
+      window.location.reload(); // could be replaced with better state reset
+    } else {
+      console.error('LocalStorage is not available');
     }
   }
 }
