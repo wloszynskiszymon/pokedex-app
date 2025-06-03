@@ -1,59 +1,108 @@
 # PokedexApp
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.13.
+A simple Pokédex App built with Angular and Material UI  
+![Angular](https://img.shields.io/badge/Angular-19%2B-red?logo=angular) ![Material UI](https://img.shields.io/badge/Material--UI-Design-blue?logo=angular) ![Cypress](https://img.shields.io/badge/Tested%20with-Cypress-6e6e6e?logo=cypress)
 
-## Development server
+---
 
-To start a local development server, run:
+## ✨ About the Project
+
+**PokedexApp** is a simple web application built with Angular 19 and Material UI, leveraging the [Pokémon TCG public API](https://docs.pokemontcg.io) (without using their SDK).  
+The app allows you to browse, filter, and edit (locally) Pokémon cards, view detailed stats, and explore similar Pokémon—all in a friendly UI.
+
+---
+
+## 🚀 Features
+
+- **Pokédex List**  
+  Browse a paginated list of Pokémon cards fetched from the Pokémon TCG API.
+
+- **Advanced Filtering**  
+  Filter Pokémon by:
+
+  - **Supertype** (e.g., Pokémon, Trainer, Energy)
+  - **Subtype** (e.g., Stage 1, BREAK, Basic)
+  - **Type** (e.g., Fire, Water, Metal, etc.)
+
+- **Pokémon Details**  
+  Click any Pokémon to view detailed stats, including HP, types, subtypes, and more.
+
+- **Similar Pokémon**  
+  Instantly see and navigate to similar Pokémon cards from the details view.
+
+- **Edit Pokémon Stats**  
+  Edit selected statistics (HP, types, subtypes, supertype) for any Pokémon.  
+  Changes are stored in local storage and reflected in the UI.
+
+- **Material UI Design**  
+  Clean, modern, and fully responsive interface using Angular Material components.
+
+- **End-to-End Testing**  
+  App tested in Cypress.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Angular 19**
+- **Angular Material**
+- **Cypress**
+
+---
+
+## 📸 Visualization
+
+> _TODO_
+
+---
+
+## 🧑‍💻 How to Run the App
+
+### 1. Clone the repository
 
 ```bash
-ng serve
+git clone <your-repo-url>
+cd pokedex-app
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 2. Install dependencies
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 3. Go to /src/environments
+
+### 4. Create 'environment.ts'
+
+### 5. Copy everything from the 'environment.sample.ts' to 'environment.ts'
+
+### 6. Add your api key or leave as undefined
+
+### 7. Start the development server
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+Open [http://localhost:4200/](http://localhost:4200/) in your browser.
 
-To build the project run:
+---
+
+## 🧪 Running Tests
+
+### End-to-End (E2E) Tests with Cypress
 
 ```bash
-ng build
+npx cypress open
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 📝 Additional info
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+This project is part of a recruitment task
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+> Szymon Włoszyński - 2025.
