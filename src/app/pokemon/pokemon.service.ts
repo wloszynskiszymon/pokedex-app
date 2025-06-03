@@ -8,7 +8,7 @@ import {
 } from './pokemon.model';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
 import { Observable, tap } from 'rxjs';
-import { preparePokemonApiUrl } from './pokemon.api';
+import { createApiHeaders, preparePokemonApiUrl } from './pokemon.api';
 import { API_SELECTS } from './pokemon.constants';
 import { updatePokemons } from './pokemon.helpers';
 
@@ -17,6 +17,8 @@ export class PokemonService {
   // services
   private http = inject(HttpClient);
   private paginator = inject(PokemonPaginatorService);
+
+  private _headers = createApiHeaders();
 
   // data
   private _allPokemonsApiResponse = signal<PokemonApiResponse<
@@ -60,18 +62,22 @@ export class PokemonService {
       select: API_SELECTS.pokemonItem,
     });
 
-    this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).subscribe({
-      next: (response) => {
-        this._allPokemonsApiResponse.set(response);
-        this.paginator.setCurrentPage(response.page ?? 1);
-        this.paginator.setTotalCount(response.totalCount ?? 0);
-        this._isLoadingAllPokemons.set(false);
-      },
-      error: (e) => {
-        this._isLoadingAllPokemons.set(false);
-        console.error(e);
-      },
-    });
+    this.http
+      .get<PokemonApiResponse<PokemonItemFields[]>>(url, {
+        headers: this._headers,
+      })
+      .subscribe({
+        next: (response) => {
+          this._allPokemonsApiResponse.set(response);
+          this.paginator.setCurrentPage(response.page ?? 1);
+          this.paginator.setTotalCount(response.totalCount ?? 0);
+          this._isLoadingAllPokemons.set(false);
+        },
+        error: (e) => {
+          this._isLoadingAllPokemons.set(false);
+          console.error(e);
+        },
+      });
   }
 
   // load pokemon details by ID
@@ -84,12 +90,16 @@ export class PokemonService {
       select: API_SELECTS.pokemonDetails,
     });
 
-    return this.http.get<PokemonApiResponse<PokemonDetails>>(url).pipe(
-      tap((data) => {
-        this._pokemonDetails.set(data.data);
-        this._isLoadingPokemonDetails.set(false);
+    return this.http
+      .get<PokemonApiResponse<PokemonDetails>>(url, {
+        headers: this._headers,
       })
-    );
+      .pipe(
+        tap((data) => {
+          this._pokemonDetails.set(data.data);
+          this._isLoadingPokemonDetails.set(false);
+        })
+      );
   }
 
   // fetch similar pokemons for pokemon details page
@@ -109,12 +119,16 @@ export class PokemonService {
     });
 
     console.log(url);
-    return this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).pipe(
-      tap((response) => {
-        this._pokemonsSimilar.set(response.data ?? []);
-        this._isLoadingAllPokemonsSimilar.set(false);
+    return this.http
+      .get<PokemonApiResponse<PokemonItemFields[]>>(url, {
+        headers: this._headers,
       })
-    );
+      .pipe(
+        tap((response) => {
+          this._pokemonsSimilar.set(response.data ?? []);
+          this._isLoadingAllPokemonsSimilar.set(false);
+        })
+      );
   }
 
   // disables loading state for all pokemons

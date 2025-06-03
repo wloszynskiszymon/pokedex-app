@@ -35,15 +35,15 @@ import { PokemonService } from '../../pokemon.service';
   styleUrl: './pokemon-edit-form.component.scss',
 })
 export class PokemonEditFormComponent implements OnInit {
-  pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
+  private pokemon = inject<PokemonDetails>(MAT_DIALOG_DATA);
   private filterService = inject(PokemonFilterService);
   private pokemonService = inject(PokemonService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  types = computed(() => this.filterService.loadedTypes());
-  subtypes = computed(() => this.filterService.loadedSubtypes());
-  supertype = computed(() => this.filterService.loadedSupertypes());
+  types = computed(() => this.filterService.types());
+  subtypes = computed(() => this.filterService.subtypes());
+  supertype = computed(() => this.filterService.supertype());
 
   form = new FormGroup({
     hp: new FormControl<number>(Number(this.pokemon?.hp) ?? 1),
@@ -113,9 +113,9 @@ export class PokemonEditFormComponent implements OnInit {
         updatedData: pokemonDataToSave,
       });
 
-      if (this.filterService.isFilterActive()) {
+      if (this.filterService.areFiltersActive()) {
         // filter
-        this.filterService.updatePokemons(pokemonDataToSave);
+        this.filterService.updateFilteredPokemons(pokemonDataToSave);
       } else {
         // not filter
         this.pokemonService.updateAllPokemons(pokemonDataToSave);

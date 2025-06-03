@@ -47,13 +47,13 @@ export class AppComponent implements OnInit {
       this.pokemonFilterService.restoreFiltersFromUrl(),
     ]);
 
-    this.pokemonFilterService.loadFilters();
+    this.pokemonFilterService.fetchFilters();
 
-    const isFilterActive = this.pokemonFilterService.isFilterActive();
+    const areFiltersActive = this.pokemonFilterService.areFiltersActive();
     const page = this.pokemonPaginatorService.getCurrentPagination().page;
 
-    console.log('Is filted active: ', isFilterActive);
-    if (isFilterActive) {
+    console.log('Is filted active: ', areFiltersActive);
+    if (areFiltersActive) {
       // all pokemon data not needed
       this.pokemonService.disableAllPokemonsLoading();
 
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit {
       );
     } else {
       // filtered data not needed
-      this.pokemonFilterService.disableLoading();
+      this.pokemonFilterService.disableFilteredPokemonsLoading();
       // fetch all pokemons
       this.pokemonService.fetchAllPokemons(page);
     }

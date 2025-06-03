@@ -3,6 +3,7 @@ import {
   LocalStoragePokemon,
   PokemonEditable,
   PokemonItemFields,
+  SelectedPokemonFilters,
 } from './pokemon.model';
 
 export interface PokemonFilter {
@@ -18,24 +19,22 @@ export interface FilterResult {
 
 export const filterEditedPokemons = (
   pokemons: LocalStoragePokemon[],
-  filter: PokemonFilter = {}
+  filter: SelectedPokemonFilters = {}
 ): FilterResult => {
   const matchesFilter = (
     p: PokemonEditable,
-    filter: PokemonFilter
+    filter: SelectedPokemonFilters
   ): boolean => {
     const matchesType =
-      !filter.types ||
-      filter.types.length === 0 ||
+      !filter.type ||
       (Array.isArray(p.types) &&
-        p.types.some((type) => type && filter.types!.includes(type)));
+        p.types.some((type) => type && filter.type!.includes(type)));
 
     const matchesSubtype =
-      !filter.subtypes ||
-      filter.subtypes.length === 0 ||
+      !filter.subtype ||
       (Array.isArray(p.subtypes) &&
         p.subtypes.some(
-          (subtype) => subtype && filter.subtypes!.includes(subtype)
+          (subtype) => subtype && filter.subtype!.includes(subtype)
         ));
 
     const matchesSupertype =

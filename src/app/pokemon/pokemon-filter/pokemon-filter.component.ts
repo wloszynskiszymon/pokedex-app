@@ -6,6 +6,7 @@ import { MatButton } from '@angular/material/button';
 import { PokemonFilterService } from './pokemon-filter.service';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
+import { SelectedPokemonFilters } from '../pokemon.model';
 
 @Component({
   selector: 'app-pokemon-filter',
@@ -26,24 +27,20 @@ export class PokemonFilterComponent {
   private pokemonService = inject(PokemonService);
 
   controls = {
-    types: new FormControl<string | null>(null),
-    subtypes: new FormControl<string | null>(null),
-    supertypes: new FormControl<string | null>(null),
+    type: new FormControl<string | null>(null),
+    subtype: new FormControl<string | null>(null),
+    supertype: new FormControl<string | null>(null),
   };
 
-  types = computed(() => this.withDefault(this.filterService.loadedTypes()));
-  subtypes = computed(() =>
-    this.withDefault(this.filterService.loadedSubtypes())
-  );
-  supertypes = computed(() =>
-    this.withDefault(this.filterService.loadedSupertypes())
-  );
+  types = computed(() => this.withDefault(this.filterService.types()));
+  subtypes = computed(() => this.withDefault(this.filterService.subtypes()));
+  supertypes = computed(() => this.withDefault(this.filterService.supertype()));
 
   isLoading = computed(
     () =>
       this.filterService.isLoadingFilteredPokemons() ||
       this.pokemonService.isLoadingAllPokemons() ||
-      this.filterService.areFiltersLoading()
+      this.filterService.isFilterDataLoading()
   );
 
   constructor() {
@@ -60,27 +57,27 @@ export class PokemonFilterComponent {
       const subtype = this.filterService.selectedSubtype();
       const supertype = this.filterService.selectedSupertype();
 
-      this.controls.types.setValue(type.length ? type[0] : null, {
+      this.controls.type.setValue(type ?? null, {
         emitEvent: false,
       });
-      this.controls.subtypes.setValue(subtype.length ? subtype[0] : null, {
+      this.controls.subtype.setValue(subtype ?? null, {
         emitEvent: false,
       });
-      this.controls.supertypes.setValue(supertype ?? null, {
+      this.controls.supertype.setValue(supertype ?? null, {
         emitEvent: false,
       });
 
       console.log(
-        `effect() - selected filters updated: types=${type}, subtypes=${subtype}, supertypes=${supertype}`
+        `effect() - selected filters updated: type=${type}, subtype=${subtype}, supertype=${supertype}`
       );
     });
   }
 
   onFilterChange() {
-    const filters = {
-      types: this.toArray(this.controls.types.value),
-      subtypes: this.toArray(this.controls.subtypes.value),
-      supertype: this.controls.supertypes.value,
+    const filters: SelectedPokemonFilters = {
+      type: this.controls.type.value,
+      subtype: this.controls.subtype.value,
+      supertype: this.controls.supertype.value,
     };
     this.paginator.resetPagination(0);
     this.filterService.filterBy(filters);
@@ -89,12 +86,8 @@ export class PokemonFilterComponent {
   onReset() {
     console.log('onReset() - resetting filters');
     Object.values(this.controls).forEach((control) => control.setValue(null));
-    this.filterService.reset();
+    this.filterService.resetFilters();
     this.paginator.resetPagination(this.pokemonService.allPokemonsTotalCount());
-  }
-
-  private toArray(value: string | null): string[] {
-    return value ? [value] : [];
   }
 
   private withDefault = (values: string[]) => [

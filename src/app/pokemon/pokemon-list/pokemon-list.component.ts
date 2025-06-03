@@ -39,11 +39,11 @@ export class PokemonListComponent {
   // if any value is selected in the filter, return filtered pokemons
   pokemons = computed(() => {
     console.log(
-      `pokemons() - isFilterActive: ${this.pokemonFilterService.isFilterActive()}`
+      `pokemons() - isFilterActive: ${this.pokemonFilterService.areFiltersActive()}`
     );
 
-    if (this.pokemonFilterService.isFilterActive()) {
-      const filtered = this.pokemonFilterService.loadedFilteredPokemons();
+    if (this.pokemonFilterService.areFiltersActive()) {
+      const filtered = this.pokemonFilterService.filteredPokemons();
       if (filtered.length === 0) return [];
       console.log(filtered);
       return this.includeEditedPokemons(filtered);
@@ -72,8 +72,8 @@ export class PokemonListComponent {
 
     const editedPokemons = getEditedPokemonsFromLocalStorage();
     const { includedPokemons } = filterEditedPokemons(editedPokemons, {
-      types: selectedType,
-      subtypes: selectedSubtype,
+      type: selectedType,
+      subtype: selectedSubtype,
       supertype: selectedSupertype || undefined,
     });
 

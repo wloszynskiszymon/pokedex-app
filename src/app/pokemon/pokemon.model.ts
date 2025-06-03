@@ -108,9 +108,14 @@ export interface LocalStoragePokemon {
   updatedData: EditedPokemon;
 }
 
-
 export type PokemonFilters = {
   types?: string[];
   subtypes?: string[];
+  supertype?: string | null;
+};
+
+export type SelectedPokemonFilters = {
+  type?: string | null;
+  subtype?: string | null;
   supertype?: string | null;
 };

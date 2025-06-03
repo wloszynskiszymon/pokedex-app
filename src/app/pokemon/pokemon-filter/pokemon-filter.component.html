@@ -1,6 +1,6 @@
 <mat-form-field appearance="outline">
     <mat-label>Supertype</mat-label>
-    <mat-select [attr.data-cy]="`filter-supertype`" [formControl]="controls.supertypes" canSelectNullableOptions
+    <mat-select [attr.data-cy]="`filter-supertype`" [formControl]="controls.supertype" canSelectNullableOptions
         (selectionChange)="onFilterChange()">
         @for (option of supertypes(); track option) {
         <mat-option [attr.data-cy]="`filter-supertype-option-${option.label}`" [value]="option.value">{{ option.label
@@ -11,7 +11,7 @@
 
 <mat-form-field appearance="outline">
     <mat-label>Type</mat-label>
-    <mat-select [attr.data-cy]="'filter-type'" [formControl]="controls.types" canSelectNullableOptions
+    <mat-select [attr.data-cy]="'filter-type'" [formControl]="controls.type" canSelectNullableOptions
         (selectionChange)="onFilterChange()">
         @for (option of types(); track option) {
         <mat-option [attr.data-cy]="`filter-type-option-${option.label}`" [value]="option.value">{{ option.label
@@ -22,7 +22,7 @@
 
 <mat-form-field appearance="outline">
     <mat-label>Subtype</mat-label>
-    <mat-select [attr.data-cy]="`filter-subtype`" [formControl]="controls.subtypes" canSelectNullableOptions
+    <mat-select [attr.data-cy]="`filter-subtype`" [formControl]="controls.subtype" canSelectNullableOptions
         (selectionChange)="onFilterChange()">
         @for (option of subtypes(); track option) {
         <mat-option [attr.data-cy]="`filter-subtype-option-${option.label}`" [value]="option.value">{{ option.label
@@ -32,6 +32,6 @@
 </mat-form-field>
 
 <button [attr.data-cy]="`filter-reset`" mat-flat-button (click)="onReset()"
-    [disabled]="!controls.types.value && !controls.supertypes.value && !controls.subtypes.value">
+    [disabled]="!controls.type.value && !controls.supertype.value && !controls.subtype.value">
     Reset
 </button>

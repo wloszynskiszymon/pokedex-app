@@ -33,7 +33,7 @@ export class PokemonPaginatorComponent {
 
   // when no results or error
   shouldHide = computed(() => {
-    const isFilterActive = this.pokemonFilterService.isFilterActive();
+    const isFilterActive = this.pokemonFilterService.areFiltersActive();
     const isLoading = this.isLoading();
     const totalCount = this.pokemonPaginatorService.totalCount();
     const xd =
@@ -53,7 +53,7 @@ export class PokemonPaginatorComponent {
     console.log(
       `onPageChange() - pageIndex: ${event.pageIndex}, pageSize: ${event.pageSize}`
     );
-    if (this.pokemonFilterService.isFilterActive()) {
+    if (this.pokemonFilterService.areFiltersActive()) {
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),
         page

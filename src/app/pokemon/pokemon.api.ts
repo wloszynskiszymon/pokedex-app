@@ -31,10 +31,10 @@ export const preparePokemonApiUrl = ({
     query = overriddenQuery;
   } else {
     if (types.length) {
-      queryParts.push(...types.map((val) => `types:"${val}"`));
+      queryParts.push(...types.map((val) => `type:"${val}"`));
     }
     if (subtypes.length) {
-      queryParts.push(...subtypes.map((val) => `subtypes:"${val}"`));
+      queryParts.push(...subtypes.map((val) => `subtype:"${val}"`));
     }
     if (supertype) {
       queryParts.push(`supertype:"${supertype}"`);
