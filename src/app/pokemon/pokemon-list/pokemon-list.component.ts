@@ -64,17 +64,11 @@ export class PokemonListComponent {
     const selectedSupertype = this.pokemonFilterService.selectedSupertype();
 
     const editedPokemons = getEditedPokemonsFromLocalStorage();
-    console.log(editedPokemons);
     const { includedPokemons } = filterEditedPokemons(editedPokemons, {
       type: selectedType,
       subtype: selectedSubtype,
       supertype: selectedSupertype || undefined,
     });
-
-    console.log(
-      `Including ${includedPokemons.length} edited pokemons in the list`
-    );
-    console.log('Edited Pokemons:', includedPokemons);
 
     if (!includedPokemons || includedPokemons.length === 0) {
       return pokemons; // no edited pokemons to include
