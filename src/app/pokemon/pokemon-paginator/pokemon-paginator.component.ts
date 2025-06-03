@@ -28,7 +28,7 @@ export class PokemonPaginatorComponent {
   isLoading = computed(
     () =>
       this.pokemonFilterService.isLoadingFilteredPokemons() ||
-      this.pokemonService.isLoadingPokemons()
+      this.pokemonService.isLoadingAllPokemons()
   );
 
   // when no results or error
@@ -59,7 +59,7 @@ export class PokemonPaginatorComponent {
         page
       );
     } else {
-      this.pokemonService.fetchPokemons(page);
+      this.pokemonService.fetchAllPokemons(page);
     }
     this.pokemonPaginatorService.updateUrlPageParam(page);
   }

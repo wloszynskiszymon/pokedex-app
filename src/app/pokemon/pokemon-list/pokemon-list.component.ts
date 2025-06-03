@@ -31,7 +31,7 @@ export class PokemonListComponent {
 
   isLoading = computed(() => {
     return (
-      this.pokemonService.isLoadingPokemons() ||
+      this.pokemonService.isLoadingAllPokemons() ||
       this.pokemonFilterService.isLoadingFilteredPokemons()
     );
   });
@@ -49,7 +49,7 @@ export class PokemonListComponent {
       return this.includeEditedPokemons(filtered);
     }
 
-    const allPokemons = this.pokemonService.loadedPokemons();
+    const allPokemons = this.pokemonService.allPokemons();
 
     if (allPokemons.length === 0) return [];
 

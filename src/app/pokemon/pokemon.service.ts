@@ -7,41 +7,50 @@ import {
   PokemonItemFields,
 } from './pokemon.model';
 import { PokemonPaginatorService } from './pokemon-paginator/pokemon-paginator.service';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { preparePokemonApiUrl } from './pokemon.api';
 import { API_SELECTS } from './pokemon.constants';
 import { updatePokemons } from './pokemon.helpers';
 
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
+  // services
   private http = inject(HttpClient);
   private paginator = inject(PokemonPaginatorService);
 
-  private pokemonApiResponse = signal<PokemonApiResponse<
+  // data
+  private _allPokemonsApiResponse = signal<PokemonApiResponse<
     PokemonItemFields[]
   > | null>(null);
-  private pokemonDetails = signal<PokemonDetails | undefined>(undefined);
-  private pokemonsLoading = signal<boolean>(true);
-  private pokemonsDetailsLoading = signal<boolean>(false);
-  private pokemonsSimilarLoading = signal<boolean>(true);
-  private pokemonsSimilar = signal<PokemonItemFields[]>([]);
+  private _pokemonDetails = signal<PokemonDetails | undefined>(undefined);
+  private _pokemonsSimilar = signal<PokemonItemFields[]>([]);
 
-  readonly loadedApiResponse = this.pokemonApiResponse.asReadonly();
-  readonly loadedPokemons = computed(
-    () => this.pokemonApiResponse()?.data ?? []
+  // loading states
+  private _isLoadingAllPokemons = signal<boolean>(true);
+  private _isLoadingPokemonDetails = signal<boolean>(false);
+  private _isLoadingAllPokemonsSimilar = signal<boolean>(true);
+
+  // public readonly signals
+  readonly allPokemonsApiResponse = this._allPokemonsApiResponse.asReadonly();
+  readonly allPokemons = computed(
+    () => this._allPokemonsApiResponse()?.data ?? []
   );
-  readonly loadedSimilarPokemons = this.pokemonsSimilar.asReadonly();
-  readonly loadedPokemonDetails = this.pokemonDetails.asReadonly();
-  readonly isLoadingPokemons = this.pokemonsLoading.asReadonly();
-  readonly isLoadingSimilarPokemons = this.pokemonsSimilarLoading.asReadonly();
-  readonly isLoadingPokemonDetails = this.pokemonsDetailsLoading.asReadonly();
-  readonly totalCount = computed(
-    () => this.pokemonApiResponse()?.totalCount ?? 0
+  readonly similarPokemons = this._pokemonsSimilar.asReadonly();
+  readonly pokemonDetails = this._pokemonDetails.asReadonly();
+
+  readonly isLoadingAllPokemons = this._isLoadingAllPokemons.asReadonly();
+  readonly isLoadingSimilarPokemons =
+    this._isLoadingAllPokemonsSimilar.asReadonly();
+  readonly isLoadingPokemonDetails = this._isLoadingPokemonDetails.asReadonly();
+
+  readonly allPokemonsTotalCount = computed(
+    () => this._allPokemonsApiResponse()?.totalCount ?? 0
   );
 
-  fetchPokemons(page: number = 1) {
+  // fetch all pokemons (no filters)
+  fetchAllPokemons(page: number = 1) {
     console.log(`fetchPokemons(${page})`);
-    this.pokemonsLoading.set(true);
+    this._isLoadingAllPokemons.set(true);
 
     if (!localStorage) throw new Error('LocalStorage is not available');
 
@@ -53,20 +62,23 @@ export class PokemonService {
 
     this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).subscribe({
       next: (response) => {
-        this.pokemonApiResponse.set(response);
+        this._allPokemonsApiResponse.set(response);
         this.paginator.setPage(response.page ?? 1);
         this.paginator.setTotalCount(response.totalCount ?? 0);
-        this.pokemonsLoading.set(false);
+        this._isLoadingAllPokemons.set(false);
       },
       error: (e) => {
-        this.pokemonsLoading.set(false);
+        this._isLoadingAllPokemons.set(false);
         console.error(e);
       },
     });
   }
 
-  loadPokemonById(id: string): Observable<PokemonApiResponse<PokemonDetails>> {
-    this.pokemonsDetailsLoading.set(true);
+  // load pokemon details by ID
+  fetchPokemonById$(
+    id: string
+  ): Observable<PokemonApiResponse<PokemonDetails>> {
+    this._isLoadingPokemonDetails.set(true);
     const url = preparePokemonApiUrl({
       route: `/cards/${id}`,
       select: API_SELECTS.pokemonDetails,
@@ -74,18 +86,19 @@ export class PokemonService {
 
     return this.http.get<PokemonApiResponse<PokemonDetails>>(url).pipe(
       tap((data) => {
-        this.pokemonDetails.set(data.data);
-        this.pokemonsDetailsLoading.set(false);
+        this._pokemonDetails.set(data.data);
+        this._isLoadingPokemonDetails.set(false);
       })
     );
   }
 
-  loadSimilarPokemons$(
+  // fetch similar pokemons for pokemon details page
+  fetchSimilarPokemons$(
     pokemonSet: PokemonDetails['set'],
     excludeId: string
   ): Observable<PokemonApiResponse<PokemonItemFields[]>> {
     console.log(`loadSimilarPokemons(${pokemonSet.name})`);
-    this.pokemonsSimilarLoading.set(true);
+    this._isLoadingAllPokemonsSimilar.set(true);
 
     const query = `set.series:"${pokemonSet.series}" AND -id:${excludeId}`;
     const url = preparePokemonApiUrl({
@@ -98,30 +111,35 @@ export class PokemonService {
     console.log(url);
     return this.http.get<PokemonApiResponse<PokemonItemFields[]>>(url).pipe(
       tap((response) => {
-        this.pokemonsSimilar.set(response.data ?? []);
-        this.pokemonsSimilarLoading.set(false);
+        this._pokemonsSimilar.set(response.data ?? []);
+        this._isLoadingAllPokemonsSimilar.set(false);
       })
     );
   }
 
-  disableLoading() {
+  // disables loading state for all pokemons
+  disableAllPokemonsLoading() {
     console.log('disableLoading()');
-    this.pokemonsLoading.set(false);
+    this._isLoadingAllPokemons.set(false);
   }
 
+  // updates the pokemon details with data from local storage
   updatePokemonDetails(pokemon: PokemonItemFields[]) {
-    this.pokemonDetails.set({
-      ...this.pokemonDetails()!,
+    this._pokemonDetails.set({
+      ...this._pokemonDetails()!,
       ...pokemon,
     });
   }
 
-  updatePokemons(pokemon: EditedPokemon) {
-    if (!this.pokemonApiResponse()?.data) return;
-    const updated = updatePokemons(this.pokemonApiResponse()!.data, [pokemon]);
+  // updates all pokemons with data from local storage
+  updateAllPokemons(pokemon: EditedPokemon) {
+    if (!this._allPokemonsApiResponse()?.data) return;
+    const updated = updatePokemons(this._allPokemonsApiResponse()!.data, [
+      pokemon,
+    ]);
 
-    this.pokemonApiResponse.set({
-      ...this.pokemonApiResponse()!,
+    this._allPokemonsApiResponse.set({
+      ...this._allPokemonsApiResponse()!,
       data: updated,
     });
     this.updatePokemonDetails(updated);

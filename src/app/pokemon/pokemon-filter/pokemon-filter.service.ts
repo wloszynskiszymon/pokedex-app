@@ -8,7 +8,7 @@ import {
 } from '../pokemon.model';
 import { baseUrl } from '../../app.config';
 import { HttpClient } from '@angular/common/http';
-import { PokemonFilters } from './pokemon-filter.model';
+import { PokemonFilters } from '../pokemon.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { PokemonService } from '../pokemon.service';
@@ -133,7 +133,7 @@ export class PokemonFilterService {
       console.warn('No filters selected, resetting filtered pokemons');
       const page = this.pokemonPaginatorService.currentPagination.page;
       this.filteredPokemons.set([]);
-      this.pokemonService.fetchPokemons(page);
+      this.pokemonService.fetchAllPokemons(page);
       this.isFilterNowActive.set(false);
       return;
     }
@@ -188,7 +188,9 @@ export class PokemonFilterService {
     this.isFilterNowActive.set(false);
     this.filteredPokemons.set([]);
     this.filteredPokemonsLoading.set(false);
-    this.pokemonPaginatorService.reset(this.pokemonService.totalCount());
+    this.pokemonPaginatorService.reset(
+      this.pokemonService.allPokemonsTotalCount()
+    );
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -201,10 +203,10 @@ export class PokemonFilterService {
       queryParamsHandling: 'merge',
     });
 
-    if (this.pokemonService.loadedPokemons.length === 0) {
+    if (this.pokemonService.allPokemons.length === 0) {
       console.warn('No pokemons loaded, fetching all pokemons');
 
-      this.pokemonService.fetchPokemons();
+      this.pokemonService.fetchAllPokemons();
     }
   }
 

@@ -1,4 +1,4 @@
-import { PokemonFilters } from './pokemon-filter/pokemon-filter.model';
+import { PokemonFilters } from './pokemon.model';
 import { baseUrl, pokemonsPerPage } from './../app.config';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';

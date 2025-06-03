@@ -42,7 +42,7 @@ export class PokemonFilterComponent {
   isLoading = computed(
     () =>
       this.filterService.isLoadingFilteredPokemons() ||
-      this.pokemonService.isLoadingPokemons() ||
+      this.pokemonService.isLoadingAllPokemons() ||
       this.filterService.areFiltersLoading()
   );
 
@@ -90,7 +90,7 @@ export class PokemonFilterComponent {
     console.log('onReset() - resetting filters');
     Object.values(this.controls).forEach((control) => control.setValue(null));
     this.filterService.reset();
-    this.paginator.reset(this.pokemonService.totalCount());
+    this.paginator.reset(this.pokemonService.allPokemonsTotalCount());
   }
 
   private toArray(value: string | null): string[] {

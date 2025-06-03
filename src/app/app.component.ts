@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
     console.log('Is filted active: ', isFilterActive);
     if (isFilterActive) {
       // all pokemon data not needed
-      this.pokemonService.disableLoading();
+      this.pokemonService.disableAllPokemonsLoading();
 
       // fetch filtered pokemons
       this.pokemonFilterService.filterBy(
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
       // filtered data not needed
       this.pokemonFilterService.disableLoading();
       // fetch all pokemons
-      this.pokemonService.fetchPokemons(page);
+      this.pokemonService.fetchAllPokemons(page);
     }
   }
 

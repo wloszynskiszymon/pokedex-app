@@ -118,7 +118,7 @@ export class PokemonEditFormComponent implements OnInit {
         this.filterService.updatePokemons(pokemonDataToSave);
       } else {
         // not filter
-        this.pokemonService.updatePokemons(pokemonDataToSave);
+        this.pokemonService.updateAllPokemons(pokemonDataToSave);
       }
 
       this.showSnackbar(`Pokemon ${this.pokemon.name} saved successfully!`);

@@ -9,7 +9,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.component';
 import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
-import { PokemonEditable } from '../pokemon.model';
 import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 import { HttpErrorResponse } from '@angular/common/http';
 @Component({
@@ -42,8 +41,8 @@ export class PokemonDetailsComponent {
 
   pokemon = computed(() => {
     const edittedPokemon = getEditedPokemonsFromLocalStorage();
-    if (!edittedPokemon) return this.pokemonService.loadedPokemonDetails();
-    const pokemon = this.pokemonService.loadedPokemonDetails();
+    if (!edittedPokemon) return this.pokemonService.pokemonDetails();
+    const pokemon = this.pokemonService.pokemonDetails();
     const foundPokemon = edittedPokemon.find(
       (p) => p.updatedData.id === pokemon?.id
     );
@@ -54,7 +53,7 @@ export class PokemonDetailsComponent {
   });
 
   similarPokemons = computed(() => {
-    return this.pokemonService.loadedSimilarPokemons();
+    return this.pokemonService.similarPokemons();
   });
 
   defaultValue = 'N/A';
@@ -64,14 +63,14 @@ export class PokemonDetailsComponent {
       .pipe(
         filter((params) => !!params['id']),
         switchMap((params) =>
-          this.pokemonService.loadPokemonById(params['id']).pipe(
+          this.pokemonService.fetchPokemonById$(params['id']).pipe(
             switchMap(({ data }) => {
               if (!data?.set) {
                 throw new Error(
                   `No Pokemon set found in ngOnInit for ID: ${params['id']}`
                 );
               }
-              return this.pokemonService.loadSimilarPokemons$(
+              return this.pokemonService.fetchSimilarPokemons$(
                 data.set,
                 data.id
               );

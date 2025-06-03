@@ -107,3 +107,10 @@ export interface LocalStoragePokemon {
   oldData: PokemonEditable;
   updatedData: EditedPokemon;
 }
+
+
+export type PokemonFilters = {
+  types?: string[];
+  subtypes?: string[];
+  supertype?: string | null;
+};
