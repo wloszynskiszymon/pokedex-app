@@ -31,8 +31,7 @@ The app allows you to browse, filter, and edit (locally) Pokémon cards, view de
   Instantly see and navigate to similar Pokémon cards from the details view.
 
 - **Edit Pokémon Stats**  
-  Edit selected statistics (HP, types, subtypes, supertype) for any Pokémon.  
-  Changes are stored in local storage and reflected in the UI.
+  Edit selected statistics (HP, types, subtypes, supertype) for any Pokémon. Changes are stored in local storage and reflected in the UI. If local edited data does not fit filter requirements (but for original api data it does) the pokemon is excluded from the query. If the filter fits the requirements app replaces original data with edited data.
 
 - **Material UI Design**  
   Clean, modern, and fully responsive interface using Angular Material components.
