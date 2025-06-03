@@ -14,7 +14,7 @@ describe('Pokemon App Routes', () => {
   });
 
   it('should pre-fill filters and set correct page based on URL query parameters', () => {
-    const superType = 'Pokémon';
+    const supertype = 'Pokémon';
     const type = 'Fairy';
     const subtype = 'Stage 2';
     const page = 2;
@@ -22,9 +22,9 @@ describe('Pokemon App Routes', () => {
     cy.visit(baseAppUrl, {
       qs: {
         page,
-        supertype: superType,
-        types: type,
-        subtypes: subtype,
+        supertype,
+        type,
+        subtype,
       },
     });
 
@@ -34,7 +34,7 @@ describe('Pokemon App Routes', () => {
 
     cy.get('[data-cy=filter-type]').should('contain', type);
     cy.get('[data-cy=filter-subtype]').should('contain', subtype);
-    cy.get('[data-cy=filter-supertype]').should('contain', superType);
+    cy.get('[data-cy=filter-supertype]').should('contain', supertype);
 
     cy.get('[data-cy=pokemon-item]').should('have.length.greaterThan', 0);
     cy.get(`[data-cy=page-${page}]`);

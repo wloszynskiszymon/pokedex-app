@@ -1,4 +1,4 @@
-import { baseAppUrl } from "../config";
+import { baseAppUrl } from '../config';
 
 describe('Pokemon filters', () => {
   beforeEach(() => {
@@ -33,7 +33,7 @@ describe('Pokemon filters', () => {
 
     cy.wait('@getFilteredPokemons', { timeout: 5000 });
 
-    cy.url().should('include', `types=${pokemonType}`);
+    cy.url().should('include', `type=${pokemonType}`);
 
     cy.get('[data-cy=pokemon-item]').should('have.length.greaterThan', 0);
     cy.get('[data-cy=pokemon-item]').should('contain', pokemonType);
@@ -77,7 +77,7 @@ describe('Pokemon filters', () => {
 
     cy.wait('@getFilteredPokemons', { timeout: 5000 });
 
-    cy.url().should('include', `subtypes=${pokemonSubtype}`);
+    cy.url().should('include', `subtype=${pokemonSubtype}`);
 
     cy.get('[data-cy=pokemon-item]').should('have.length.greaterThan', 0);
     cy.get('[data-cy=pokemon-item]').should('contain', pokemonSubtype);
@@ -140,8 +140,8 @@ describe('Pokemon filters', () => {
     cy.wait('@getFilteredPokemons-type-colorless-break', { timeout: 5000 });
 
     // url check
-    cy.url().should('include', `types=${pokemonType}`);
-    cy.url().should('include', `subtypes=${pokemonSubtype}`);
+    cy.url().should('include', `type=${pokemonType}`);
+    cy.url().should('include', `subtype=${pokemonSubtype}`);
     cy.url().should('include', `supertype=${pokemonSupertype}`);
 
     cy.get('[data-cy=pokemon-no-results]').should('exist');
