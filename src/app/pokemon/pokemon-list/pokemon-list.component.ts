@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
 import { filterEditedPokemons } from '../pokemon.helpers';
 import { PokemonItemFields } from '../pokemon.model';
+import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -21,9 +22,12 @@ export class PokemonListComponent {
 
   private pokemonService = inject(PokemonService);
   private pokemonFilterService = inject(PokemonFilterService);
+  private pokemonPaginatorService = inject(PokemonPaginatorService);
 
   pageSize = new Array(pokemonsPerPage);
-  selectedPokemonId = signal<string | null>(null);
+  selectedPokemonId = computed(() =>
+    this.pokemonPaginatorService.selectedPokemonId()
+  );
 
   isLoading = computed(() => {
     return (
@@ -53,7 +57,7 @@ export class PokemonListComponent {
   });
 
   onPokemonItemClick(id: string) {
-    this.selectedPokemonId.set(id);
+    this.pokemonPaginatorService.setSelectedPokemonId(id);
     this.router.navigate(['/pokemon', id], {
       queryParamsHandling: 'preserve',
     });

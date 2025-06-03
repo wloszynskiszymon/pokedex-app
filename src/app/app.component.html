@@ -2,8 +2,13 @@
   <!-- Dark mode for this section -->
   <section class="app__section app__section--left">
     <div class="app__header">
-      <h1 class="app__title">Welcome!</h1>
-      <p class="app__description">Find your favorite pokémons here!</p>
+      <div>
+        <h1 class="app__title">Welcome!</h1>
+        <p class="app__description">Find your favorite pokémons here!</p>
+      </div>
+      <button (click)="onClearLocalStorage()" class="app__header__clear"
+        matTooltip="Clear all pokemons you edited. All your edited data will be lost.">clear app
+        memory</button>
     </div>
     <app-pokemon-filter />
     <app-pokemon-list />

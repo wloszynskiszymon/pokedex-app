@@ -34,6 +34,33 @@
 
   &__header {
     margin-bottom: 2rem;
+    display: flex;
+    justify-tracks: space-between;
+    align-items: center;
+
+    &__clear {
+      all: unset;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ddd;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      text-decoration: underline;
+      align-self: flex-end;
+      cursor: pointer;
+      background-color: transparent;
+      margin-left: 5rem;
+
+      &:hover {
+        color: #fff;
+      }
+
+      @include respond(tablet) {
+        font-size: 0.75rem;
+      }
+    }
   }
 
   &__card {

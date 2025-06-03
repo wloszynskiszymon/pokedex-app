@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { PokemonService } from '../pokemon.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, switchMap } from 'rxjs';
@@ -10,6 +10,8 @@ import { PokemonAttacksComponent } from './pokemon-attacks/pokemon-attacks.compo
 import { ThermometerComponent } from '../../ui/thermometer/thermometer.component';
 import { getEditedPokemonsFromLocalStorage } from '../pokemon.localstorage';
 import { PokemonEditable } from '../pokemon.model';
+import { PokemonPaginatorService } from '../pokemon-paginator/pokemon-paginator.service';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-pokemon-details',
   standalone: true,
@@ -23,10 +25,20 @@ import { PokemonEditable } from '../pokemon.model';
   styleUrl: './pokemon-details.component.scss',
 })
 export class PokemonDetailsComponent {
-  pokemonService = inject(PokemonService);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  dialog = inject(MatDialog);
+  private pokemonService = inject(PokemonService);
+  private pokemonPaginator = inject(PokemonPaginatorService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  pokemonLoading = computed(() => {
+    const detailsLoading = this.pokemonService.isLoadingPokemonDetails();
+    const similarLoading = this.pokemonService.isLoadingSimilarPokemons();
+    return detailsLoading || similarLoading;
+  });
+
+  pokemonError = signal<{ status: number; message: string } | undefined>(
+    undefined
+  );
 
   pokemon = computed(() => {
     const edittedPokemon = getEditedPokemonsFromLocalStorage();
@@ -73,6 +85,19 @@ export class PokemonDetailsComponent {
             'Failed to load pokemon details or similar pokemons',
             err
           );
+          const pokemonError = err as HttpErrorResponse;
+
+          if (pokemonError.status === 404) {
+            this.pokemonError.set({
+              status: pokemonError.status,
+              message: `Pokemon with this ID not found.`,
+            });
+          } else {
+            this.pokemonError.set({
+              status: pokemonError.status,
+              message: pokemonError.message,
+            });
+          }
         },
         next: (data) => {
           console.log(
@@ -84,6 +109,7 @@ export class PokemonDetailsComponent {
   }
 
   navigateToThisPokemon(pokemonId: string) {
+    this.pokemonPaginator.setSelectedPokemonId(pokemonId);
     this.router.navigate(['../', pokemonId], {
       relativeTo: this.route,
       queryParamsHandling: 'preserve',

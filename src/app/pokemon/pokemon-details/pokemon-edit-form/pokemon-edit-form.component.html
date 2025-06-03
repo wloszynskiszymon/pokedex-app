@@ -1,11 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="onSave()">
+<form [attr.data-cy]="'pokemon-edit-form'" [formGroup]="form" (ngSubmit)="onSave()">
     <h2 mat-dialog-title>Edit pokemon</h2>
     <mat-dialog-content>
         <p>You can edit some choosen statistics. You will be able to see the changes by switching to "edited view"</p>
         <div class="form__slider__container">
             <span class="form__slider__label">HP</span>
             <mat-slider class="form__slider" [min]="0" [max]="150" [step]="1" tickInterval="10">
-                <input matSliderThumb [formControl]="form.controls.hp" />
+                <input [attr.data-cy]="'pokemon-edit-form-hp'" matSliderThumb [formControl]="form.controls.hp" />
             </mat-slider>
             <span class="mat-slider
                 -thumb-label">
@@ -17,39 +17,11 @@
         </div>
 
         <div class="form__select__container">
-            <mat-form-field appearance="outline">
-                <mat-label>Type</mat-label>
-                <mat-select [formControl]="form.controls.types" multiple>
-                    <mat-select-trigger>
-                        {{ (form.controls.types.value?.[0]) || '' }}
-                        @if ((form.controls.types.value?.length || 0) > 1) {
-                        <span class="form__select__others">
-                            (+{{ (form.controls.types.value?.length || 0) - 1 }} {{ form.controls.types.value?.length
-                            === 2 ?
-                            'other'
-                            :
-                            'others' }})
-                        </span>
-                        }
-                    </mat-select-trigger>
-                    @for (option of types(); track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-                <mat-label>Supertype</mat-label>
-                <mat-select [formControl]="form.controls.supertype">
-                    @for (option of supertype(); track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
-                    }
-                </mat-select>
-            </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Subtype</mat-label>
-                <mat-select [formControl]="form.controls.subtypes" multiple>
+                <mat-select [attr.data-cy]="'pokemon-edit-form-subtypes'" [formControl]="form.controls.subtypes"
+                    multiple>
                     <mat-select-trigger>
                         {{ (form.controls.subtypes.value?.[0]) || '' }}
                         @if ((form.controls.subtypes.value?.length || 0) > 1) {
@@ -64,16 +36,54 @@
                         }
                     </mat-select-trigger>
                     @for (option of subtypes(); track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                    <mat-option [attr.data-cy]="`pokemon-edit-form-subtypes-option-${option}`" [value]="option">{{
+                        option }}</mat-option>
                     }
                 </mat-select>
             </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+                <mat-select [attr.data-cy]="'pokemon-edit-form-types'" [formControl]="form.controls.types" multiple>
+                    <mat-select-trigger>
+                        {{ (form.controls.types.value?.[0]) || '' }}
+                        @if ((form.controls.types.value?.length || 0) > 1) {
+                        <span class="form__select__others">
+                            (+{{ (form.controls.types.value?.length || 0) - 1 }} {{ form.controls.types.value?.length
+                            === 2 ?
+                            'other'
+                            :
+                            'others' }})
+                        </span>
+                        }
+                    </mat-select-trigger>
+                    @for (option of types(); track option) {
+                    <mat-option [attr.data-cy]="`pokemon-edit-form-types-option-${option}`" [value]="option">{{ option
+                        }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Supertype</mat-label>
+                <mat-select [attr.data-cy]="'pokemon-edit-form-supertype'" [formControl]="form.controls.supertype">
+                    @for (option of supertype(); track option) {
+                    <mat-option [attr.data-cy]="`pokemon-edit-form-supertype-option-${option}`" [value]="option">{{
+                        option }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+
         </div>
 
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button type="button" (click)="onReset()" matTooltip="Reset to original values" mat-button>Reset</button>
-        <button type="button" (click)="onCancel()" mat-button>Cancel</button>
-        <button type="submit" [disabled]="form.pristine" mat-flat-button>Save</button>
+        <button [attr.data-cy]="'pokemon-edit-form-reset-button'" type="button" (click)="onReset()"
+            matTooltip="Reset to original values" mat-button>Reset</button>
+        <button [attr.data-cy]="'pokemon-edit-form-cancel-button'" type="button" (click)="onCancel()"
+            mat-button>Cancel</button>
+        <button [attr.data-cy]="'pokemon-edit-form-submit-button'" type="submit" [disabled]="form.pristine"
+            mat-flat-button>Save</button>
     </mat-dialog-actions>
 </form>
