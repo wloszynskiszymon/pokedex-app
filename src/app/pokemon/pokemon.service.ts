@@ -51,7 +51,6 @@ export class PokemonService {
 
   // fetch all pokemons (no filters)
   fetchAllPokemons(page: number = 1) {
-    console.log(`fetchPokemons(${page})`);
     this._isLoadingAllPokemons.set(true);
 
     if (!localStorage) throw new Error('LocalStorage is not available');
@@ -107,7 +106,6 @@ export class PokemonService {
     pokemonSet: PokemonDetails['set'],
     excludeId: string
   ): Observable<PokemonApiResponse<PokemonItemFields[]>> {
-    console.log(`loadSimilarPokemons(${pokemonSet.name})`);
     this._isLoadingAllPokemonsSimilar.set(true);
 
     const query = `set.series:"${pokemonSet.series}" AND -id:${excludeId}`;
@@ -118,7 +116,6 @@ export class PokemonService {
       select: API_SELECTS.pokemonSimilar,
     });
 
-    console.log(url);
     return this.http
       .get<PokemonApiResponse<PokemonItemFields[]>>(url, {
         headers: this._headers,
@@ -133,7 +130,6 @@ export class PokemonService {
 
   // disables loading state for all pokemons
   disableAllPokemonsLoading() {
-    console.log('disableLoading()');
     this._isLoadingAllPokemons.set(false);
   }
 

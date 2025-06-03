@@ -98,12 +98,6 @@ export class PokemonDetailsComponent {
             });
           }
         },
-        next: (data) => {
-          console.log(
-            'Pokemon details and similar pokemons loaded successfully'
-          );
-          console.log(data);
-        },
       });
   }
 

@@ -19,11 +19,7 @@ export class PokemonPaginatorComponent {
 
   totalLength = computed(() => this.pokemonPaginatorService.totalCount());
   pageSize = computed(() => this.pokemonPaginatorService.pageSize());
-  currentPage = computed(() => {
-    console.log('currentPage() - called');
-    console.log(this.pokemonPaginatorService.currentPage());
-    return this.pokemonPaginatorService.currentPage();
-  });
+  currentPage = computed(() => this.pokemonPaginatorService.currentPage());
 
   isLoading = computed(
     () =>
@@ -36,12 +32,6 @@ export class PokemonPaginatorComponent {
     const isFilterActive = this.pokemonFilterService.areFiltersActive();
     const isLoading = this.isLoading();
     const totalCount = this.pokemonPaginatorService.totalCount();
-    const xd =
-      (isFilterActive && !isLoading && totalCount === 0) ||
-      (!isFilterActive && !isLoading && totalCount === 0);
-
-    console.log('=========== shouldHide() ===========');
-    console.log(xd);
     return (
       (isFilterActive && !isLoading && totalCount === 0) ||
       (!isFilterActive && !isLoading && totalCount === 0)
@@ -50,9 +40,6 @@ export class PokemonPaginatorComponent {
 
   onPageChange(event: PageEvent) {
     const page = event.pageIndex + 1; // material paginator uses 0-based index
-    console.log(
-      `onPageChange() - pageIndex: ${event.pageIndex}, pageSize: ${event.pageSize}`
-    );
     if (this.pokemonFilterService.areFiltersActive()) {
       this.pokemonFilterService.filterBy(
         this.pokemonFilterService.getSelectedFilters(),

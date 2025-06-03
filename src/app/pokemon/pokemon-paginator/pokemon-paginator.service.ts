@@ -44,13 +44,11 @@ export class PokemonPaginatorService {
 
   // selected pokemon id from the list - to apply hihlight class
   setSelectedPokemonId(id: string | null) {
-    console.log(`setSelectedPokemonId(${id})`);
     this._selctedPokemonId.set(id);
   }
 
   // update URL with the current page number
   updateUrlPageParam(page: number) {
-    console.log(`updateUrlPageParam(${page})`);
     this.router.navigate([], {
       queryParams: { page },
       queryParamsHandling: 'merge',
@@ -59,24 +57,19 @@ export class PokemonPaginatorService {
 
   // restored data from URL is used to set the current page
   async restorePageFromUrl() {
-    console.log('restorePageFromUrl()');
     this.route.queryParamMap.subscribe((params) => {
-      console.log(params);
       const page = Number(params.get('page'));
       if (!isNaN(page) && page > 0) {
-        console.log(`Restoring page from URL: ${page}`);
-        this.setPageSize(page);
+        this.setCurrentPage(page);
       } else {
-        console.log('No valid page in URL, resetting to 1');
-        this.setPageSize(1);
+        this.setCurrentPage(1);
       }
     });
   }
 
   resetPagination(totalCount: number) {
-    console.log(`reset(${totalCount})`);
     this.setCurrentPage(1);
-    this.setPageSize(pokemonsPerPage);
+    this.setCurrentPage(pokemonsPerPage);
     this.setTotalCount(totalCount);
   }
 }

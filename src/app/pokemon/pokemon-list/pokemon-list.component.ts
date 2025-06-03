@@ -38,14 +38,9 @@ export class PokemonListComponent {
 
   // if any value is selected in the filter, return filtered pokemons
   pokemons = computed(() => {
-    console.log(
-      `pokemons() - isFilterActive: ${this.pokemonFilterService.areFiltersActive()}`
-    );
-
     if (this.pokemonFilterService.areFiltersActive()) {
       const filtered = this.pokemonFilterService.filteredPokemons();
       if (filtered.length === 0) return [];
-      console.log(filtered);
       return this.includeEditedPokemons(filtered);
     }
 

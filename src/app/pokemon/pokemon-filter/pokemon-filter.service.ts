@@ -60,7 +60,6 @@ export class PokemonFilterService {
   readonly selectedSupertype = this._selectedSupertype.asReadonly();
 
   fetchFilters() {
-    console.log('loadFilters()');
     forkJoin({
       types: this.http.get<PokemonApiFilterResponse>(`${baseUrl}/types`, {
         headers: this._headers,
@@ -87,7 +86,6 @@ export class PokemonFilterService {
   }
 
   async restoreFiltersFromUrl() {
-    console.log('restoreFiltersFromUrl()');
     this.route.queryParamMap.subscribe((params) => {
       if (
         !params.getAll('type').length &&
@@ -96,14 +94,9 @@ export class PokemonFilterService {
       )
         return;
 
-      console.log('Restoring filters from URL');
-      console.log('Loading when restoring: ', this._isFilterDataLoading());
-
       const type = params.getAll('type');
       const subtype = params.getAll('subtype');
       const supertype = params.getAll('supertype');
-
-      console.log(type, subtype, supertype);
 
       this._selectedType.set(type[0]);
       this._selectedSubtype.set(subtype[0]);
@@ -116,9 +109,6 @@ export class PokemonFilterService {
     filters: SelectedPokemonFilters,
     page: number = 1
   ): Promise<void> {
-    console.log(
-      `filterBy({type: ${filters.type}, subtype: ${filters.subtype}, supertype: ${filters.supertype}}, ${page})`
-    );
     const { type = null, subtype = null, supertype = null } = filters;
 
     this._selectedType.set(type);
@@ -168,15 +158,12 @@ export class PokemonFilterService {
       idsToExclude: filteredIds.exclude,
     });
 
-    console.log(fullUrl);
-
     try {
       const { data, totalCount } = await firstValueFrom(
         this.http.get<PokemonApiResponse<PokemonItemFields[]>>(fullUrl, {
           headers: this._headers,
         })
       );
-      console.log(`filterBy() - received ${data.length} filtered pokemons`);
       this._filteredPokemons.set(data);
       this._isLoadingFilteredPokemons.set(false);
       this.pokemonPaginatorService.setTotalCount(totalCount ?? 0);
@@ -188,7 +175,6 @@ export class PokemonFilterService {
   }
 
   getSelectedFilters(): SelectedPokemonFilters {
-    console.log('getSelectedFilters()');
     return {
       type: this._selectedType(),
       subtype: this._selectedSubtype(),
@@ -197,7 +183,6 @@ export class PokemonFilterService {
   }
 
   disableFilteredPokemonsLoading() {
-    console.log('disableLoading()');
     this._isLoadingFilteredPokemons.set(false);
   }
 
@@ -218,7 +203,6 @@ export class PokemonFilterService {
   }
 
   resetFilters() {
-    console.log('reset()');
     this._selectedType.set(null);
     this._selectedSubtype.set(null);
     this._selectedSupertype.set(null);

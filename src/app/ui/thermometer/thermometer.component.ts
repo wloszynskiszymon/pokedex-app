@@ -13,7 +13,7 @@ export class ThermometerComponent {
   maxValue = input.required<number>();
   asAbsoluteValue = input<boolean>(false); //  in case of passing negative values
 
-  // Converts to <0, 1> in order to calculate % width in component template
+  // converts to <0, 1> in order to calculate % width in component template
   normalizeToUnit(value: unknown, max: number = 100): number {
     if (value === null || value === undefined) return 0;
     let num;

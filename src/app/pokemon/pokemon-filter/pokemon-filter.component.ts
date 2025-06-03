@@ -45,7 +45,6 @@ export class PokemonFilterComponent {
 
   constructor() {
     effect(() => {
-      console.log('effect() - isLoading triggered');
       const loading = this.isLoading();
       Object.values(this.controls).forEach((control) => {
         loading ? control.disable() : control.enable();
@@ -66,10 +65,6 @@ export class PokemonFilterComponent {
       this.controls.supertype.setValue(supertype ?? null, {
         emitEvent: false,
       });
-
-      console.log(
-        `effect() - selected filters updated: type=${type}, subtype=${subtype}, supertype=${supertype}`
-      );
     });
   }
 
@@ -84,7 +79,6 @@ export class PokemonFilterComponent {
   }
 
   onReset() {
-    console.log('onReset() - resetting filters');
     Object.values(this.controls).forEach((control) => control.setValue(null));
     this.filterService.resetFilters();
     this.paginator.resetPagination(this.pokemonService.allPokemonsTotalCount());
