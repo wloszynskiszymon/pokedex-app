@@ -1,8 +1,4 @@
-import {
-  EditedPokemon,
-  LocalStoragePokemon,
-  PokemonEditable,
-} from './pokemon.model';
+import { LocalStoragePokemon } from './pokemon.model';
 
 // makes it easier to remove all edited pokemons from local storage
 // excluding other potential local storage items in the future

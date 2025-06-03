@@ -1,6 +1,6 @@
 # PokedexApp
 
-A simple Pokédex App built with Angular and Material UI  
+A simple Pokédex App built with Angular and Material UI
 ![Angular](https://img.shields.io/badge/Angular-19%2B-red?logo=angular) ![Material UI](https://img.shields.io/badge/Material--UI-Design-blue?logo=angular) ![Cypress](https://img.shields.io/badge/Tested%20with-Cypress-6e6e6e?logo=cypress)
 
 ---
@@ -47,6 +47,7 @@ The app allows you to browse, filter, and edit (locally) Pokémon cards, view de
 - **Angular 19**
 - **Angular Material**
 - **Cypress**
+- **Zod**
 
 ---
 
@@ -71,15 +72,16 @@ cd pokedex-app
 npm install
 ```
 
-### 3. Go to /src/environments
+### 3. Create environment file
 
-### 4. Create 'environment.ts'
+- Go to /src/environments
+- Create 'environment.ts'
+- Copy everything from the 'environment.sample.ts' to 'environment.ts'
+- Add your api key or leave as undefined
 
-### 5. Copy everything from the 'environment.sample.ts' to 'environment.ts'
+In the end you should have a environment.ts file next to environment.sample.ts file.
 
-### 6. Add your api key or leave as undefined
-
-### 7. Start the development server
+### 4. Start the development server
 
 ```bash
 npm start

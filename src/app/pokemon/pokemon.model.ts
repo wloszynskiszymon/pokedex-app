@@ -1,7 +1,3 @@
-// for pokemon api v2\
-// https://pokeapi.co/docs/v2#pokemon
-
-export type TODO = any;
 export interface PokemonApiResponse<T> {
   data: T;
   count: number;
@@ -10,38 +6,25 @@ export interface PokemonApiResponse<T> {
   totalCount: number;
 }
 
-interface CardImages {
+// shared
+interface ImagePair {
   small: string;
   large: string;
 }
 
-// only selected fields for the Pokemon model as well as it's nested types
-export interface PokemonItemFields {
-  id: string;
-  name: string;
-  images: CardImages;
-  supertype: string | null;
-  subtypes: string[];
-  types: string[];
-  hp: string;
-  rarity: string;
-  evolvesFrom: string;
-  number: string;
-  set: PokemonSet;
-  _updatedAt: number; // _ because it's local, not from API
+interface Legalities {
+  unlimited: string;
+  expanded?: string;
+  standard?: string;
 }
 
-interface PokemonSet {
+interface PokemonSetBase {
   id: string;
   name: string;
   series: string;
   printedTotal: number;
   total: number;
-  legalities: {
-    unlimited: string;
-    expanded: string;
-    standard: string;
-  };
+  legalities: Legalities;
   images: {
     symbol: string;
     logo: string;
@@ -49,9 +32,22 @@ interface PokemonSet {
   releaseDate: string;
   updatedAt: string;
 }
-export interface PokemonDetails extends PokemonCard {
-  // TODO: select fields for details
-  _updatedAt: number | undefined; // _ because it's local, not from API
+
+// pokemon models
+
+export interface PokemonItemFields {
+  id: string;
+  name: string;
+  images: ImagePair;
+  supertype: string | null;
+  subtypes: string[];
+  types: string[];
+  hp: string;
+  rarity: string;
+  evolvesFrom: string;
+  number: string;
+  set: PokemonSetBase;
+  _updatedAt: number;
 }
 
 export type PokemonCard = {
@@ -61,9 +57,6 @@ export type PokemonCard = {
   subtypes: string[];
   hp: string;
   types: string[];
-  evolvesFrom?: string;
-  flavorText?: string;
-  nationalPokedexNumbers: number[];
   rarity?: string;
   number: string;
   artist?: string;
@@ -82,53 +75,22 @@ export type PokemonCard = {
     type: string;
     value: string;
   }[];
-  retreatCost?: string[];
-  convertedRetreatCost?: number;
-  legalities: {
-    unlimited: string;
-  };
-  images: {
-    small: string;
-    large: string;
-  };
-  set: {
-    id: string;
-    name: string;
-    series: string;
-    printedTotal: number;
-    total: number;
-    legalities: {
-      unlimited: string;
-    };
+  images: ImagePair;
+  set: PokemonSetBase & {
     ptcgoCode: string;
-    releaseDate: string;
-    updatedAt: string;
-    images: {
-      symbol: string;
-      logo: string;
-    };
-  };
-  cardmarket?: {
-    url: string;
-    updatedAt: string;
-    prices: {
-      averageSellPrice: number;
-      lowPrice: number;
-      trendPrice: number;
-      germanProLow: number;
-      suggestedPrice: number;
-      reverseHoloSell: number;
-      reverseHoloLow: number;
-      reverseHoloTrend: number;
-    };
   };
 };
 
-// for /types /subtypes / supertypes endpoints
+export interface PokemonDetails extends PokemonCard {
+  _updatedAt: number | undefined;
+}
+
+// filter API
 export interface PokemonApiFilterResponse {
   data: string[];
 }
 
+// editable Models
 export interface PokemonEditable {
   id: string;
   hp: number;
@@ -138,7 +100,7 @@ export interface PokemonEditable {
 }
 
 export interface EditedPokemon extends PokemonEditable {
-  _updatedAt: number; // _ because it's local, not from API
+  _updatedAt: number;
 }
 
 export interface LocalStoragePokemon {
