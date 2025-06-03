@@ -26,16 +26,11 @@ export const filterEditedPokemons = (
     filter: SelectedPokemonFilters
   ): boolean => {
     const matchesType =
-      !filter.type ||
-      (Array.isArray(p.types) &&
-        p.types.some((type) => type && filter.type!.includes(type)));
+      !filter.type || (Array.isArray(p.types) && p.types.includes(filter.type));
 
     const matchesSubtype =
       !filter.subtype ||
-      (Array.isArray(p.subtypes) &&
-        p.subtypes.some(
-          (subtype) => subtype && filter.subtype!.includes(subtype)
-        ));
+      (Array.isArray(p.subtypes) && p.subtypes.includes(filter.subtype));
 
     const matchesSupertype =
       !filter.supertype || p.supertype === filter.supertype;
@@ -55,7 +50,6 @@ export const filterEditedPokemons = (
     } else if (matchesOld) {
       excludedPokemons.push(pokemon.updatedData);
     }
-    // If neither matches, we skip the pokemon
   }
 
   return { includedPokemons, excludedPokemons };

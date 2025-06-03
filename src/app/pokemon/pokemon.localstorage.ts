@@ -42,6 +42,5 @@ export const getEditedPokemonsFromLocalStorage = (): LocalStoragePokemon[] => {
       }
     }
   }
-
   return editedPokemons;
 };

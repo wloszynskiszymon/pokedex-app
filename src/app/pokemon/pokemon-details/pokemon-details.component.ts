@@ -29,6 +29,7 @@ export class PokemonDetailsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+
   pokemonLoading = computed(() => {
     const detailsLoading = this.pokemonService.isLoadingPokemonDetails();
     const similarLoading = this.pokemonService.isLoadingSimilarPokemons();
@@ -40,10 +41,10 @@ export class PokemonDetailsComponent {
   );
 
   pokemon = computed(() => {
-    const edittedPokemon = getEditedPokemonsFromLocalStorage();
-    if (!edittedPokemon) return this.pokemonService.pokemonDetails();
+    const editedPokemons = getEditedPokemonsFromLocalStorage();
+    if (!editedPokemons) return this.pokemonService.pokemonDetails();
     const pokemon = this.pokemonService.pokemonDetails();
-    const foundPokemon = edittedPokemon.find(
+    const foundPokemon = editedPokemons.find(
       (p) => p.updatedData.id === pokemon?.id
     );
     return {

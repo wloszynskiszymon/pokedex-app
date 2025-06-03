@@ -1,11 +1,11 @@
-import { PokemonFilters } from './pokemon.model';
+import { PokemonFilters, SelectedPokemonFilters } from './pokemon.model';
 import { baseUrl, pokemonsPerPage } from './../app.config';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 type PokemonApi = {
   route: PokemonApiSuportedRoutes;
-  filters?: PokemonFilters;
+  filters?: SelectedPokemonFilters;
   page?: number;
   idsToInclude?: string[];
   idsToExclude?: string[];
@@ -25,16 +25,16 @@ export const preparePokemonApiUrl = ({
   const queryParts: string[] = [];
   let query = '';
 
-  const { types = [], subtypes = [], supertype = null } = filters || {};
+  const { type = null, subtype = null, supertype = null } = filters || {};
 
   if (overriddenQuery) {
     query = overriddenQuery;
   } else {
-    if (types.length) {
-      queryParts.push(...types.map((val) => `type:"${val}"`));
+    if (type) {
+      queryParts.push(`types:"${type}"`);
     }
-    if (subtypes.length) {
-      queryParts.push(...subtypes.map((val) => `subtype:"${val}"`));
+    if (subtype) {
+      queryParts.push(`subtypes:"${subtype}"`);
     }
     if (supertype) {
       queryParts.push(`supertype:"${supertype}"`);

@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   padding: 1rem;
+  overflow: hidden;
 
   .pokemon {
     &__edit__button {
@@ -12,7 +13,6 @@
     }
     &__header {
       display: flex;
-
       align-items: flex-start;
       gap: 0.5rem;
 
@@ -29,7 +29,7 @@
       }
     }
     &__name {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       color: #363062;
       letter-spacing: -1px;
       font-weight: bold;
